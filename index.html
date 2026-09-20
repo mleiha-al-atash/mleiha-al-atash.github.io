@@ -1616,6 +1616,8 @@ async function initBackend(){
   if(!ok)return;
   try{
     sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true}});
+    /* the e-mail link ("forgot password") brings the owner back here with a recovery session */
+    try{sb.auth.onAuthStateChange(function(ev){if(ev==='PASSWORD_RECOVERY')setTimeout(openRecovery,300)})}catch(e){}
     var dp=loadData(),finished=false;
     await withTimeout(dp.then(function(r){finished=true;return r},function(){finished=true;return false}),7000,false);
     ls('malha-noloader',site.design.loader===false?'1':null);
@@ -1841,6 +1843,12 @@ gen:function(){
     textRow('كلمة الترحيب الأولى (عربي)','loader.a','ar')+textRow('كلمة الترحيب الثانية (عربي)','loader.b','ar')+
     textRow('First welcome word (English)','loader.a','en',' dir="ltr"')+textRow('Second welcome word (English)','loader.b','en',' dir="ltr"')+
     '<h4>آراء الزوار</h4>'+toggleRow('نشر آراء الزوار مباشرة بدون مراجعة (غير مفضّل)','reviews.auto')+
+    '<h4>تغيير كلمة السر</h4><p class="hint">10 خانات أو أكثر، أحرف إنجليزية وأرقام (بدون عربي أو مسافات). بعد التغيير يُسجَّل خروجك من أي جهاز آخر.</p>'+
+    '<label class="fld">كلمة السر الحالية<input id="pw-cur" type="password" autocomplete="current-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<label class="fld">كلمة السر الجديدة<input id="pw-new" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<label class="fld">أعد كتابة الجديدة<input id="pw-new2" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<label class="opt"><input type="checkbox" data-act="pw-show-panel">إظهار كلمات السر</label><p class="err" id="pw-err" dir="auto" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="pw-change" id="pw-go">تغيير كلمة السر</button></div>'+
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
 }
 };
@@ -2022,7 +2030,8 @@ function loginHTML(){
     '<label class="fld">كلمة السر<input id="l-pass" type="password" autocomplete="current-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="opt" style="margin-top:-6px"><input type="checkbox" data-act="pass-show">إظهار كلمة السر</label>'+
     '<p class="err" id="l-err" dir="auto" hidden></p>'+
-    '<div class="ed-actions"><button class="primary" data-act="login-go" id="l-go">دخول</button><button data-close>إلغاء</button></div></div>';
+    '<div class="ed-actions"><button class="primary" data-act="login-go" id="l-go">دخول</button><button data-close>إلغاء</button></div>'+
+    '<p style="margin:16px 0 0"><button class="linkbtn" data-act="forgot" style="color:var(--ui);opacity:1;font-size:.95rem">نسيت كلمة السر؟</button></p></div>';
 }
 async function doLogin(){
   var email=$('l-email').value.trim(),pass=$('l-pass').value;
@@ -2075,6 +2084,87 @@ async function logout(){
   ui.admin=false;ui.edit=false;root.classList.remove('editing');$('fab').hidden=true;
   $('design').close();
   await loadData();renderAll();toast('تم تسجيل الخروج.');
+}
+
+
+/* ---------- password: change (inside the panel), forgot (login dialog), recovery (from the e-mail link) ---------- */
+function pwProblem(n1,n2,cur){
+  if(n1.length<10)return'كلمة السر الجديدة قصيرة: اكتب 10 خانات أو أكثر.';
+  if(!/^[\x21-\x7e]+$/.test(n1))return'استعمل الكيبورد الإنجليزي فقط، بدون حروف عربية وبدون مسافات.';
+  if(!/[A-Za-z]/.test(n1)||!/\d/.test(n1))return'استعمل أحرفاً إنجليزية وأرقاماً معاً.';
+  if(n1!==n2)return'كلمتا السر الجديدتان غير متطابقتين.';
+  if(cur!==undefined&&n1===cur)return'الكلمة الجديدة لازم تختلف عن الحالية.';
+  return'';
+}
+function pwUpdateError(e){
+  var m=String(e&&e.message||'');
+  if(/same|different/i.test(m))return'الكلمة الجديدة لازم تختلف عن الحالية.';
+  if(/weak|at least|short|characters/i.test(m))return'كلمة السر ضعيفة أو قصيرة. اختر كلمة أطول.';
+  if(/fetch|network|timeout/i.test(m))return'تعذّر الاتصال. تأكد من الإنترنت ثم جرّب.';
+  return'تعذّر تغيير كلمة السر. ['+m.slice(0,80)+']';
+}
+async function changePassword(){
+  var cur=$('pw-cur').value,n1=$('pw-new').value,n2=$('pw-new2').value,err=$('pw-err'),btn=$('pw-go');
+  function bad(m){err.textContent=m;err.hidden=false}
+  err.hidden=true;
+  if(!cur){bad('اكتب كلمة السر الحالية.');return}
+  var pr=pwProblem(n1,n2,cur);if(pr){bad(pr);return}
+  btn.disabled=true;btn.textContent='جاري التغيير...';
+  try{
+    var u=await sb.auth.getUser(),email=u&&u.data&&u.data.user&&u.data.user.email;
+    if(!email){bad('تعذّر معرفة حسابك. سجّل خروج ثم دخول وجرّب.');return}
+    var a=await sb.auth.signInWithPassword({email:email,password:cur});
+    if(a.error){bad(/invalid login/i.test(String(a.error.message))?'كلمة السر الحالية غير صحيحة.':pwUpdateError(a.error));return}
+    var r=await sb.auth.updateUser({password:n1});
+    if(r.error){bad(pwUpdateError(r.error));return}
+    try{await sb.auth.signOut({scope:'others'})}catch(e){}
+    ['pw-cur','pw-new','pw-new2'].forEach(function(id){var i=$(id);if(i)i.value=''});
+    toast('تم تغيير كلمة السر، وسُجِّل خروجك من أي جهاز آخر.');
+  }catch(e){bad(pwUpdateError(e))}
+  finally{btn.disabled=false;btn.textContent='تغيير كلمة السر'}
+}
+function openForgot(){
+  var d=$('login');
+  d.innerHTML='<div class="dlg-in"><h3>استعادة كلمة السر</h3><p class="hint">اكتب بريد المالك، وبنرسل لك رابطاً تختار منه كلمة سر جديدة. افتح الرابط من نفس هذا الجهاز.</p>'+
+    '<label class="fld">البريد الإلكتروني<input id="r-email" type="email" autocomplete="username" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<p class="err" id="r-err" dir="auto" hidden></p><p class="hint" id="r-ok" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="forgot-send" id="r-go">إرسال الرابط</button><button data-act="login">رجوع</button></div></div>';
+}
+async function forgotSend(){
+  var email=$('r-email').value.trim(),err=$('r-err'),ok=$('r-ok'),btn=$('r-go');
+  err.hidden=true;ok.hidden=true;
+  if(!email){err.textContent='اكتب البريد.';err.hidden=false;return}
+  btn.disabled=true;btn.textContent='جاري الإرسال...';
+  var r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+  btn.disabled=false;btn.textContent='إرسال الرابط';
+  if(r&&r.error){
+    var m=String(r.error.message||'');
+    err.textContent=/rate|limit|seconds|too many/i.test(m)?'أُرسلت رسائل كثيرة. انتظر ساعة ثم جرّب.':'تعذّر الإرسال. ['+m.slice(0,80)+']';err.hidden=false;return;
+  }
+  ok.textContent='إذا كان البريد صحيحاً وصلتك رسالة فيها رابط، وقد تتأخر دقائق. إن لم تجدها فابحث في الرسائل غير المرغوبة (Spam). افتح الرابط من نفس هذا الجهاز.';ok.hidden=false;
+}
+function openRecovery(){
+  var d=$('login');
+  d.innerHTML='<div class="dlg-in"><h3>كلمة سر جديدة</h3><p class="hint">اختر كلمة سر جديدة لحساب المالك: 10 خانات أو أكثر، أحرف إنجليزية وأرقام.</p>'+
+    '<label class="fld">كلمة السر الجديدة<input id="rc-1" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<label class="fld">أعد كتابتها<input id="rc-2" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
+    '<label class="opt"><input type="checkbox" data-act="rc-show">إظهار</label><p class="err" id="rc-err" dir="auto" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="rc-save" id="rc-go">حفظ</button></div></div>';
+  openDlg(d);
+}
+async function recoverySave(){
+  var n1=$('rc-1').value,n2=$('rc-2').value,err=$('rc-err'),btn=$('rc-go');
+  err.hidden=true;
+  var pr=pwProblem(n1,n2);if(pr){err.textContent=pr;err.hidden=false;return}
+  btn.disabled=true;btn.textContent='جاري الحفظ...';
+  var r=await sb.auth.updateUser({password:n1});
+  btn.disabled=false;btn.textContent='حفظ';
+  if(r.error){err.textContent=pwUpdateError(r.error);err.hidden=false;return}
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  var ok=await checkAdmin();
+  $('login').close();
+  if(ok){ls('malha-nocount','1');enterEdit();toast('تم تغيير كلمة السر ودخلت بها.')}
+  else toast('تم تغيير كلمة السر، لكن هذا الحساب ليس مالك الموقع.');
 }
 
 
@@ -2168,7 +2258,7 @@ async function sendReview(){
 
 
 /* ---------- events ---------- */
-var OFFLINE_OK={'pass-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1};
+var OFFLINE_OK={'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1};
 function setLang(l){lang=l;ls('malha-lang',l);ui.menu=false;root.classList.remove('menuopen');renderAll()}
 function moveIn(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return false;var x=arr[i];arr[i]=arr[j];arr[j]=x;return true}
 document.addEventListener('click',function(e){
@@ -2202,6 +2292,12 @@ document.addEventListener('click',function(e){
     case'poi-go':{var pp=(site.map.pois||[]).filter(function(x){return x.id===id})[0];if(pp&&mm){mmFlyTo(pp.lat,pp.lng,Math.max(mm.z,15));var box=$('mapbox');if(box)box.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});[].forEach.call(document.querySelectorAll('.mm-poi.on'),function(x){x.classList.remove('on')});if(mm.poi[id])mm.poi[id].el.classList.add('on')}break}
     case'login':{var d=$('login');d.innerHTML=loginHTML();openDlg(d);break}
     case'login-go':doLogin();break;
+    case'pw-change':changePassword();break;
+    case'pw-show-panel':['pw-cur','pw-new','pw-new2'].forEach(function(id){var x=$(id);if(x)x.type=a.checked?'text':'password'});break;
+    case'forgot':openForgot();break;
+    case'forgot-send':forgotSend();break;
+    case'rc-save':recoverySave();break;
+    case'rc-show':['rc-1','rc-2'].forEach(function(id){var x=$(id);if(x)x.type=a.checked?'text':'password'});break;
     case'pass-show':{var pi=$('l-pass');if(pi)pi.type=a.checked?'text':'password';break}
     case'logout':logout();break;
     case'edit-on':enterEdit();break;
@@ -2316,6 +2412,8 @@ document.addEventListener('keydown',function(e){
   var tg=e.target;
   if(ui.edit&&e.key==='Enter'&&tg.hasAttribute&&tg.hasAttribute('data-line')){e.preventDefault();tg.blur();return}
   if(e.key==='Enter'&&(tg.id==='l-email'||tg.id==='l-pass')){e.preventDefault();doLogin();return}
+  if(e.key==='Enter'&&tg.id==='r-email'){e.preventDefault();forgotSend();return}
+  if(e.key==='Enter'&&(tg.id==='rc-1'||tg.id==='rc-2')){e.preventDefault();recoverySave();return}
   if(e.key==='Escape'&&ui.menu){ui.menu=false;root.classList.remove('menuopen')}
   if($('viewer')&&$('viewer').open){var nx=lang==='ar'?'ArrowLeft':'ArrowRight',pv=lang==='ar'?'ArrowRight':'ArrowLeft';if(e.key===nx)showPhoto(ui.vi+1);else if(e.key===pv)showPhoto(ui.vi-1)}
 });
