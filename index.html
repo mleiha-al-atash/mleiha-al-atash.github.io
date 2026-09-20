@@ -450,6 +450,16 @@ dialog.viewer[open]{display:flex;flex-direction:column;align-items:center;justif
 .vnav{position:fixed;inset-inline:0;bottom:14px;display:flex;justify-content:center;gap:16px}
 .vnav button{width:52px;height:52px;border:0;border-radius:50%;background:#fff;color:#000;font-size:1.8rem;line-height:1;cursor:pointer}
 
+/* audio */
+.aud-list{display:grid;gap:clamp(14px,2vw,22px)}
+@media (min-width:900px){.aud-list{grid-template-columns:1fr 1fr}}
+.aud{border:2px solid currentColor;border-radius:var(--r);padding:clamp(16px,2.4vw,26px);display:grid;gap:16px}
+.aud-top{display:flex;gap:16px;align-items:center}
+.aud-ic{display:grid;place-items:center;flex:none;width:clamp(52px,8vw,68px);aspect-ratio:1;border-radius:50%;background:var(--sfg);color:var(--sbg);font-size:1.6rem}
+.aud-title{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.25;margin:0}
+html[lang="en"] .aud-title{font-family:var(--display-lat);text-transform:uppercase;font-size:clamp(1.3rem,2.6vw,1.9rem)}
+.aud-by{margin:4px 0 0;font-size:.95rem;opacity:.85}
+.aud audio{width:100%;height:48px}
 /* announcement, share, search, font size */
 .ann{margin-top:var(--nav-h);display:flex;justify-content:center;align-items:center;gap:12px;padding:10px calc(var(--pad) + 30px);background:#d9a62e;color:#161614;font-weight:700;font-size:.95rem;text-align:center;position:relative}
 .ann a{color:inherit}
@@ -562,6 +572,7 @@ ar:{
   offline:'الموقع غير متصل بقاعدة البيانات الآن.',lifeline:'من {a} إلى {b}',
   footer_note:'مليحة العطش، درعا، سوريا',count_note:'نحسب عدد الزيارات فقط، دون تسجيل أي معلومة شخصية.',lang_btn:'EN',lang_label:'English',
   loader_a:'أهلاً',loader_b:'بكم',dir_no:'الاتجاهات',
+  aud_by:'بصوت',aud_untitled:'تسجيل صوتي',
   msg_btn:'✉ راسلنا بشكل خاص',msg_title:'راسلنا',msg_note:'رسالتك تصل لصاحب الموقع فقط ولا تُنشر.',msg_contact:'وسيلة للتواصل معك (اختياري)',msg_contact_p:'رقم واتساب أو بريد',msg_body:'رسالتك',
   msg_err_name:'اكتب اسمك.',msg_err_body:'اكتب رسالة أطول قليلاً (5 أحرف على الأقل).',msg_ok:'وصلتنا رسالتك، شكراً لك.',msg_fail:'تعذّر إرسال الرسالة. تأكد من الاتصال ثم جرّب.',msg_cool:'انتظر دقيقة قبل إرسال رسالة ثانية.',
   share:'مشاركة',share_wa:'واتساب',share_fb:'فيسبوك',share_tg:'تيليجرام',share_copy:'نسخ الرابط',copied:'تم نسخ الرابط.',copy_fail:'انسخ الرابط من شريط العنوان.',share_site:'شارك الموقع',
@@ -590,6 +601,7 @@ en:{
   offline:'The site is not connected to the database right now.',lifeline:'{a} to {b}',
   footer_note:'Muleiha Al-Atash, Daraa, Syria',count_note:'We only count visits, with no personal information.',lang_btn:'ع',lang_label:'العربية',
   loader_a:'Welcome',loader_b:'Home',dir_no:'Directions',
+  aud_by:'Voice of',aud_untitled:'Audio recording',
   msg_btn:'✉ Message us privately',msg_title:'Message us',msg_note:'Your message goes to the site owner only and is never published.',msg_contact:'How can we reach you? (optional)',msg_contact_p:'WhatsApp number or e-mail',msg_body:'Your message',
   msg_err_name:'Please enter your name.',msg_err_body:'Please write a little more (at least 5 characters).',msg_ok:'We received your message. Thank you.',msg_fail:'Could not send. Check your connection and try again.',msg_cool:'Please wait a minute before sending another message.',
   share:'Share',share_wa:'WhatsApp',share_fb:'Facebook',share_tg:'Telegram',share_copy:'Copy link',copied:'Link copied.',copy_fail:'Copy the link from the address bar.',share_site:'Share the site',
@@ -648,12 +660,13 @@ var SECDEF={
   about:{t:{ar:'عنّا',en:'About'},nav:true,notitle:true},
   stories:{t:{ar:'حكايات القرية',en:'Village Stories'},nav:true},
   photos:{t:{ar:'الصور والفيديو',en:'Photos & Videos'},nav:true},
+  audio:{t:{ar:'أصوات من القرية',en:'Voices of the Village'},nav:true},
   map:{t:{ar:'أين نحن',en:'Where We Are'},nav:true},
   reviews:{t:{ar:'آراء الزوار',en:'Visitor Reviews'},nav:true},
   contact:{t:{ar:'شاركنا.',en:'Share with us.'},nav:true}
 };
-var SECORDER=['hero','intro','featured','about','stories','photos','map','reviews','contact'];
-var SECBG={hero:1,intro:3,featured:3,about:2,stories:3,photos:2,map:3,reviews:2,contact:1};
+var SECORDER=['hero','intro','featured','about','stories','photos','audio','map','reviews','contact'];
+var SECBG={hero:1,intro:3,featured:3,about:2,stories:3,photos:2,audio:1,map:3,reviews:2,contact:1};
 
 function defaults(){return{
   v:2,
@@ -870,6 +883,7 @@ function navItems(){
   site.sections.forEach(function(s){
     if(!s.on||s.id==='hero')return;
     if(s.id==='featured'&&!featuredList().length)return;
+    if(s.id==='audio'&&!audioList().length)return;
     var d=SECDEF[s.id];
     if(d&&!d.nav)return;
     var ti=titleOf(s);
@@ -950,7 +964,7 @@ function heroHTML(s){
 }
 function nextSecId(){
   var f=site.sections.filter(function(s){return s.on&&s.id!=='hero'});
-  for(var i=0;i<f.length;i++){if(f[i].id==='featured'&&!featuredList().length)continue;if(f[i].id==='intro'&&introIndex()<0&&!ui.edit)continue;return f[i].id}
+  for(var i=0;i<f.length;i++){if(f[i].id==='featured'&&!featuredList().length)continue;if(f[i].id==='intro'&&introIndex()<0&&!ui.edit)continue;if(f[i].id==='audio'&&!audioList().length&&!ui.edit)continue;return f[i].id}
   return'top';
 }
 
@@ -1051,9 +1065,12 @@ function mediaThumb(m){
   if(m.kind==='video')return safeUrl(m.poster);
   return safeUrl(m.url);
 }
+function gallery(){return photos.filter(function(p){return p.kind!=='audio'})}
+function audioList(){var r=[];photos.forEach(function(p,i){if(p.kind==='audio')r.push({p:p,i:i})});return r}
 function photosHTML(s){
   var items='';
   photos.forEach(function(p,i){
+    if(p.kind==='audio')return;
     var th=mediaThumb(p),isVid=p.kind==='video'||p.kind==='youtube',cap=tx(p.cap);
     if(!th&&!isVid)return;
     items+='<figure class="ph"><button class="ph-btn" data-act="photo-open" data-i="'+i+'" aria-label="'+esc(cap||(isVid?t('play'):t('view_photo')))+'">'+
@@ -1062,8 +1079,23 @@ function photosHTML(s){
       (ui.edit?'<figcaption'+ea('photos.'+i+'.cap','وصف (اختياري)',1,1)+'>'+esc(cap)+'</figcaption><div class="ph-tools"><button class="tool" data-act="photo-up" data-i="'+i+'">↑</button><button class="tool" data-act="photo-down" data-i="'+i+'">↓</button>'+(isVid?'<button class="tool" data-act="photo-intro" data-i="'+i+'" aria-pressed="'+(!!site.intro&&site.intro.id===p.id)+'">🎬 '+((site.intro&&site.intro.id===p.id)?'فيديو التعريف ✓':'اجعله فيديو التعريف')+'</button>':'')+(p.kind==='video'?'<button class="tool" data-act="photo-poster" data-i="'+i+'">🖼 صورة الغلاف</button>':'')+'<button class="tool danger" data-act="photo-del" data-i="'+i+'">حذف</button></div>':(cap?'<figcaption>'+esc(cap)+'</figcaption>':''))+'</figure>';
   });
   if(!items)items=['4/5','1/1','4/3'].map(function(r){return'<div class="ph-empty" style="aspect-ratio:'+r+'" aria-hidden="true">'+STAR+'</div>'}).join('');
-  return secOpen(s)+secTitle(s)+(photos.length?'':'<p class="empty" style="margin-bottom:24px">'+t('soon_media')+'</p>')+'<div class="masonry">'+items+'</div>'+
+  return secOpen(s)+secTitle(s)+(gallery().length?'':'<p class="empty" style="margin-bottom:24px">'+t('soon_media')+'</p>')+'<div class="masonry">'+items+'</div>'+
     (ui.edit?'<button class="add-btn" data-act="photo-add">＋ إضافة صور</button><button class="add-btn" data-act="vid-add">＋ رفع فيديو (حتى 50 ميغابايت)</button><button class="add-btn" data-act="yt-add">＋ إضافة فيديو من رابط يوتيوب</button>':'')+'</section>';
+}
+
+/* ---------- audio: voices of the village ---------- */
+function audioHTML(s){
+  var list=audioList();
+  if(!list.length&&!ui.edit)return'';
+  var cards=list.map(function(x){
+    var p=x.p,i=x.i,src=safeUrl(p.url),title=tx(p.cap),by=p.speaker||'';
+    return'<article class="aud"><div class="aud-top"><span class="aud-ic" aria-hidden="true">🎙</span><div class="aud-txt"><h3 class="aud-title"'+ea('photos.'+i+'.cap','عنوان التسجيل',1,1)+'>'+esc(title||(ui.edit?'':t('aud_untitled')))+'</h3>'+
+      ((by||ui.edit)?'<p class="aud-by">'+(ui.edit?'':esc(t('aud_by'))+' ')+'<span'+ea('photos.'+i+'.speaker','اسم المتحدث',1)+'>'+esc(by)+'</span></p>':'')+'</div></div>'+
+      '<audio controls preload="none" src="'+esc(src)+'"></audio>'+
+      (ui.edit?'<div class="ph-tools"><button class="tool" data-act="photo-up" data-i="'+i+'">↑</button><button class="tool" data-act="photo-down" data-i="'+i+'">↓</button><button class="tool danger" data-act="photo-del" data-i="'+i+'">حذف</button></div>':'')+'</article>';
+  }).join('');
+  return secOpen(s)+secTitle(s)+(list.length?'':'<div class="ow-hint">ما في تسجيلات بعد. سجّل حكاية من أحد كبار السن، أو ارفع ملفاً صوتياً.</div>')+'<div class="aud-list">'+cards+'</div>'+
+    (ui.edit?'<button class="add-btn" data-act="aud-rec">🎙 تسجيل صوتي الآن</button><button class="add-btn" data-act="aud-add">＋ رفع ملف صوتي (m4a أو mp3، حتى 50 ميغابايت)</button>':'')+'</section>';
 }
 
 /* ---------- map section ---------- */
@@ -1144,7 +1176,7 @@ function blockHTML(s){
 }
 
 /* ---------- assemble ---------- */
-var BUILDERS={hero:heroHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
+var BUILDERS={hero:heroHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,audio:audioHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
 function secHTML(s){
   if(s.id.indexOf('blk_')===0)return blockHTML(s);
   var f=BUILDERS[s.id];return f?f(s):'';
@@ -1445,7 +1477,7 @@ function toRow(p){
     pinned:!!p.pinned,extra:p.extra||{},status:p.status||'approved'};
 }
 function photoFromRow(r){
-  return{id:r.id,url:r.url,kind:r.kind||'image',poster:r.poster_url||'',yt:r.yt_id||'',cap:{ar:r.caption||'',en:r.caption_en||''},sort:r.sort||0};
+  return{id:r.id,url:r.url,kind:r.kind||'image',poster:r.poster_url||'',yt:r.yt_id||'',cap:{ar:r.caption||'',en:r.caption_en||''},speaker:r.speaker||'',sort:r.sort||0};
 }
 function reviewFromRow(r){return{id:r.id,name:r.name||'',rating:+r.rating||0,comment:r.comment||'',status:r.status,created:r.created_at||''}}
 
@@ -1484,7 +1516,10 @@ function queueSettings(){debounce('settings',saveSettings,1200)}
 function queuePhoto(id){
   debounce('photo'+id,async function(){
     var p=photos.filter(function(x){return x.id===id})[0];if(!p)return true;
-    var r=await sb.from('photos').update({caption:(p.cap.ar||'').slice(0,300),caption_en:(p.cap.en||'').slice(0,300)}).eq('id',id).select('id');
+    var body={caption:(p.cap.ar||'').slice(0,300),caption_en:(p.cap.en||'').slice(0,300)};
+    if(p.kind==='audio')body.speaker=(p.speaker||'').slice(0,120);
+    var r=await sb.from('photos').update(body).eq('id',id).select('id');
+    if(r.error&&body.speaker!==undefined){delete body.speaker;r=await sb.from('photos').update(body).eq('id',id).select('id')}
     return !r.error&&!!r.data&&r.data.length>0;
   },1200);
 }
@@ -1495,8 +1530,12 @@ function setTxPath(path,val){
 }
 function onEdit(path,val,isTx){
   if(path.indexOf('photos.')===0){
-    var i=+path.split('.')[1];
-    if(photos[i]){if(!photos[i].cap||typeof photos[i].cap!=='object')photos[i].cap={ar:'',en:''};photos[i].cap[lang]=val;queuePhoto(photos[i].id)}
+    var pp=path.split('.'),i=+pp[1];
+    if(photos[i]){
+      if(pp[2]==='speaker')photos[i].speaker=val;
+      else{if(!photos[i].cap||typeof photos[i].cap!=='object')photos[i].cap={ar:'',en:''};photos[i].cap[lang]=val}
+      queuePhoto(photos[i].id);
+    }
     return;
   }
   if(isTx)setTxPath(path,val);else setPath(site,path,val);
@@ -1601,6 +1640,7 @@ function pickFiles(kind,accept,multi){
 async function onFiles(files){
   var kind=ui.fileFor;if(!files.length||!kind)return;
   if(kind==='video'){await addVideo(files[0]);return}
+  if(kind==='audio'){await addAudio(files[0]);return}
   if(kind==='poster'){
     var it=photos[ui.fileIdx];if(!it)return;
     try{
@@ -1738,6 +1778,24 @@ async function recordVisit(){
 }
 
 
+/* ---------- audio files ---------- */
+async function addAudio(file){
+  var ext=(/\.([a-z0-9]{2,4})$/i.exec(file.name||'')||[])[1]||'';ext=ext.toLowerCase();
+  var map={m4a:'audio/mp4',mp4:'audio/mp4',mp3:'audio/mpeg',aac:'audio/aac',wav:'audio/wav',ogg:'audio/ogg',webm:'audio/webm'};
+  var ctype=map[ext]||(/^audio\//.test(file.type)?file.type.split(';')[0]:'');
+  if(!ctype){toast('نوع الملف غير مدعوم. استعمل m4a أو mp3 أو wav.');return}
+  if(!ext)ext=ctype==='audio/mpeg'?'mp3':ctype==='audio/wav'?'wav':ctype==='audio/webm'?'webm':ctype==='audio/ogg'?'ogg':'m4a';
+  if(file.size>50*1024*1024){toast('حجم الملف أكبر من 50 ميغابايت.');return}
+  toast('جاري رفع التسجيل...');
+  var up=await upload(file,'audio',ext,ctype);
+  if(!up){toast('تعذّر رفع الملف. تأكد من الاتصال وأن update4.sql تم تشغيله.');return}
+  var r=await sb.from('photos').insert({url:up.url,kind:'audio',caption:'',caption_en:'',speaker:'',sort:nextSort()}).select().single();
+  if(r.error||!r.data){removeFiles([up.url]);toast('تعذّر حفظ التسجيل. تأكد من تشغيل update4.sql.');return}
+  photos.push(photoFromRow(r.data));renderAll();
+  toast('تمت الإضافة. اكتب عنوان التسجيل واسم المتحدث مباشرة من القسم.');
+}
+
+
 /* ---------- chrome: bar, dialogs ---------- */
 function buildChrome(){
   var c=document.createElement('div');c.id='chrome';
@@ -1750,6 +1808,7 @@ function buildChrome(){
     '<dialog id="editor" class="sheet owner" aria-label="محرر المحتوى"></dialog>'+
     '<dialog id="poidlg" class="sheet owner" aria-label="مكان جديد"></dialog>'+
     '<dialog id="ytdlg" class="sheet owner" aria-label="فيديو يوتيوب"></dialog>'+
+    '<dialog id="recdlg" class="sheet owner" aria-label="تسجيل صوتي"></dialog>'+
     '<dialog id="submit" class="sheet" aria-label="submit"></dialog>'+
     '<dialog id="login" class="sheet owner" aria-label="دخول المالك"></dialog>'+
     '<div class="toast" id="toast" role="status" aria-live="polite"></div>'+
@@ -1758,7 +1817,8 @@ function buildChrome(){
   [].forEach.call(c.querySelectorAll('dialog'),function(d){
     d.addEventListener('click',function(e){if(e.target===d)d.close()});
     d.addEventListener('close',function(){
-      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='ytdlg'||d.id==='viewer')d.innerHTML='';
+      if(d.id==='recdlg')recCleanup();
+      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
       if(d.id==='reader'||d.id==='viewer'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
       if(d.id==='reader')d.innerHTML='';
       if(!document.querySelector('dialog[open]'))root.classList.remove('modal');
@@ -2037,12 +2097,14 @@ async function deleteReview(id){
   reviews=reviews.filter(function(x){return x.id!==id});renderSec('reviews');toast('تم الحذف.');
 }
 async function movePhoto(i,dir){
-  var j=i+dir;if(j<0||j>=photos.length)return;
+  var j=i+dir;
+  while(j>=0&&j<photos.length&&(photos[j].kind==='audio')!==(photos[i].kind==='audio'))j+=dir;
+  if(j<0||j>=photos.length)return;
   var a=photos[i],b=photos[j],sa=a.sort,sb2=b.sort;
   if(sa===sb2){sb2=sa+dir}
   a.sort=sb2;b.sort=sa;
   photos.sort(function(x,y){return(x.sort-y.sort)||0});
-  renderSec('photos');
+  renderAll();
   await sb.from('photos').update({sort:a.sort}).eq('id',a.id);
   await sb.from('photos').update({sort:b.sort}).eq('id',b.id);
 }
@@ -2085,16 +2147,18 @@ function openReader(id){
   try{history.replaceState(null,'','#p='+encodeURIComponent(p.id))}catch(e){}
   d.scrollTop=0;openDlg(d);
 }
+function stepPhoto(from,dir){var n=photos.length,k=from;for(var c=0;c<n;c++){k=(k+dir+n)%n;if(photos[k].kind!=='audio')return k}return from}
 function showPhoto(i){
   var n=photos.length;if(!n)return;
   ui.vi=(i+n)%n;
+  if(photos[ui.vi].kind==='audio'){ui.vi=stepPhoto(ui.vi,1);if(photos[ui.vi].kind==='audio')return}
   var p=photos[ui.vi],cap=tx(p.cap),media;
   try{history.replaceState(null,'','#m='+encodeURIComponent(p.id))}catch(e){}
   if(p.kind==='youtube'&&/^[A-Za-z0-9_-]{11}$/.test(p.yt||''))media='<iframe src="https://www.youtube-nocookie.com/embed/'+p.yt+'?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="video"></iframe>';
   else if(p.kind==='video')media='<video controls autoplay playsinline preload="metadata" src="'+esc(safeUrl(p.url))+'"'+(safeUrl(p.poster)?' poster="'+esc(safeUrl(p.poster))+'"':'')+'></video>';
   else media='<img alt="'+esc(cap)+'" src="'+esc(safeUrl(p.url))+'">';
   $('viewer').innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button>'+media+(cap?'<p>'+esc(cap)+'</p>':'')+shareBar('m',p.id,cap||(lang==='ar'?site.brand.ar:site.brand.en))+
-    (n>1?'<div class="vnav"><button data-act="v-prev" aria-label="'+t('prev')+'">'+(lang==='ar'?'›':'‹')+'</button><button data-act="v-next" aria-label="'+t('next')+'">'+(lang==='ar'?'‹':'›')+'</button></div>':'');
+    (gallery().length>1?'<div class="vnav"><button data-act="v-prev" aria-label="'+t('prev')+'">'+(lang==='ar'?'›':'‹')+'</button><button data-act="v-next" aria-label="'+t('next')+'">'+(lang==='ar'?'‹':'›')+'</button></div>':'');
 }
 
 /* ---------- login / edit mode ---------- */
@@ -2293,8 +2357,75 @@ function openFromHash(){
     if(p)openReader(p.id);
   }else{
     var i=-1;photos.forEach(function(x,j){if(x.id===m[2])i=j});
-    if(i>=0){showPhoto(i);openDlg($('viewer'))}
+    if(i>=0&&photos[i].kind!=='audio'){showPhoto(i);openDlg($('viewer'))}
   }
+}
+
+
+/* ---------- recording a voice from the site (owner) ---------- */
+var rec={stream:null,mr:null,chunks:[],t0:0,timer:0,blob:null,mime:'',ext:'m4a',url:''};
+function recMime(){
+  var c=['audio/mp4;codecs=mp4a.40.2','audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'];
+  if(!window.MediaRecorder)return'';
+  for(var i=0;i<c.length;i++){try{if(MediaRecorder.isTypeSupported(c[i]))return c[i]}catch(e){}}
+  return'';
+}
+function recCleanup(){
+  clearInterval(rec.timer);
+  try{if(rec.mr&&rec.mr.state!=='inactive'){rec.mr.onstop=null;rec.mr.stop()}}catch(e){}
+  try{if(rec.stream)rec.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}
+  if(rec.url){try{URL.revokeObjectURL(rec.url)}catch(e){}}
+  rec={stream:null,mr:null,chunks:[],t0:0,timer:0,blob:null,mime:'',ext:'m4a',url:''};
+}
+function recHTML(state){
+  if(state==='idle')return'<div class="dlg-in"><h3>🎙 تسجيل صوتي</h3><p class="hint">اضغط «ابدأ»، وسيطلب المتصفح إذنك باستعمال الميكروفون. تكلّم بقرب من الهاتف وفي مكان هادئ. أفضل نتيجة على الآيفون.</p><div class="ed-actions"><button class="primary" data-act="rec-start">● ابدأ التسجيل</button><button data-close>إلغاء</button></div></div>';
+  if(state==='rec')return'<div class="dlg-in"><h3>🔴 جاري التسجيل...</h3><p id="rec-time" style="font-size:2.4rem;font-weight:700;margin:6px 0 16px;direction:ltr;text-align:center">00:00</p><div class="ed-actions"><button class="primary" data-act="rec-stop">■ إيقاف</button></div></div>';
+  return'<div class="dlg-in"><h3>تسجيلك</h3><audio controls src="'+esc(rec.url)+'" style="width:100%;margin:0 0 14px"></audio>'+
+    '<label class="fld">عنوان التسجيل<input id="rec-title" maxlength="200" placeholder="مثال: حكاية أول موسم حصاد"></label>'+
+    '<label class="fld">اسم المتحدث (اختياري)<input id="rec-speaker" maxlength="120"></label><p class="err" id="rec-err" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="rec-save" id="rec-go">حفظ</button><button data-act="rec-again">إعادة التسجيل</button></div></div>';
+}
+function openRecorder(){
+  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){toast('هذا المتصفح لا يدعم التسجيل هنا. ارفع ملفاً صوتياً بدلاً من ذلك.');return}
+  recCleanup();var d=$('recdlg');d.innerHTML=recHTML('idle');openDlg(d);
+}
+async function recStart(){
+  try{rec.stream=await navigator.mediaDevices.getUserMedia({audio:true})}
+  catch(e){toast('ما قدرنا نوصل للميكروفون. اسمح للموقع باستعمال الميكروفون ثم جرّب.');return}
+  rec.mime=recMime();
+  try{rec.mr=new MediaRecorder(rec.stream,rec.mime?{mimeType:rec.mime}:{})}
+  catch(e){toast('تعذّر بدء التسجيل على هذا المتصفح.');recCleanup();return}
+  rec.chunks=[];
+  rec.mr.ondataavailable=function(e){if(e.data&&e.data.size)rec.chunks.push(e.data)};
+  rec.mr.onstop=function(){
+    clearInterval(rec.timer);
+    var type=(rec.mr&&rec.mr.mimeType)||rec.mime||'audio/webm';
+    rec.blob=new Blob(rec.chunks,{type:type});
+    rec.ext=/mp4|aac/.test(type)?'m4a':/ogg/.test(type)?'ogg':'webm';
+    rec.url=URL.createObjectURL(rec.blob);
+    try{rec.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}
+    var d=$('recdlg');if(d&&d.open)d.innerHTML=recHTML('done');
+  };
+  rec.mr.start();rec.t0=Date.now();$('recdlg').innerHTML=recHTML('rec');
+  rec.timer=setInterval(function(){
+    var s=Math.floor((Date.now()-rec.t0)/1000),el=$('rec-time');
+    if(el)el.textContent=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+s%60).slice(-2);
+    if(s>=3000)recStop();
+  },400);
+}
+function recStop(){try{rec.mr.stop()}catch(e){}}
+async function recSave(){
+  if(!rec.blob)return;
+  var btn=$('rec-go'),err=$('rec-err');
+  function bad(m){err.textContent=m;err.hidden=false;btn.disabled=false;btn.textContent='حفظ'}
+  if(rec.blob.size>50*1024*1024){bad('التسجيل أكبر من 50 ميغابايت.');return}
+  btn.disabled=true;btn.textContent='جاري الحفظ...';err.hidden=true;
+  var base=(rec.blob.type||'audio/webm').split(';')[0];
+  var up=await upload(rec.blob,'audio',rec.ext,base);
+  if(!up){bad('تعذّر رفع التسجيل. تأكد من الاتصال وأن update4.sql تم تشغيله.');return}
+  var r=await sb.from('photos').insert({url:up.url,kind:'audio',caption:($('rec-title').value||'').trim().slice(0,300),caption_en:'',speaker:($('rec-speaker').value||'').trim().slice(0,120),sort:nextSort()}).select().single();
+  if(r.error||!r.data){removeFiles([up.url]);bad('تعذّر حفظ التسجيل. تأكد من تشغيل update4.sql.');return}
+  photos.push(photoFromRow(r.data));$('recdlg').close();renderAll();toast('تم حفظ التسجيل.');
 }
 
 
@@ -2446,12 +2577,18 @@ document.addEventListener('click',function(e){
     }
     case'post-open':openReader(id);break;
     case'photo-open':showPhoto(i);openDlg($('viewer'));break;
-    case'v-prev':showPhoto(ui.vi-1);break;
-    case'v-next':showPhoto(ui.vi+1);break;
+    case'v-prev':showPhoto(stepPhoto(ui.vi,-1));break;
+    case'v-next':showPhoto(stepPhoto(ui.vi,1));break;
     case'map-layer':mmSetLayer(a.dataset.layer);break;
     case'poi-go':{var pp=(site.map.pois||[]).filter(function(x){return x.id===id})[0];if(pp&&mm){mmFlyTo(pp.lat,pp.lng,Math.max(mm.z,15));var box=$('mapbox');if(box)box.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});[].forEach.call(document.querySelectorAll('.mm-poi.on'),function(x){x.classList.remove('on')});if(mm.poi[id])mm.poi[id].el.classList.add('on')}break}
     case'login':{var d=$('login');d.innerHTML=loginHTML();openDlg(d);break}
     case'login-go':doLogin();break;
+    case'aud-add':pickFiles('audio','audio/*,.m4a,.mp3,.aac,.wav',false);break;
+    case'aud-rec':openRecorder();break;
+    case'rec-start':recStart();break;
+    case'rec-stop':recStop();break;
+    case'rec-again':recCleanup();$('recdlg').innerHTML=recHTML('idle');break;
+    case'rec-save':recSave();break;
     case'fontsize':{var fv=((+ls('malha-fs')||0)+1)%3;ls('malha-fs',String(fv));applyUserScale();toast(t('fs_'+fv));setTimeout(fitHero,150);break}
     case'copy-link':copyLink(a.dataset.url);break;
     case'native-share':try{navigator.share({title:a.dataset.title||'',url:a.dataset.url})}catch(x){copyLink(a.dataset.url)}break;
@@ -2586,7 +2723,7 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&tg.id==='r-email'){e.preventDefault();forgotSend();return}
   if(e.key==='Enter'&&(tg.id==='rc-1'||tg.id==='rc-2')){e.preventDefault();recoverySave();return}
   if(e.key==='Escape'&&ui.menu){ui.menu=false;root.classList.remove('menuopen')}
-  if($('viewer')&&$('viewer').open){var nx=lang==='ar'?'ArrowLeft':'ArrowRight',pv=lang==='ar'?'ArrowRight':'ArrowLeft';if(e.key===nx)showPhoto(ui.vi+1);else if(e.key===pv)showPhoto(ui.vi-1)}
+  if($('viewer')&&$('viewer').open){var nx=lang==='ar'?'ArrowLeft':'ArrowRight',pv=lang==='ar'?'ArrowRight':'ArrowLeft';if(e.key===nx)showPhoto(stepPhoto(ui.vi,1));else if(e.key===pv)showPhoto(stepPhoto(ui.vi,-1))}
 });
 document.addEventListener('paste',function(e){
   var tg=e.target;
