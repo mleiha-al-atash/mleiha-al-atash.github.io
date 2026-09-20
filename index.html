@@ -219,6 +219,17 @@ html[lang="en"] .person-name{font-family:var(--display-lat);text-transform:upper
 .ph-play span{display:grid;place-items:center;width:clamp(48px,7vw,72px);aspect-ratio:1;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.8)}
 .ph-play svg{width:42%;margin-inline-start:6%}
 .ph figcaption{margin-top:6px;font-size:.9rem;opacity:.85}
+.ph-vph svg{width:22%;opacity:.55;color:#fff}
+.ph-vph{background:linear-gradient(135deg,var(--bg1),var(--bg2))!important}
+.tool[aria-pressed="true"]{background:var(--sfg);color:var(--sbg);border-color:var(--sfg)}
+.intro-grid{display:grid;gap:clamp(24px,4vw,64px);align-items:center}
+@media (min-width:900px){.intro-grid{grid-template-columns:minmax(0,1fr) auto}}
+.intro-copy .sec-title{margin-bottom:clamp(16px,2.5vw,28px)}
+.intro-card{position:relative;display:block;width:min(100%,380px);padding:0;border:0;background:#000;border-radius:var(--r);overflow:hidden;cursor:pointer;justify-self:center;box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.intro-card img{display:block;width:100%;height:auto;max-height:72svh;object-fit:cover}
+.intro-ph{display:grid;place-items:center;aspect-ratio:9/16;color:#fff;background:linear-gradient(135deg,var(--bg1),var(--bg2))}
+.intro-ph svg{width:26%;opacity:.5}
+.ph-play.big span{width:clamp(64px,14vw,92px)}
 .ph-empty{display:grid;place-items:center;background:color-mix(in srgb,currentColor 14%,transparent);break-inside:avoid;margin:0 0 clamp(10px,1.6vw,20px);border-radius:var(--r)}
 .ph-empty svg{width:22%;opacity:.5}
 .ph-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -347,7 +358,7 @@ html.editing .bar{display:flex}
 .bar.warn .status{color:#f0c14b}
 .bar-btns{display:flex;gap:6px;flex-wrap:nowrap;flex:1;justify-content:flex-end}
 .bar-btns .primary{margin-inline-start:auto}
-@media (max-width:700px){.bar{padding:8px 10px;gap:6px}.bar-btns{width:100%;flex:none}.bar button{padding:0 9px;font-size:.85rem;min-height:40px;white-space:nowrap}.bar-btns button:not(.primary){flex:1}}
+@media (max-width:700px){.bar{padding:8px 10px;gap:6px}.bar-btns{width:100%;flex:none;flex-wrap:wrap}.bar .bar-btns button{padding:0 7px;font-size:.8rem;min-height:40px;white-space:nowrap}.bar-btns{gap:5px}.bar .bar-btns button:not(.primary){flex:1 1 auto}}
 .bar button,.ed-actions button{min-height:44px;padding:0 16px;border:1.5px solid currentColor;border-radius:10px;background:none;color:inherit;font-size:.95rem;font-weight:600;cursor:pointer}
 .bar .primary{background:#d9a62e;border-color:#d9a62e;color:#161614}
 .toast{position:fixed;z-index:200;inset-inline:16px;bottom:90px;margin-inline:auto;width:fit-content;max-width:min(92vw,460px);padding:12px 18px;border-radius:12px;background:var(--ui);color:var(--ui-fg);font-size:.95rem;text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s}
@@ -588,6 +599,7 @@ var MAPICONS=['📍','🕌','🏫','💧','🌾','🌳','🏠','🏛️','🕯�
 
 var SECDEF={
   hero:{t:{ar:'الواجهة',en:'Home'},nav:false,fixed:true},
+  intro:{t:{ar:'كيف تستخدم الموقع',en:'How to use this site'},nav:false},
   featured:{t:{ar:'مختارات',en:'Featured'},nav:true},
   about:{t:{ar:'عنّا',en:'About'},nav:true,notitle:true},
   stories:{t:{ar:'حكايات القرية',en:'Village Stories'},nav:true},
@@ -596,8 +608,8 @@ var SECDEF={
   reviews:{t:{ar:'آراء الزوار',en:'Visitor Reviews'},nav:true},
   contact:{t:{ar:'شاركنا.',en:'Share with us.'},nav:true}
 };
-var SECORDER=['hero','featured','about','stories','photos','map','reviews','contact'];
-var SECBG={hero:1,featured:3,about:2,stories:3,photos:2,map:3,reviews:2,contact:1};
+var SECORDER=['hero','intro','featured','about','stories','photos','map','reviews','contact'];
+var SECBG={hero:1,intro:3,featured:3,about:2,stories:3,photos:2,map:3,reviews:2,contact:1};
 
 function defaults(){return{
   v:2,
@@ -609,6 +621,7 @@ function defaults(){return{
   emblem:'',
   loader:{a:{ar:'أهلاً',en:'Welcome'},b:{ar:'بكم',en:'Home'}},
   cover:{imgs:[],dark:40},
+  intro:{id:'',text:{ar:'شاهد هذا الفيديو القصير لتعرف ما هو الموقع وكيف تستخدمه.',en:'Watch this short video to learn what this site is and how to use it.'}},
   hero:{tag:{ar:'قرية في محافظة درعا، جنوب سوريا. هنا نجمع صورها وحكاياتها ومعلومات عنها في مكان واحد.',en:'A village in Daraa Governorate, southern Syria. Here we gather its photos, stories and information in one place.'}},
   sections:SECORDER.map(function(id){return{id:id,on:true,bg:SECBG[id]}}),
   cats:[
@@ -671,6 +684,7 @@ var V1_MAPTEXT='مليحة العطش في سهل حوران بمحافظة در
 function normalize(s){
   if(s.map&&s.map.text===V1_MAPTEXT)s.map.text=defaults().map.text;
   s.hero.tag=T2(s.hero.tag);
+  s.intro=s.intro&&typeof s.intro==='object'?s.intro:{};s.intro.id=String(s.intro.id||'');s.intro.text=T2(s.intro.text);if(!s.intro.text.ar&&!s.intro.text.en)s.intro.text=defaults().intro.text;
   s.about.statement=T2(s.about.statement);
   s.about.facts=(s.about.facts||[]).map(function(f){return{k:T2(f.k),v:T2(f.v)}});
   s.about.qa=(s.about.qa||[]).map(function(f){return{q:T2(f.q),a:T2(f.a)}});
@@ -868,8 +882,24 @@ function heroHTML(s){
 }
 function nextSecId(){
   var f=site.sections.filter(function(s){return s.on&&s.id!=='hero'});
-  for(var i=0;i<f.length;i++){if(f[i].id==='featured'&&!featuredList().length)continue;return f[i].id}
+  for(var i=0;i<f.length;i++){if(f[i].id==='featured'&&!featuredList().length)continue;if(f[i].id==='intro'&&introIndex()<0&&!ui.edit)continue;return f[i].id}
   return'top';
+}
+
+/* ---------- intro video (chosen by the owner from the gallery) ---------- */
+function introIndex(){
+  var id=site.intro&&site.intro.id,r=-1;
+  if(id)photos.forEach(function(p,i){if(p.id===id&&(p.kind==='video'||p.kind==='youtube'))r=i});
+  return r;
+}
+function introHTML(s){
+  var idx=introIndex();
+  if(idx<0){
+    return ui.edit?secOpen(s)+secTitle(s)+'<div class="ow-hint">لم تختر فيديو التعريف بعد. من قسم «الصور والفيديو» اضغط زر «🎬 اجعله فيديو التعريف» تحت الفيديو الذي تريده، فيظهر هنا بأول الموقع.</div></section>':'';
+  }
+  var p=photos[idx],th=mediaThumb(p);
+  return secOpen(s,'intro')+'<div class="intro-grid"><div class="intro-copy">'+secTitle(s)+'<p class="sec-lead"'+ea('intro.text','وصف قصير للفيديو','',1)+'>'+esc(tx(site.intro.text))+'</p></div>'+
+    '<button class="intro-card" data-act="photo-open" data-i="'+idx+'" aria-label="'+esc(t('play'))+'">'+(th?'<img alt="" src="'+th+'">':'<span class="intro-ph">'+STAR0+'</span>')+'<span class="ph-play big"><span>'+PLAY+'</span></span></button></div></section>';
 }
 
 /* ---------- featured (pinned) ---------- */
@@ -959,9 +989,9 @@ function photosHTML(s){
     var th=mediaThumb(p),isVid=p.kind==='video'||p.kind==='youtube',cap=tx(p.cap);
     if(!th&&!isVid)return;
     items+='<figure class="ph"><button class="ph-btn" data-act="photo-open" data-i="'+i+'" aria-label="'+esc(cap||(isVid?t('play'):t('view_photo')))+'">'+
-      (th?'<img loading="lazy" alt="'+esc(cap)+'" src="'+th+'">':'<span class="ph-vph"></span>')+
+      (th?'<img loading="lazy" alt="'+esc(cap)+'" src="'+th+'">':'<span class="ph-vph">'+STAR0+'</span>')+
       (isVid?'<span class="ph-play"><span>'+PLAY+'</span></span>':'')+'</button>'+
-      (ui.edit?'<figcaption'+ea('photos.'+i+'.cap','وصف (اختياري)',1,1)+'>'+esc(cap)+'</figcaption><div class="ph-tools"><button class="tool" data-act="photo-up" data-i="'+i+'">↑</button><button class="tool" data-act="photo-down" data-i="'+i+'">↓</button><button class="tool danger" data-act="photo-del" data-i="'+i+'">حذف</button></div>':(cap?'<figcaption>'+esc(cap)+'</figcaption>':''))+'</figure>';
+      (ui.edit?'<figcaption'+ea('photos.'+i+'.cap','وصف (اختياري)',1,1)+'>'+esc(cap)+'</figcaption><div class="ph-tools"><button class="tool" data-act="photo-up" data-i="'+i+'">↑</button><button class="tool" data-act="photo-down" data-i="'+i+'">↓</button>'+(isVid?'<button class="tool" data-act="photo-intro" data-i="'+i+'" aria-pressed="'+(!!site.intro&&site.intro.id===p.id)+'">🎬 '+((site.intro&&site.intro.id===p.id)?'فيديو التعريف ✓':'اجعله فيديو التعريف')+'</button>':'')+(p.kind==='video'?'<button class="tool" data-act="photo-poster" data-i="'+i+'">🖼 صورة الغلاف</button>':'')+'<button class="tool danger" data-act="photo-del" data-i="'+i+'">حذف</button></div>':(cap?'<figcaption>'+esc(cap)+'</figcaption>':''))+'</figure>';
   });
   if(!items)items=['4/5','1/1','4/3'].map(function(r){return'<div class="ph-empty" style="aspect-ratio:'+r+'" aria-hidden="true">'+STAR+'</div>'}).join('');
   return secOpen(s)+secTitle(s)+(photos.length?'':'<p class="empty" style="margin-bottom:24px">'+t('soon_media')+'</p>')+'<div class="masonry">'+items+'</div>'+
@@ -1046,7 +1076,7 @@ function blockHTML(s){
 }
 
 /* ---------- assemble ---------- */
-var BUILDERS={hero:heroHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
+var BUILDERS={hero:heroHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
 function secHTML(s){
   if(s.id.indexOf('blk_')===0)return blockHTML(s);
   var f=BUILDERS[s.id];return f?f(s):'';
@@ -1441,20 +1471,36 @@ function removeFiles(urls){
 }
 function videoPoster(file){
   return new Promise(function(res){
-    var v=document.createElement('video'),url=URL.createObjectURL(file),done=false;
-    function fin(b){if(done)return;done=true;try{URL.revokeObjectURL(url)}catch(e){}res(b||null)}
-    v.muted=true;v.playsInline=true;v.preload='metadata';
-    v.onloadeddata=function(){try{v.currentTime=Math.min(1,(v.duration||2)/3)}catch(e){fin(null)}};
-    v.onseeked=function(){
+    var v=document.createElement('video'),url=URL.createObjectURL(file),done=false,tm=0,seeked=false;
+    v.muted=true;v.defaultMuted=true;v.playsInline=true;v.preload='auto';
+    v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('webkit-playsinline','');
+    v.style.cssText='position:fixed;left:-9999px;top:0;width:2px;height:2px;opacity:0;pointer-events:none';
+    document.body.appendChild(v);
+    function fin(b){
+      if(done)return;done=true;clearTimeout(tm);
+      try{v.pause();v.removeAttribute('src');v.load()}catch(e){}
+      try{v.remove()}catch(e){}
+      try{URL.revokeObjectURL(url)}catch(e){}
+      res(b||null);
+    }
+    function draw(){
       try{
-        var w=v.videoWidth,h=v.videoHeight;if(!w)return fin(null);
+        var w=v.videoWidth,h=v.videoHeight;if(!w||!h)return false;
         var s=Math.min(1,900/Math.max(w,h)),c=document.createElement('canvas');c.width=Math.round(w*s);c.height=Math.round(h*s);
-        c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(function(b){fin(b)},'image/jpeg',.78);
-      }catch(e){fin(null)}
-    };
-    v.onerror=function(){fin(null)};
-    setTimeout(function(){fin(null)},9000);
+        c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+        c.toBlob(function(b){fin(b)},'image/jpeg',.8);return true;
+      }catch(e){return false}
+    }
+    function seek(){try{var d=isFinite(v.duration)&&v.duration>0?v.duration:2;v.currentTime=Math.min(1,d/3)}catch(e){}}
+    v.addEventListener('loadedmetadata',seek);
+    v.addEventListener('loadeddata',seek);
+    v.addEventListener('seeked',function(){seeked=true;if(!draw())setTimeout(draw,250)});
+    v.addEventListener('error',function(){fin(null)});
+    tm=setTimeout(function(){fin(null)},12000);
     v.src=url;
+    /* iPhone Safari often decodes a frame only after a short muted play */
+    var pr;try{pr=v.play()}catch(e){}
+    if(pr&&pr.then)pr.then(function(){setTimeout(function(){if(!done&&!seeked){try{v.pause()}catch(e){}seek()}},500)},function(){});
   });
 }
 function nextSort(){var m=0;photos.forEach(function(p){if(p.sort>m)m=p.sort});return m+1}
@@ -1487,6 +1533,19 @@ function pickFiles(kind,accept,multi){
 async function onFiles(files){
   var kind=ui.fileFor;if(!files.length||!kind)return;
   if(kind==='video'){await addVideo(files[0]);return}
+  if(kind==='poster'){
+    var it=photos[ui.fileIdx];if(!it)return;
+    try{
+      toast('جاري رفع الصورة...');
+      var pb=await readImage(files[0],900,.82),pu=await upload(pb,'videos','jpg','image/jpeg');
+      if(!pu){toast('تعذّر رفع الصورة. جرّب مرة ثانية.');return}
+      var pr=await sb.from('photos').update({poster_url:pu.url}).eq('id',it.id).select('id');
+      if(pr.error||!pr.data||!pr.data.length){removeFiles([pu.url]);toast('تعذّر حفظ صورة الغلاف.');return}
+      var oldp=it.poster;it.poster=pu.url;if(oldp)removeFiles([oldp]);
+      renderAll();toast('تم تغيير صورة الغلاف.');
+    }catch(e){toast(t('img_fail'))}
+    return;
+  }
   var max=kind==='cover'?1800:kind==='photos'?1600:kind==='emblem'?600:1200;
   if(kind==='post'||kind==='submit'){
     try{var b=await readImage(files[0],max,.8);if(edPost){edPost._blob=b;edPost.image='';refreshEditorImg()}}catch(e){toast(t('img_fail'))}
@@ -1614,7 +1673,7 @@ function buildChrome(){
   var c=document.createElement('div');c.id='chrome';
   c.innerHTML=
     '<button class="fab" id="fab" data-act="edit-on" hidden>✎ تحرير</button>'+
-    '<div class="bar" id="bar" role="toolbar" aria-label="أدوات التحرير"><span class="status" id="status">تم الحفظ</span><div class="bar-btns"><button data-act="design">🎨 لوحة التحكم</button><button data-act="stats" aria-label="الزوار">📊</button><button data-act="post-add">＋ إضافة</button><button id="revbtn" data-act="review">مراجعة</button><button class="primary" data-act="edit-off">تم</button></div></div>'+
+    '<div class="bar" id="bar" role="toolbar" aria-label="أدوات التحرير"><span class="status" id="status">تم الحفظ</span><div class="bar-btns"><button data-act="design">🎨 التحكم</button><button data-act="stats" aria-label="الزوار">📊</button><button data-act="post-add">＋ إضافة</button><button id="revbtn" data-act="review">مراجعة</button><button class="primary" data-act="edit-off">تم</button></div></div>'+
     '<dialog id="reader" class="reader" aria-label="reader"></dialog>'+
     '<dialog id="viewer" class="viewer" aria-label="viewer"></dialog>'+
     '<dialog id="design" class="sheet owner" aria-label="لوحة التحكم"></dialog>'+
@@ -2194,6 +2253,8 @@ document.addEventListener('click',function(e){
     case'vid-add':pickFiles('video','video/mp4,video/webm,video/quicktime',false);break;
     case'yt-add':openYt();break;
     case'yt-save':addYouTube($('yt-in').value).then(function(ok){if(ok)$('ytdlg').close()});break;
+    case'photo-intro':{var pi=photos[i];if(pi){site.intro=site.intro||{};site.intro.id=(site.intro.id===pi.id)?'':pi.id;queueSettings();renderAll();toast(site.intro.id?'صار هذا فيديو التعريف، ويظهر بأول الموقع.':'أُلغي فيديو التعريف.')}break}
+    case'photo-poster':ui.fileIdx=i;pickFiles('poster','image/*',false);break;
     case'photo-up':movePhoto(i,-1);break;
     case'photo-down':movePhoto(i,1);break;
     case'photo-del':
@@ -2201,7 +2262,7 @@ document.addEventListener('click',function(e){
         var ph2=photos[i];
         sb.from('photos').delete().eq('id',ph2.id).select('id').then(function(r){
           if(r.error||!r.data||!r.data.length){toast('تعذّر حذف العنصر.');return}
-          photos=photos.filter(function(x){return x.id!==ph2.id});removeFiles([ph2.url,ph2.poster].filter(Boolean));renderSec('photos');
+          photos=photos.filter(function(x){return x.id!==ph2.id});removeFiles([ph2.url,ph2.poster].filter(Boolean));if(site.intro&&site.intro.id===ph2.id){site.intro.id='';queueSettings()}renderAll();
         });
       }
       break;
