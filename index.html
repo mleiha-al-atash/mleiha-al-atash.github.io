@@ -426,6 +426,20 @@ dialog.viewer[open]{display:flex;flex-direction:column;align-items:center;justif
 .vnav{position:fixed;inset-inline:0;bottom:14px;display:flex;justify-content:center;gap:16px}
 .vnav button{width:52px;height:52px;border:0;border-radius:50%;background:#fff;color:#000;font-size:1.8rem;line-height:1;cursor:pointer}
 
+/* visitor statistics (owner) */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 6px}
+.stat{border:1.5px solid var(--ui);border-radius:12px;padding:10px 6px;text-align:center;background:#fff}
+.stat b{display:block;font-size:1.6rem;line-height:1.2}
+.stat span{font-size:.8rem;opacity:.75}
+.bars{display:flex;align-items:flex-end;gap:2px;height:110px;border-bottom:2px solid var(--ui);padding:0 2px}
+.bars i{flex:1;display:block;background:var(--ui);border-radius:2px 2px 0 0;min-height:2px}
+.bars-lbl{display:flex;justify-content:space-between;font-size:.75rem;opacity:.7;margin:4px 0 0}
+.sbar{display:grid;grid-template-columns:8.5em 1fr auto;gap:8px;align-items:center;font-size:.9rem;margin:0 0 6px}
+.sbar i{display:block;height:8px;border-radius:99px;background:rgba(0,0,0,.12);overflow:hidden}
+.sbar i b{display:block;height:100%;background:var(--ui)}
+.sbar em{font-style:normal;font-size:.8rem;opacity:.8;white-space:nowrap}
+.count-note{display:block;flex-basis:100%;opacity:.7;font-size:.8rem}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .spin,.pin-ring,.flag-wave{animation:none}
@@ -501,7 +515,7 @@ ar:{
   send:'إرسال',cancel:'إلغاء',sending:'جاري الإرسال...',err_title:'اكتب عنواناً للمشاركة.',err_name:'اكتب الاسم.',err_body:'اكتب نصاً أطول قليلاً (20 حرفاً على الأقل).',cooldown:'انتظر دقيقة قبل إرسال مشاركة ثانية.',
   img_fail:'تعذّرت قراءة الصورة.',img_up_fail:'تعذّر رفع الصورة. جرّب بدونها أو لاحقاً.',sent_ok:'وصلتنا مشاركتك. ستظهر بعد مراجعتها.',send_fail:'تعذّر إرسال المشاركة. تأكد من الاتصال ثم جرّب.',
   offline:'الموقع غير متصل بقاعدة البيانات الآن.',lifeline:'من {a} إلى {b}',
-  footer_note:'مليحة العطش، درعا، سوريا',lang_btn:'EN',lang_label:'English',
+  footer_note:'مليحة العطش، درعا، سوريا',count_note:'نحسب عدد الزيارات فقط، دون تسجيل أي معلومة شخصية.',lang_btn:'EN',lang_label:'English',
   loader_a:'أهلاً',loader_b:'بكم',dir_no:'الاتجاهات',
   t_event:'حدث',doc_title:'مليحة العطش — درعا، سوريا'
 },
@@ -524,7 +538,7 @@ en:{
   send:'Send',cancel:'Cancel',sending:'Sending...',err_title:'Please enter a title.',err_name:'Please enter the name.',err_body:'Please write a little more (at least 20 characters).',cooldown:'Please wait a minute before sending another contribution.',
   img_fail:'Could not read the photo.',img_up_fail:'Could not upload the photo. Try without it or later.',sent_ok:'We received your contribution. It will appear after review.',send_fail:'Could not send. Check your connection and try again.',
   offline:'The site is not connected to the database right now.',lifeline:'{a} to {b}',
-  footer_note:'Muleiha Al-Atash, Daraa, Syria',lang_btn:'ع',lang_label:'العربية',
+  footer_note:'Muleiha Al-Atash, Daraa, Syria',count_note:'We only count visits, with no personal information.',lang_btn:'ع',lang_label:'العربية',
   loader_a:'Welcome',loader_b:'Home',dir_no:'Directions',
   t_event:'Event',doc_title:'Muleiha Al-Atash — Daraa, Syria'
 }};
@@ -819,7 +833,7 @@ function navHTML(){
 function footHTML(){
   var em=safeUrl(site.emblem);
   return'<footer class="foot"><div class="foot-l">'+(site.design.flagFoot?'<span class="flag-ico">'+flagSVG()+'</span>':'')+(em?'<img class="emblem" alt="" src="'+em+'">':'')+
-    '<span>'+esc(t('footer_note'))+'</span></div>'+(CONFIGURED&&!ui.admin?'<button class="linkbtn" data-act="login">'+t('owner_login')+'</button>':'')+'</footer>';
+    '<span>'+esc(t('footer_note'))+'</span>'+(CONFIGURED?'<small class="count-note">'+esc(t('count_note'))+'</small>':'')+'</div>'+(CONFIGURED&&!ui.admin?'<button class="linkbtn" data-act="login">'+t('owner_login')+'</button>':'')+'</footer>';
 }
 
 /* ---------- section shells ---------- */
@@ -1554,7 +1568,44 @@ async function initBackend(){
       var isAdmin=await withTimeout(checkAdmin(),8000,false);
       if(isAdmin)renderAll();
     }
+    recordVisit().catch(function(){});
   }catch(e){}
+}
+
+/* ---------- visit counter: anonymous (no name, no IP, no cookies) ---------- */
+var VSRC=['direct','whatsapp','facebook','google','telegram','instagram','x','youtube','other'];
+function anonId(){
+  var v=ls('malha-vid');
+  if(!/^[a-z0-9]{8,40}$/.test(v||'')){
+    v=(Date.now().toString(36)+Math.random().toString(36).slice(2,12)+Math.random().toString(36).slice(2,8)).replace(/[^a-z0-9]/g,'').slice(0,28);
+    ls('malha-vid',v);
+  }
+  return v;
+}
+function visitSource(){
+  var q=/[?&]from=([a-z]{1,12})(?:&|#|$)/.exec(location.search);
+  if(q&&VSRC.indexOf(q[1])>=0)return q[1];
+  var ref=document.referrer||'';
+  if(!ref)return'direct';
+  var h='';
+  try{h=new URL(ref).hostname.toLowerCase()}catch(e){return'other'}
+  if(h===location.hostname)return'direct';
+  if(/(^|\.)wa\.me$|whatsapp/.test(h))return'whatsapp';
+  if(/facebook\.com$|fb\.com$|fb\.me$/.test(h))return'facebook';
+  if(/(^|\.)google\./.test(h))return'google';
+  if(/(^|\.)t\.me$|telegram/.test(h))return'telegram';
+  if(/instagram\.com$/.test(h))return'instagram';
+  if(/(^|\.)(twitter|x)\.com$|(^|\.)t\.co$/.test(h))return'x';
+  if(/youtube\.com$|youtu\.be$/.test(h))return'youtube';
+  return'other';
+}
+async function recordVisit(){
+  if(!sb||ui.admin||ls('malha-nocount')==='1')return;
+  if(/bot|crawl|spider|slurp|preview/i.test(navigator.userAgent||''))return;
+  var day=todayISO();
+  if(ls('malha-vday')===day)return;
+  var r=await withTimeout(sb.rpc('record_visit',{p_vid:anonId(),p_lang:lang,p_device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent||'')?'mobile':'desktop',p_src:visitSource()}),5000,{error:true});
+  if(r&&!r.error)ls('malha-vday',day);
 }
 
 
@@ -1563,7 +1614,7 @@ function buildChrome(){
   var c=document.createElement('div');c.id='chrome';
   c.innerHTML=
     '<button class="fab" id="fab" data-act="edit-on" hidden>✎ تحرير</button>'+
-    '<div class="bar" id="bar" role="toolbar" aria-label="أدوات التحرير"><span class="status" id="status">تم الحفظ</span><div class="bar-btns"><button data-act="design">🎨 لوحة التحكم</button><button data-act="post-add">＋ إضافة</button><button id="revbtn" data-act="review">مراجعة</button><button class="primary" data-act="edit-off">تم</button></div></div>'+
+    '<div class="bar" id="bar" role="toolbar" aria-label="أدوات التحرير"><span class="status" id="status">تم الحفظ</span><div class="bar-btns"><button data-act="design">🎨 لوحة التحكم</button><button data-act="stats" aria-label="الزوار">📊</button><button data-act="post-add">＋ إضافة</button><button id="revbtn" data-act="review">مراجعة</button><button class="primary" data-act="edit-off">تم</button></div></div>'+
     '<dialog id="reader" class="reader" aria-label="reader"></dialog>'+
     '<dialog id="viewer" class="viewer" aria-label="viewer"></dialog>'+
     '<dialog id="design" class="sheet owner" aria-label="لوحة التحكم"></dialog>'+
@@ -1595,7 +1646,7 @@ function confirmTap(key,msg){
 }
 
 /* ---------- design panel (owner) ---------- */
-var DTABS=[['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
+var DTABS=[['stats','📊 الزوار'],['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
 function parseVal(v){
   if(v==='true')return true;if(v==='false')return false;
   if(/^-?\d+(\.\d+)?$/.test(v))return +v;
@@ -1624,7 +1675,46 @@ function fontButtons(path,list){
     return'<button class="seg-b" data-act="set" data-key="'+path+'" data-val="'+esc(f)+'" aria-pressed="'+(cur===f)+'" style="font-family:\''+f+'\',sans-serif;font-size:1.15rem;text-align:center;border-radius:12px">'+sample+'<br><small style="font-family:inherit;font-size:.7rem;opacity:.7">'+f+'</small></button>';
   }).join('')+'</div>';
 }
+var STAT_NAMES={
+  device:{mobile:'جوال',desktop:'حاسوب',other:'غير معروف'},
+  lang:{ar:'عربي',en:'إنجليزي',other:'غير معروف'},
+  src:{direct:'مباشر (رابط مباشر أو واتساب)',whatsapp:'واتساب',facebook:'فيسبوك',google:'جوجل',telegram:'تيليجرام',instagram:'إنستغرام',x:'X (تويتر)',youtube:'يوتيوب',other:'مواقع أخرى'}
+};
+function n0(n){return(+n||0).toLocaleString('en-US')}
+function statBreak(title,obj,names){
+  var keys=Object.keys(obj||{}),tot=0;keys.forEach(function(k){tot+=+obj[k]});
+  if(!tot)return'';
+  keys.sort(function(a,b){return obj[b]-obj[a]});
+  return'<h4>'+title+'</h4>'+keys.map(function(k){
+    var p=Math.round(obj[k]/tot*100);
+    return'<div class="sbar"><span>'+esc(names[k]||k)+'</span><i><b style="width:'+p+'%"></b></i><em>'+n0(obj[k])+' ('+p+'%)</em></div>';
+  }).join('');
+}
+function statsHTML(d){
+  var days=d.days||[],max=1;days.forEach(function(x){if(+x.n>max)max=+x.n});
+  var bars=days.map(function(x){return'<i title="'+esc(x.d)+': '+n0(x.n)+'" style="height:'+Math.max(2,Math.round(x.n/max*100))+'%"></i>'}).join('');
+  var first=days.length?days[0].d:'',last=days.length?days[days.length-1].d:'';
+  return'<div class="stat-grid">'+
+    [['اليوم',d.today],['أمس',d.yesterday],['آخر 7 أيام',d.last7],['آخر 30 يوم',d.last30],['كل الوقت',d.people]].map(function(c){return'<div class="stat"><b>'+n0(c[1])+'</b><span>'+c[0]+'</span></div>'}).join('')+
+    '<div class="stat"><b>'+n0(d.visits)+'</b><span>مجموع الزيارات</span></div></div>'+
+    '<h4>الزوار كل يوم (آخر 30 يوم)</h4><div class="bars" dir="ltr">'+bars+'</div><div class="bars-lbl" dir="ltr"><span>'+esc(first)+'</span><span>الأعلى: '+n0(max)+'</span><span>'+esc(last)+'</span></div>'+
+    statBreak('الجهاز (آخر 30 يوم)',d.device,STAT_NAMES.device)+statBreak('لغة الزائر',d.lang,STAT_NAMES.lang)+statBreak('من أين وصلوا',d.src,STAT_NAMES.src)+
+    (d.first_day?'<p class="hint" style="margin-top:14px">العدّاد بدأ بتاريخ '+esc(d.first_day)+'.</p>':'')+
+    '<p class="hint">كل متصفح يُحسب مرة واحدة باليوم، فالأرقام تقريبية: من يزور من جهازين يُحسب مرتين، ومن يمسح بيانات المتصفح يُحسب من جديد. لا يُسجَّل أي اسم أو رقم أو موقع، لذلك لا يمكن معرفة أسماء الزوار. الأسماء الوحيدة هي ما يكتبونه بأنفسهم في التقييمات والمشاركات.</p>'+
+    '<label class="opt"><input type="checkbox" data-nocount'+(ls('malha-nocount')==='1'?' checked':'')+'>لا تحسب زياراتي من هذا الجهاز</label>';
+}
+async function loadStats(){
+  var box=$('statsbox');if(!box||!sb)return;
+  var r=await withTimeout(sb.rpc('visit_stats'),9000,{error:{message:'timeout'}});
+  box=$('statsbox');if(!box)return;
+  if(!r||r.error||!r.data){
+    box.innerHTML='<p class="err">تعذّر تحميل الإحصائيات.</p><p class="hint">إذا لم تشغّل ملف <b>update2.sql</b> في Supabase بعد، شغّله أولاً ثم أعد المحاولة. (الرسالة: '+esc(String(r&&r.error&&r.error.message||'').slice(0,80))+')</p>';
+    return;
+  }
+  box.innerHTML=statsHTML(r.data);
+}
 var DBODY={
+stats:function(){return'<div id="statsbox"><p class="hint">جاري التحميل...</p></div>'},
 look:function(){
   var t=site.theme;
   return'<h4>الألوان</h4><div class="presets">'+PRESETS.map(function(p,i){return'<button class="preset" data-act="preset" data-i="'+i+'"><span class="sw"><i style="background:'+p.c[0]+'"></i><i style="background:'+p.c[1]+'"></i><i style="background:'+p.c[2]+'"></i></span>'+p.n+'</button>'}).join('')+'</div>'+
@@ -1699,8 +1789,8 @@ function picker(k,label,v){return'<label class="pick"><input type="color" data-c
 function designHTML(){
   return'<div class="dlg-in"><h3>لوحة التحكم</h3><div class="dtabs">'+DTABS.map(function(x){return'<button class="dtab" data-act="dtab" data-t="'+x[0]+'" aria-pressed="'+(ui.dtab===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div id="dbody">'+DBODY[ui.dtab]()+'</div><div class="ed-actions"><button class="primary" data-close>تم</button></div></div>';
 }
-function refreshDesign(){var d=$('design');if(d.open){var b=d.querySelector('.dlg-in'),y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y}}
-function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d)}
+function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats()}}
+function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats()}
 function afterSet(path){
   if(path==='design.tscale'){fitHero();return}
   if(path.indexOf('design.')===0&&['scale','space','shape','disp','body','dispLat'].indexOf(path.slice(7))>=0){applyDesign();setTimeout(fitHero,400);return}
@@ -1893,6 +1983,7 @@ async function doLogin(){
     err.textContent=why+' ['+em.slice(0,90)+']';err.hidden=false;return;
   }
   var ok=await checkAdmin();
+  if(ok)ls('malha-nocount','1');
   b.disabled=false;b.textContent='دخول';
   if(!ok){await sb.auth.signOut();err.textContent='هذا الحساب ليس مالك الموقع.';err.hidden=false;return}
   $('login').close();
@@ -1901,7 +1992,7 @@ async function doLogin(){
 async function checkAdmin(){
   var r=await sb.rpc('is_admin');
   if(r.error||r.data!==true)return false;
-  ui.admin=true;
+  ui.admin=true;ls('malha-nocount','1');
   var pr=await sb.from('posts').select('*').order('created_at',{ascending:false});
   if(!pr.error&&pr.data)posts=pr.data.map(fromRow);
   var rr=await sb.from('reviews').select('*').order('created_at',{ascending:false});
@@ -2057,6 +2148,7 @@ document.addEventListener('click',function(e){
     case'edit-on':enterEdit();break;
     case'edit-off':exitEdit();break;
     case'design':openDesign();break;
+    case'stats':openDesign('stats');break;
     case'dtab':ui.dtab=a.dataset.t;refreshDesign();break;
     case'review':{var pe=$('pending')||$('pending-rev')||$('stories');if(pe)pe.scrollIntoView();break}
     case'set':{var pth=a.dataset.key;setBySpec(pth,parseVal(a.dataset.val));afterSet(pth);queueSettings();refreshDesign();break}
@@ -2148,6 +2240,7 @@ document.addEventListener('change',function(e){
   if(tg.id==='p-cat'){applyKind($('editor'),tg.value)}
   if(tg.id==='s-cat'){applySubmitKind($('submit'))}
   if(tg.id==='file'){onFiles([].slice.call(tg.files))}
+  if(tg.dataset&&tg.dataset.nocount!==undefined){ls('malha-nocount',tg.checked?'1':null);return}
   if(tg.dataset&&tg.dataset.toggle){var pth=tg.dataset.toggle;setPath(site,pth,tg.checked);afterSet(pth);queueSettings();return}
   if(tg.dataset&&tg.dataset.model){
     var path=tg.dataset.model,l=tg.dataset.l,val=tg.value;
