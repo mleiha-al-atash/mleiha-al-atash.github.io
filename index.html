@@ -627,6 +627,19 @@ html.look2 .foot{border-top:0}
 .tile-wrap .row-tools{gap:6px}
 .tile-wrap .row-tools .tool{padding:5px 11px;font-size:.8rem;min-height:0;line-height:1.5}
 
+/* comments */
+.cmt-btn{display:inline-flex;align-items:center;gap:6px;margin:14px 0 0;padding:9px 18px;border:2px solid currentColor;border-radius:999px;background:none;color:inherit;font:inherit;font-weight:600;cursor:pointer}
+.cmt-pend{background:#d9b44a;color:#161614;border-radius:999px;padding:0 8px;font-size:.8em}
+.cmt-of{margin:0 0 14px;font-weight:600;opacity:.8}
+.cmt-list{display:flex;flex-direction:column;gap:12px;margin:0 0 18px;max-height:46vh;overflow:auto}
+.cmt-item{border:1px solid color-mix(in srgb,currentColor 25%,transparent);border-radius:14px;padding:12px 14px}
+.cmt-item.pend{border-style:dashed}
+.cmt-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.9rem}
+.cmt-head span{opacity:.65}
+.cmt-item p{margin:6px 0 0;line-height:1.8;overflow-wrap:anywhere}
+.aud .cmt-btn{margin-top:10px;font-size:.9rem;padding:6px 14px}
+.viewer .cmt-btn{color:#fff;margin-top:10px}
+
 </style>
 <style id="theme-vars"></style>
 <noscript><style>.loader{display:none}.line>span{transform:none}html.loading,html.loading body{overflow:auto}</style></noscript>
@@ -679,7 +692,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',owner_login:'دخول الإدارة',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',owner_login:'دخول الإدارة',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -712,7 +725,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش — درعا، سوريا'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',owner_login:'Staff login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',owner_login:'Staff login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -875,6 +888,7 @@ function defaults(){return{
       {k:{ar:'فيسبوك',en:'Facebook'},v:'@username',href:'#'}
     ]},
   reviews:{auto:false},
+  comments:{auto:false},
   tiles:{lead:{ar:'محتوى متكامل يوثّق تاريخ القرية وتراثها ومعالمها',en:'A complete record of the village: its history, heritage and landmarks'},
     items:[
       {id:'t1',title:{ar:'الحكايات',en:'Stories'},icon:'book',image:'',k:'sec',v:'stories',on:true},
@@ -930,6 +944,7 @@ function normalize(s){
   s.about.statement=T2(s.about.statement);s.about.title=T2(s.about.title);s.about.quote=T2(s.about.quote);
   s.hero.quote=T2(s.hero.quote);
   s.tiles=normTiles(s.tiles);
+  s.comments=s.comments&&typeof s.comments==='object'?s.comments:{};s.comments.auto=s.comments.auto===true;
   s.foot=s.foot&&typeof s.foot==='object'?s.foot:{};s.foot.line=T2(s.foot.line);
   s.about.facts=(s.about.facts||[]).map(function(f){return{k:T2(f.k),v:T2(f.v)}});
   s.about.qa=(s.about.qa||[]).map(function(f){return{q:T2(f.q),a:T2(f.a)}});
@@ -964,8 +979,8 @@ function normalize(s){
   if(!s.seen.look2){s.sections.forEach(function(x){if(x.id==='about'&&x.bg===2)x.bg=3});s.seen.look2=1}
   return s;
 }
-var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[];
-var ui={edit:false,admin:false,tab:'all',pending:null,fileFor:null,vi:0,dtab:'look',menu:false};
+var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[],comments=[];
+var ui={cmtOK:false,edit:false,admin:false,tab:'all',pending:null,fileFor:null,vi:0,dtab:'look',menu:false};
 
 /* ---------- theme + design ---------- */
 function okHex(h){return/^#[0-9a-fA-F]{6}$/.test(h||'')}
@@ -1319,7 +1334,7 @@ function storiesHTML(s){
     }).join('')+'</div>';
   }
   var empty=list.length?'':'<p class="empty">'+(approved().length?t('empty_cat'):t('empty_soon'))+'</p>';
-  return secOpen(s)+secTitle(s)+pendBox+(base.length>=3?'<input class="search" id="q" type="search" placeholder="'+esc(t('search_ph'))+'" aria-label="'+esc(t('search_ph'))+'" autocomplete="off">':'')+'<div class="tabs" role="group">'+tabs+'</div>'+body+'<p class="empty" id="nores" hidden>'+esc(t('search_none'))+'</p>'+empty+
+  return secOpen(s)+secTitle(s)+pendBox+pendCmtHTML()+(base.length>=3?'<input class="search" id="q" type="search" placeholder="'+esc(t('search_ph'))+'" aria-label="'+esc(t('search_ph'))+'" autocomplete="off">':'')+'<div class="tabs" role="group">'+tabs+'</div>'+body+'<p class="empty" id="nores" hidden>'+esc(t('search_none'))+'</p>'+empty+
     (ui.edit?'<button class="add-btn" data-act="post-add">＋ إضافة قصة أو مقال أو حدث</button>':(CONFIGURED?'<button class="add-btn" data-act="submit-open">'+t('share_btn')+'</button><p class="note">'+t('share_note')+'</p>':''))+'</section>';
 }
 
@@ -1410,7 +1425,7 @@ function audioHTML(s){
     var p=x.p,i=x.i,src=safeUrl(p.url),title=tx(p.cap),by=p.speaker||'';
     return'<article class="aud"><div class="aud-top"><span class="aud-ic" aria-hidden="true">🎙</span><div class="aud-txt"><h3 class="aud-title"'+ea('photos.'+i+'.cap','عنوان التسجيل',1,1)+'>'+esc(title||(ui.edit?'':t('aud_untitled')))+'</h3>'+
       ((by||ui.edit)?'<p class="aud-by">'+(ui.edit?'':esc(t('aud_by'))+' ')+'<span'+ea('photos.'+i+'.speaker','اسم المتحدث',1)+'>'+esc(by)+'</span></p>':'')+'</div></div>'+
-      '<audio controls preload="none" src="'+esc(src)+'"></audio>'+
+      '<audio controls preload="none" src="'+esc(src)+'"></audio>'+cmtBtn('photo',p.id)+
       (ui.edit?'<div class="ph-tools"><button class="tool" data-act="photo-up" data-i="'+i+'">↑</button><button class="tool" data-act="photo-down" data-i="'+i+'">↓</button><button class="tool danger" data-act="photo-del" data-i="'+i+'">حذف</button></div>':'')+'</article>';
   }).join('');
   return secOpen(s)+secTitle(s)+(list.length?'':'<div class="ow-hint">ما في تسجيلات بعد. سجّل حكاية من أحد كبار السن، أو ارفع ملفاً صوتياً.</div>')+'<div class="aud-list">'+cards+'</div>'+
@@ -1808,7 +1823,7 @@ function updateBar(){
   var s=$('status');if(!s)return;
   s.textContent=statusText();
   $('bar').classList.toggle('warn',!!(q.inflight||q.timers||q.error));
-  var n=pendingPosts().length+pendingReviews().length+pendingPhotos().length+(ui.admin&&ui.edit?unreadMessages():0);
+  var n=pendingPosts().length+pendingReviews().length+pendingPhotos().length+pendingComments().length+(ui.admin&&ui.edit?unreadMessages():0);
   $('revbtn').textContent=n?'مراجعة ('+nf(n)+')':'مراجعة';
 }
 async function run(fn){
@@ -2054,6 +2069,7 @@ async function loadData(){
   if(!h.error&&h.data)photos=h.data.map(photoFromRow);
   var r=await sb.from('reviews').select('*').order('created_at',{ascending:false});
   if(!r.error&&r.data)reviews=r.data.map(reviewFromRow);
+  await loadComments();
   return !s.error&&!p.error&&!h.error;
 }
 async function initBackend(){
@@ -2146,6 +2162,7 @@ function buildChrome(){
     '<dialog id="editor" class="sheet owner" aria-label="محرر المحتوى"></dialog>'+
     '<dialog id="poidlg" class="sheet owner" aria-label="مكان جديد"></dialog>'+
     '<dialog id="tiledlg" class="sheet owner" aria-label="تعديل البلاطة"></dialog>'+
+    '<dialog id="cmtdlg" class="sheet" aria-label="comments"></dialog>'+
     '<dialog id="ytdlg" class="sheet owner" aria-label="فيديو يوتيوب"></dialog>'+
     '<dialog id="recdlg" class="sheet owner" aria-label="تسجيل صوتي"></dialog>'+
     '<dialog id="submit" class="sheet" aria-label="submit"></dialog>'+
@@ -2157,7 +2174,7 @@ function buildChrome(){
     d.addEventListener('click',function(e){if(e.target===d)d.close()});
     d.addEventListener('close',function(){
       if(d.id==='recdlg')recCleanup();
-      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
+      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='cmtdlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
       if(d.id==='reader'||d.id==='viewer'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
       if(d.id==='reader')d.innerHTML='';
       if(!document.querySelector('dialog[open]'))root.classList.remove('modal');
@@ -2314,6 +2331,7 @@ gen:function(){
     textRow('First welcome word (English)','loader.a','en',' dir="ltr"')+textRow('Second welcome word (English)','loader.b','en',' dir="ltr"')+
     '<h4>شريط إعلان أعلى الموقع</h4><p class="hint">للأفراح والتعازي والفعاليات. الزائر يقدر يغلقه.</p>'+toggleRow('إظهار الشريط','announce.on')+textRow('نص الإعلان (عربي)','announce.text','ar')+textRow('Announcement text (English)','announce.text','en',' dir="ltr"')+textRow('رابط عند الضغط (اختياري)','announce.link','',' dir="ltr" placeholder="https://..."')+
     '<h4>آراء الزوار</h4>'+toggleRow('نشر آراء الزوار مباشرة بدون مراجعة (غير مفضّل)','reviews.auto')+
+    '<h4>تعليقات الزوار</h4><p class="hint">التعليقات على الحكايات والمقالات والصور والفيديو والتسجيلات، وليس على شهداء القرية.</p>'+toggleRow('نشر التعليقات مباشرة بدون مراجعة (غير مفضّل)','comments.auto')+
     '<h4>نسخة احتياطية</h4><p class="hint">تنزّل ملفاً فيه الحكايات والإعدادات والتعليقات والرسائل وروابط المعرض. الصور والفيديوهات نفسها تبقى في Supabase. خذ نسخة كل شهر واحفظها في مكان آمن.'+(ls('malha-lastbackup')?' آخر نسخة من هذا الجهاز: '+esc(ls('malha-lastbackup'))+'.':' لم تأخذ نسخة من هذا الجهاز بعد.')+'</p><div class="ed-actions"><button data-act="backup">📥 تنزيل نسخة احتياطية</button></div>'+
     pwHTML()+
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
@@ -2562,7 +2580,7 @@ function openReader(id){
   }
   var d=$('reader');
   d.innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button><article class="rd'+(people?' people':'')+'">'+(img?'<img alt="" src="'+img+'">':'')+'<div class="post-meta">'+postMeta(p)+'</div><h2>'+esc(pTitle(p))+'</h2>'+
-    (people&&lifeLine(p)?'<div class="lifeline">'+esc(lifeLine(p))+'</div>':'')+(c&&c.kind==='timeline'&&yearLabel(p)?'<div class="lifeline">'+esc(dig(yearLabel(p)))+'</div>':'')+'<div class="rd-body">'+body+'</div>'+shareBar('p',p.id,pTitle(p))+tools+'</article>';
+    (people&&lifeLine(p)?'<div class="lifeline">'+esc(lifeLine(p))+'</div>':'')+(c&&c.kind==='timeline'&&yearLabel(p)?'<div class="lifeline">'+esc(dig(yearLabel(p)))+'</div>':'')+'<div class="rd-body">'+body+'</div>'+shareBar('p',p.id,pTitle(p))+cmtBtn('post',p.id)+tools+'</article>';
   try{history.replaceState(null,'','#p='+encodeURIComponent(p.id))}catch(e){}
   d.scrollTop=0;openDlg(d);
 }
@@ -2576,13 +2594,13 @@ function showPhoto(i){
   if(p.kind==='youtube'&&/^[A-Za-z0-9_-]{11}$/.test(p.yt||''))media='<iframe src="https://www.youtube-nocookie.com/embed/'+p.yt+'?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="video"></iframe>';
   else if(p.kind==='video')media='<video controls autoplay playsinline preload="metadata" src="'+esc(safeUrl(p.url))+'"'+(safeUrl(p.poster)?' poster="'+esc(safeUrl(p.poster))+'"':'')+'></video>';
   else media='<img alt="'+esc(cap)+'" src="'+esc(safeUrl(p.url))+'">';
-  $('viewer').innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button>'+media+(cap?'<p>'+esc(cap)+'</p>':'')+shareBar('m',p.id,cap||(lang==='ar'?site.brand.ar:site.brand.en))+
+  $('viewer').innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button>'+media+(cap?'<p>'+esc(cap)+'</p>':'')+shareBar('m',p.id,cap||(lang==='ar'?site.brand.ar:site.brand.en))+cmtBtn('photo',p.id)+
     (gallery().length>1?'<div class="vnav"><button data-act="v-prev" aria-label="'+t('prev')+'">'+(lang==='ar'?'›':'‹')+'</button><button data-act="v-next" aria-label="'+t('next')+'">'+(lang==='ar'?'‹':'›')+'</button></div>':'');
 }
 
 /* ---------- login / edit mode ---------- */
 function loginHTML(){
-  return'<div class="dlg-in"><h3>دخول المالك</h3><p class="hint">هذا الدخول لصاحب الموقع فقط.</p>'+
+  return'<div class="dlg-in"><h3>دخول الإدارة</h3><p class="hint">هذا الدخول للمالك والمشرفين فقط.</p>'+
     '<label class="fld">البريد الإلكتروني<input id="l-email" type="email" autocomplete="username" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="fld">كلمة السر<input id="l-pass" type="password" autocomplete="current-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="opt" style="margin-top:-6px"><input type="checkbox" data-act="pass-show">إظهار كلمة السر</label>'+
@@ -2633,6 +2651,7 @@ async function checkAdmin(){
   if(!pr.error&&pr.data)posts=pr.data.map(fromRow);
   var rr=await sb.from('reviews').select('*').order('created_at',{ascending:false});
   if(!rr.error&&rr.data)reviews=rr.data.map(reviewFromRow);
+  await loadComments();
   if(!ui.mod)await loadMessages();
   var ph=await sb.from('photos').select('*').order('sort',{ascending:true}).order('created_at',{ascending:true});
   if(ph.error)ph=await sb.from('photos').select('*').order('created_at',{ascending:true});
@@ -3025,9 +3044,104 @@ async function sendPhotos(){
   ls('malha-last-ph',String(Date.now()));ui.pblobs=[];$('submit').close();toast(t('ph_ok'));
 }
 
+/* ---------- comments: on stories, articles, events, history, photos, videos and recordings (never on martyrs) ---------- */
+function cmtFromRow(r){return{id:String(r.id),t:r.target_type,tid:String(r.target_id),name:String(r.name||''),body:String(r.body||''),status:r.status==='approved'?'approved':'pending',created:r.created_at||''}}
+async function loadComments(){
+  var cm=await sb.from('comments').select('*').order('created_at',{ascending:true});
+  if(!cm.error&&cm.data){comments=cm.data.map(cmtFromRow);ui.cmtOK=true}else{comments=[];ui.cmtOK=false}
+}
+function cmtItem(type,id){
+  if(type==='post')return posts.filter(function(x){return x.id===id})[0];
+  return photos.filter(function(x){return x.id===id})[0];
+}
+function cmtAllowed(type,id){
+  if(!ui.cmtOK)return false;
+  var it=cmtItem(type,id);if(!it)return false;
+  if(type==='post'){var c=catOf(it.cat);return it.status==='approved'&&!(c&&c.kind==='people')&&it.cat!=='martyr'}
+  return !isPending(it);
+}
+function cmtList(type,id,all){
+  return comments.filter(function(c){return c.t===type&&c.tid===String(id)&&(all||c.status==='approved')}).sort(function(a,b){return a.created<b.created?-1:a.created>b.created?1:0});
+}
+function cmtLabel(type,id){
+  var it=cmtItem(type,id);if(!it)return'';
+  if(type==='post')return pTitle(it);
+  var cap=tx(it.cap);return cap||t(it.kind==='audio'?'cmt_audio':it.kind==='image'?'cmt_photo':'cmt_video');
+}
+function cmtBtn(type,id){
+  if(!cmtAllowed(type,id))return'';
+  var n=cmtList(type,id).length,pend=(ui.admin&&ui.edit)?cmtList(type,id,true).length-n:0;
+  return'<button class="cmt-btn" data-act="cmt-open" data-t="'+type+'" data-id="'+esc(id)+'">💬 '+esc(t('cmt_btn'))+(n?' ('+nf(n)+')':'')+(pend?' <b class="cmt-pend">+'+nf(pend)+'</b>':'')+'</button>';
+}
+function cmtRefresh(){
+  [].forEach.call(document.querySelectorAll('.cmt-btn'),function(b){b.outerHTML=cmtBtn(b.dataset.t,b.dataset.id)});
+}
+var cmtCur=null;
+function cmtHTML(){
+  var staff=ui.admin&&ui.edit,list=cmtList(cmtCur.t,cmtCur.id,staff);
+  var items=list.map(function(c){
+    var id=esc(c.id),pend=c.status==='pending';
+    return'<article class="cmt-item'+(pend?' pend':'')+'"><div class="cmt-head"><b>'+esc(c.name)+'</b><span>'+esc(fdate((c.created||'').slice(0,10)))+(pend?' · بانتظار المراجعة':'')+'</span></div><p>'+esc(c.body).replace(/\n/g,'<br>')+'</p>'+
+      (staff?'<div class="row-tools">'+(pend?'<button class="tool" data-act="cmt-ok" data-id="'+id+'">قبول ونشر</button>':'')+'<button class="tool danger" data-act="cmt-del" data-id="'+id+'">حذف</button></div>':'')+'</article>';
+  }).join('');
+  var form=ui.edit?'':'<div class="cmt-form"><label class="fld">'+t('cmt_name')+'<input id="cm-name" maxlength="60" autocomplete="name"></label><label class="fld">'+t('cmt_text')+'<textarea id="cm-text" rows="4" maxlength="1000"></textarea></label>'+
+    '<div class="hp" aria-hidden="true"><label>Website<input id="cm-web" tabindex="-1" autocomplete="off"></label></div><p class="hint">'+t('cmt_rule')+'</p><p class="err" id="cm-err" dir="auto" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="cmt-send" id="cm-send">'+t('cmt_send')+'</button><button data-close>'+t('close')+'</button></div></div>';
+  return'<div class="dlg-in"><h3>💬 '+esc(t('cmt_btn'))+'</h3><p class="cmt-of">'+esc(cmtLabel(cmtCur.t,cmtCur.id))+'</p><div class="cmt-list">'+(items||'<p class="empty">'+t('cmt_none')+'</p>')+'</div>'+form+(ui.edit?'<div class="ed-actions"><button data-close>'+t('close')+'</button></div>':'')+'</div>';
+}
+function openComments(type,id){
+  if(!cmtAllowed(type,id))return;
+  cmtCur={t:type,id:id};$('cmtdlg').innerHTML=cmtHTML();openDlg($('cmtdlg'));
+}
+function cerr(m){var e=$('cm-err');if(!e)return;e.textContent=m||'';e.hidden=!m}
+async function sendComment(){
+  if(!cmtCur)return;
+  var last=+ls('malha-last-cmt')||0;
+  if(Date.now()-last<30000){cerr(t('cmt_cool'));return}
+  var name=$('cm-name').value.trim(),body=$('cm-text').value.trim();
+  if(!name){cerr(t('cmt_err_name'));return}
+  if(body.length<2){cerr(t('cmt_err_text'));return}
+  if($('cm-web').value){toast(t('cmt_pending'));return}
+  if(!cmtAllowed(cmtCur.t,cmtCur.id)){cerr(t('cmt_fail'));return}
+  cerr('');
+  var btn=$('cm-send');btn.disabled=true;btn.textContent=t('cmt_sending');
+  var auto=!!site.comments.auto,row={target_type:cmtCur.t,target_id:String(cmtCur.id),name:name.slice(0,60),body:body.slice(0,1000),status:auto?'approved':'pending'},res;
+  if(auto){res=await sb.from('comments').insert(row).select().single();if(res.error){row.status='pending';auto=false;res=await sb.from('comments').insert(row)}}
+  else res=await sb.from('comments').insert(row);
+  btn=$('cm-send');if(btn){btn.disabled=false;btn.textContent=t('cmt_send')}
+  if(res.error){cerr(t('cmt_fail'));return}
+  ls('malha-last-cmt',String(Date.now()));
+  if(auto&&res.data){comments.push(cmtFromRow(res.data));$('cmtdlg').innerHTML=cmtHTML();cmtRefresh();toast(t('cmt_posted'))}
+  else{$('cm-text').value='';toast(t('cmt_pending'))}
+}
+function pendingComments(){return(ui.admin&&ui.edit)?comments.filter(function(c){return c.status==='pending'&&cmtAllowed(c.t,c.tid)}):[]}
+function pendCmtHTML(){
+  var pend=pendingComments();if(!pend.length)return'';
+  return'<div class="pending-box" id="pending-cmt"><h3 class="sub-title">تعليقات بانتظار مراجعتك ('+nf(pend.length)+')</h3>'+pend.map(function(c){
+    var id=esc(c.id);
+    return'<article class="cmt-item pend"><div class="cmt-head"><b>'+esc(c.name)+'</b><span>على: '+esc(cmtLabel(c.t,c.tid))+'</span></div><p>'+esc(c.body).replace(/\n/g,'<br>')+'</p><div class="row-tools"><button class="tool" data-act="cmt-ok" data-id="'+id+'">قبول ونشر</button><button class="tool danger" data-act="cmt-del" data-id="'+id+'">حذف</button></div></article>';
+  }).join('')+'</div>';
+}
+function cmtAfter(){
+  if($('cmtdlg').open&&cmtCur)$('cmtdlg').innerHTML=cmtHTML();
+  cmtRefresh();
+  if(ui.edit)renderSec('stories');
+  updateBar();
+}
+async function cmtApprove(id){
+  var r=await sb.from('comments').update({status:'approved'}).eq('id',id).select('id');
+  if(r.error||!r.data||!r.data.length){toast('تعذّر قبول التعليق.');return}
+  comments.forEach(function(c){if(c.id===id)c.status='approved'});cmtAfter();toast('تم نشر التعليق.');
+}
+async function cmtDelete(id){
+  var r=await sb.from('comments').delete().eq('id',id).select('id');
+  if(r.error||!r.data||!r.data.length){toast('تعذّر حذف التعليق.');return}
+  comments=comments.filter(function(c){return c.id!==id});cmtAfter();toast('تم حذف التعليق.');
+}
+
 
 /* ---------- events ---------- */
-var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1};
+var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1,'cmt-open':1};
 function setLang(l){lang=l;ls('malha-lang',l);ui.menu=false;root.classList.remove('menuopen');renderAll()}
 function moveIn(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return false;var x=arr[i];arr[i]=arr[j];arr[j]=x;return true}
 document.addEventListener('click',function(e){
@@ -3103,7 +3217,7 @@ document.addEventListener('click',function(e){
     case'design':openDesign();break;
     case'stats':openDesign('stats');break;
     case'dtab':ui.dtab=a.dataset.t;refreshDesign();break;
-    case'review':{var pe=$('pending')||$('pending-rev')||$('pending-ph');if(pe){pe.scrollIntoView();break}if(unreadMessages()){openDesign('inbox');break}toast('لا شيء للمراجعة الآن.');break}
+    case'review':{var pe=$('pending')||$('pending-rev')||$('pending-ph')||$('pending-cmt');if(pe){pe.scrollIntoView();break}if(unreadMessages()){openDesign('inbox');break}toast('لا شيء للمراجعة الآن.');break}
     case'set':{var pth=a.dataset.key;setBySpec(pth,parseVal(a.dataset.val));afterSet(pth);queueSettings();refreshDesign();break}
     case'preset':{var pr=PRESETS[i];site.theme={c1:pr.c[0],c2:pr.c[1],c3:pr.c[2]};applyDesign();queueSettings();refreshDesign();break}
     case'hero-pos':site.design.heroV=a.dataset.v;site.design.heroH=a.dataset.h;renderSec('hero');queueSettings();refreshDesign();break;
@@ -3136,6 +3250,10 @@ document.addEventListener('click',function(e){
     case'tile-add':addTile();break;
     case'tile-icon-pick':{tileDraft.icon=a.dataset.ic;[].forEach.call(document.querySelectorAll('#tiledlg [data-act="tile-icon-pick"]'),function(bt){bt.setAttribute('aria-pressed',bt===a?'true':'false')});break}
     case'tile-save':saveTile();break;
+    case'cmt-open':openComments(a.dataset.t,id);break;
+    case'cmt-send':sendComment();break;
+    case'cmt-ok':cmtApprove(id);break;
+    case'cmt-del':if(confirmTap('cc'+id))cmtDelete(id);break;
     case'mod-add':addMod();break;
     case'mod-del':if(confirmTap('md'+id))delMod(id);break;
     case'blk-add':{var bid=uid();site.blocks.push({id:bid,title:{ar:'قسم جديد',en:'New section'},body:{ar:'',en:''},image:''});
