@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mleiha-al-atash.github.io/sitemap.xml
