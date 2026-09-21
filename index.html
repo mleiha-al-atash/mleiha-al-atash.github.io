@@ -679,7 +679,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',owner_login:'دخول المالك',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',owner_login:'دخول الإدارة',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -712,7 +712,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش — درعا، سوريا'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',owner_login:'Owner login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',owner_login:'Staff login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -1029,7 +1029,7 @@ function flagSVG(cls){
   return'<svg class="'+(cls||'flag-svg')+'" viewBox="0 0 300 200" preserveAspectRatio="none" role="img" aria-label="'+(lang==='ar'?'علم سوريا':'Flag of Syria')+'"><rect width="300" height="67" fill="#007a3d"/><rect y="66.7" width="300" height="66.7" fill="#fff"/><rect y="133.3" width="300" height="67" fill="#000"/>'+star(90,100,21)+star(150,100,21)+star(210,100,21)+'</svg>';
 }
 function dig(s){s=String(s==null?'':s);return lang==='ar'?s.replace(/\d/g,function(d){return'٠١٢٣٤٥٦٧٨٩'[d]}):s}
-function ea(path,ph,line,isTx){return ui.edit?(' data-path="'+path+'" data-ph="'+esc(ph)+'"'+(line?' data-line':'')+(isTx?' data-tx':'')):''}
+function ea(path,ph,line,isTx){return ui.edit&&(!ui.mod||/^(photos|directory)\./.test(path))?(' data-path="'+path+'" data-ph="'+esc(ph)+'"'+(line?' data-line':'')+(isTx?' data-tx':'')):''}
 
 /* ---------- content helpers ---------- */
 function catOf(id){return site.cats.filter(function(c){return c.id===id})[0]}
@@ -1190,7 +1190,7 @@ function introIndex(){
 function introHTML(s){
   var idx=introIndex();
   if(idx<0){
-    return ui.edit?secOpen(s)+secTitle(s)+'<div class="ow-hint">لم تختر فيديو التعريف بعد. من قسم «الصور والفيديو» اضغط زر «🎬 اجعله فيديو التعريف» تحت الفيديو الذي تريده، فيظهر هنا بأول الموقع.</div></section>':'';
+    return (ui.edit&&!ui.mod)?secOpen(s)+secTitle(s)+'<div class="ow-hint">لم تختر فيديو التعريف بعد. من قسم «الصور والفيديو» اضغط زر «🎬 اجعله فيديو التعريف» تحت الفيديو الذي تريده، فيظهر هنا بأول الموقع.</div></section>':'';
   }
   var p=photos[idx],th=mediaThumb(p);
   return secOpen(s,'intro')+'<div class="intro-grid"><div class="intro-copy">'+secTitle(s)+'<p class="sec-lead"'+ea('intro.text','وصف قصير للفيديو','',1)+'>'+esc(tx(site.intro.text))+'</p></div>'+
@@ -1224,13 +1224,14 @@ function tileLive(it){
 }
 function tileHref(it){return it.k==='url'?(extLink(it.v)||'#'):it.k==='tab'?'#stories':'#'+it.v}
 function tilesHTML(s){
-  var all=site.tiles.items,items=all.filter(function(it){return ui.edit||(it.on!==false&&tileLive(it))});
-  if(!items.length&&!ui.edit)return'';
+  var ET=ui.edit&&!ui.mod;
+  var all=site.tiles.items,items=all.filter(function(it){return ET||(it.on!==false&&tileLive(it))});
+  if(!items.length&&!ET)return'';
   var cards=items.map(function(it){
     var i=all.indexOf(it),img=safeUrl(it.image);
     var face=(img?'<img class="tile-img" alt="" loading="lazy" src="'+img+'">':'<span class="tile-bg">'+STAR0+'</span>')+'<span class="tile-shade"></span>';
     var row='<span class="tile-row"><span class="tile-ic">'+tileIcon(it.icon)+'</span><span class="tile-t"'+ea('tiles.items.'+i+'.title','عنوان البلاطة',1,1)+'>'+esc(tx(it.title))+'</span><span class="tile-go">'+CHEV+'</span></span>';
-    if(ui.edit){
+    if(ET){
       var hidden=it.on===false,dead=!hidden&&!tileLive(it);
       return'<div class="tile-wrap'+(hidden?' off':'')+'"><div class="tile">'+face+row+'</div><div class="row-tools">'+
         '<button class="tool" data-act="tile-up" data-i="'+i+'">تقديم</button><button class="tool" data-act="tile-down" data-i="'+i+'">تأخير</button>'+
@@ -1241,8 +1242,8 @@ function tilesHTML(s){
     return'<a class="tile" href="'+esc(tileHref(it))+'" data-act="tile-go" data-i="'+i+'"'+(it.k==='url'?' target="_blank" rel="noopener"':'')+'>'+face+row+'</a>';
   }).join('');
   var lead=tx(site.tiles.lead);
-  return secOpen(s,'tiles-sec')+secTitle(s)+((lead||ui.edit)?'<p class="sec-lead tiles-lead"'+ea('tiles.lead','سطر تعريفي تحت العنوان','',1)+'>'+esc(lead)+'</p>':'')+
-    '<div class="tiles-grid">'+cards+'</div>'+(ui.edit?'<button class="add-btn" data-act="tile-add">＋ إضافة بلاطة</button>':'')+'</section>';
+  return secOpen(s,'tiles-sec')+secTitle(s)+((lead||ET)?'<p class="sec-lead tiles-lead"'+ea('tiles.lead','سطر تعريفي تحت العنوان','',1)+'>'+esc(lead)+'</p>':'')+
+    '<div class="tiles-grid">'+cards+'</div>'+(ET?'<button class="add-btn" data-act="tile-add">＋ إضافة بلاطة</button>':'')+'</section>';
 }
 
 /* ---------- about ---------- */
@@ -1828,8 +1829,18 @@ function flush(){
   Object.keys(timers).forEach(function(k){var x=timers[k];clearTimeout(x.t);delete timers[k];q.timers--;run(x.fn)});
 }
 async function saveSettings(){
-  var r=await sb.from('site_settings').update({data:site,updated_at:new Date().toISOString()}).eq('id',1).select('id');
-  return !r.error&&!!r.data&&r.data.length>0;
+  /* a moderator can only save the village directory, through a database function that touches nothing else */
+  if(ui.mod){var dr=await sb.rpc('mod_set_directory',{p_dir:site.directory});return !dr.error}
+  /* the owner's copy of the directory may be older than what a moderator saved: keep the newest one unless the owner edited it */
+  var body=site,wasDirty=ui.dirDirty;ui.dirDirty=false;
+  if(!wasDirty){
+    var cur=await sb.from('site_settings').select('data').eq('id',1).single();
+    if(!cur.error&&cur.data&&cur.data.data&&Array.isArray(cur.data.data.directory))body=Object.assign({},site,{directory:cur.data.data.directory});
+  }
+  var r=await sb.from('site_settings').update({data:body,updated_at:new Date().toISOString()}).eq('id',1).select('id');
+  var ok=!r.error&&!!r.data&&r.data.length>0;
+  if(!ok&&wasDirty)ui.dirDirty=true;
+  return ok;
 }
 function queueSettings(){debounce('settings',saveSettings,1200)}
 function queuePhoto(id){
@@ -1848,6 +1859,7 @@ function setTxPath(path,val){
   getPath(site,path)[lang]=val;
 }
 function onEdit(path,val,isTx){
+  if(path.indexOf('directory.')===0)ui.dirDirty=true;
   if(path.indexOf('photos.')===0){
     var pp=path.split('.'),i=+pp[1];
     if(photos[i]){
@@ -2163,7 +2175,8 @@ function confirmTap(key,msg){
 }
 
 /* ---------- design panel (owner) ---------- */
-var DTABS=[['inbox','📩 الرسائل'],['stats','📊 الزوار'],['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
+var DTABS_MOD=[['acct','⚙ حسابي']];
+var DTABS=[['inbox','📩 الرسائل'],['stats','📊 الزوار'],['mods','👥 المشرفون'],['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
 function parseVal(v){
   if(v==='true')return true;if(v==='false')return false;
   if(/^-?\d+(\.\d+)?$/.test(v))return +v;
@@ -2302,21 +2315,62 @@ gen:function(){
     '<h4>شريط إعلان أعلى الموقع</h4><p class="hint">للأفراح والتعازي والفعاليات. الزائر يقدر يغلقه.</p>'+toggleRow('إظهار الشريط','announce.on')+textRow('نص الإعلان (عربي)','announce.text','ar')+textRow('Announcement text (English)','announce.text','en',' dir="ltr"')+textRow('رابط عند الضغط (اختياري)','announce.link','',' dir="ltr" placeholder="https://..."')+
     '<h4>آراء الزوار</h4>'+toggleRow('نشر آراء الزوار مباشرة بدون مراجعة (غير مفضّل)','reviews.auto')+
     '<h4>نسخة احتياطية</h4><p class="hint">تنزّل ملفاً فيه الحكايات والإعدادات والتعليقات والرسائل وروابط المعرض. الصور والفيديوهات نفسها تبقى في Supabase. خذ نسخة كل شهر واحفظها في مكان آمن.'+(ls('malha-lastbackup')?' آخر نسخة من هذا الجهاز: '+esc(ls('malha-lastbackup'))+'.':' لم تأخذ نسخة من هذا الجهاز بعد.')+'</p><div class="ed-actions"><button data-act="backup">📥 تنزيل نسخة احتياطية</button></div>'+
-    '<h4>تغيير كلمة السر</h4><p class="hint">10 خانات أو أكثر، أحرف إنجليزية وأرقام (بدون عربي أو مسافات). بعد التغيير يُسجَّل خروجك من أي جهاز آخر.</p>'+
+    pwHTML()+
+    '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
+},
+acct:function(){
+  return'<p class="hint">حساب مشرف: تكتب وتنشر وتراجع المشاركات وتدير دليل القرية. إعدادات الموقع وشكله للمالك فقط.</p>'+pwHTML()+
+    '<h4>الحساب</h4><div class="ed-actions"><button data-act="logout">تسجيل الخروج</button></div>';
+},
+mods:function(){
+  return'<p class="hint">المشرف يكتب وينشر المواد، يراجع المشاركات والآراء والصور، ويدير دليل القرية. لا يغيّر شكل الموقع ولا إعداداته، ولا يقرأ الرسائل الخاصة، ولا يرى الإحصائيات ولا النسخ الاحتياطية.</p>'+
+    '<h4>إضافة مشرف</h4><p class="hint">١. من Supabase: Authentication ثم Users ثم Add user، اكتب البريد وكلمة سر، وفعّل Auto Confirm.<br>٢. اكتب نفس البريد هنا واضغط إضافة. أعطِ المشرف الكلمة وقل له يغيّرها بعد أول دخول.</p>'+
+    '<label class="fld">بريد المشرف<input id="mod-email" type="email" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false"></label><p class="err" id="mod-err" dir="auto" hidden></p>'+
+    '<div class="ed-actions"><button class="primary" data-act="mod-add">إضافة مشرف</button></div>'+
+    '<h4>المشرفون الحاليون</h4><div id="mod-list" class="mod-list">جاري التحميل...</div>';
+}
+};
+async function loadMods(){
+  if(!$('mod-list'))return;
+  var r=await sb.from('moderators').select('*').order('added_at',{ascending:true});
+  var box=$('mod-list');if(!box)return;
+  if(r.error){box.innerHTML='<p class="err">تعذّر تحميل القائمة. تأكد إنك شغّلت ملف update6.sql في Supabase.</p>';return}
+  var rows=r.data||[];
+  box.innerHTML=rows.length?rows.map(function(m){return'<div class="mod-row"><span dir="ltr">'+esc(m.email)+'</span><button class="tool danger" data-act="mod-del" data-id="'+esc(m.user_id)+'">حذف</button></div>'}).join(''):'<p class="hint">ما في مشرفين بعد.</p>';
+}
+async function addMod(){
+  var em=($('mod-email').value||'').trim().toLowerCase(),err=$('mod-err');err.hidden=true;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){err.textContent='اكتب بريداً صحيحاً.';err.hidden=false;return}
+  var b=document.querySelector('[data-act="mod-add"]');if(b)b.disabled=true;
+  var r=await sb.rpc('add_moderator',{p_email:em});
+  if(b)b.disabled=false;
+  if(r.error){
+    var m=String(r.error.message||'');
+    err.textContent=/no_account/.test(m)?'ما لقيت حساباً بهذا البريد. أنشئه أولاً من Supabase: Authentication ثم Users ثم Add user.':/not_allowed/.test(m)?'هذا الإجراء للمالك فقط.':/could not find|PGRST202/i.test(m)?'شغّل ملف update6.sql في Supabase أولاً.':'تعذّرت الإضافة. ['+m.slice(0,80)+']';
+    err.hidden=false;return;
+  }
+  $('mod-email').value='';toast('تمت إضافة المشرف.');loadMods();
+}
+async function delMod(id){
+  var r=await sb.from('moderators').delete().eq('user_id',id).select('user_id');
+  if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف.');return}
+  toast('تم حذف المشرف. لم يعد يقدر يعدّل شيئاً.');loadMods();
+}
+function pwHTML(){
+  return'<h4>تغيير كلمة السر</h4><p class="hint">10 خانات أو أكثر، أحرف إنجليزية وأرقام (بدون عربي أو مسافات). بعد التغيير يُسجَّل خروجك من أي جهاز آخر.</p>'+
     '<label class="fld">كلمة السر الحالية<input id="pw-cur" type="password" autocomplete="current-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="fld">كلمة السر الجديدة<input id="pw-new" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="fld">أعد كتابة الجديدة<input id="pw-new2" type="password" autocomplete="new-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
     '<label class="opt"><input type="checkbox" data-act="pw-show-panel">إظهار كلمات السر</label><p class="err" id="pw-err" dir="auto" hidden></p>'+
-    '<div class="ed-actions"><button class="primary" data-act="pw-change" id="pw-go">تغيير كلمة السر</button></div>'+
-    '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
+    '<div class="ed-actions"><button class="primary" data-act="pw-change" id="pw-go">تغيير كلمة السر</button></div>';
 }
-};
 function picker(k,label,v){return'<label class="pick"><input type="color" data-color="'+k+'" value="'+(okHex(v)?v:'#000000')+'"><span>'+label+'</span></label>'}
 function designHTML(){
-  return'<div class="dlg-in"><h3>لوحة التحكم</h3><div class="dtabs">'+DTABS.map(function(x){return'<button class="dtab" data-act="dtab" data-t="'+x[0]+'" aria-pressed="'+(ui.dtab===x[0])+'">'+x[1]+(x[0]==='inbox'&&unreadMessages()?' ('+unreadMessages()+')':'')+'</button>'}).join('')+'</div><div id="dbody">'+DBODY[ui.dtab]()+'</div><div class="ed-actions"><button class="primary" data-close>تم</button></div></div>';
+  if(ui.mod)ui.dtab='acct';
+  return'<div class="dlg-in"><h3>'+(ui.mod?'حسابي':'لوحة التحكم')+'</h3><div class="dtabs">'+(ui.mod?DTABS_MOD:DTABS).map(function(x){return'<button class="dtab" data-act="dtab" data-t="'+x[0]+'" aria-pressed="'+(ui.dtab===x[0])+'">'+x[1]+(x[0]==='inbox'&&unreadMessages()?' ('+unreadMessages()+')':'')+'</button>'}).join('')+'</div><div id="dbody">'+DBODY[ui.dtab]()+'</div><div class="ed-actions"><button class="primary" data-close>تم</button></div></div>';
 }
-function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox()}}
-function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox()}
+function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods()}}
+function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods()}
 function afterSet(path){
   if(path==='design.tscale'){fitHero();return}
   if(path.indexOf('design.')===0&&['scale','space','shape','disp','body','dispLat'].indexOf(path.slice(7))>=0){applyDesign();setTimeout(fitHero,400);return}
@@ -2556,19 +2610,30 @@ async function doLogin(){
   var ok=await checkAdmin();
   if(ok)ls('malha-nocount','1');
   b.disabled=false;b.textContent='دخول';
-  if(!ok){await sb.auth.signOut();err.textContent='هذا الحساب ليس مالك الموقع.';err.hidden=false;return}
+  if(!ok){await sb.auth.signOut();err.textContent='هذا الحساب ليس مالكاً ولا مشرفاً.';err.hidden=false;return}
   $('login').close();
   enterEdit();
 }
+/* ---------- moderators: what they may not touch (the database enforces it too; this only hides and explains) ---------- */
+var MOD_BLOCK={};
+('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add backup design-reset msg-read msg-del mod-add mod-del').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
+function applyRole(){
+  root.classList.toggle('modmode',!!ui.mod);
+  var st=$('mod-css');if(!st){st=document.createElement('style');st.id='mod-css';document.head.appendChild(st)}
+  st.textContent=ui.mod?Object.keys(MOD_BLOCK).map(function(k){return'html.modmode [data-act="'+k+'"]'}).join(',')+'{display:none!important}':'';
+  var b=document.querySelector('.bar [data-act="design"]');if(b)b.textContent=ui.mod?'⚙ حسابي':'🎨 التحكم';
+}
 async function checkAdmin(){
-  var r=await sb.rpc('is_admin');
-  if(r.error||r.data!==true)return false;
-  ui.admin=true;ls('malha-nocount','1');
+  var r=await sb.rpc('is_admin'),role='';
+  if(!r.error&&r.data===true)role='admin';
+  else{var mr=await sb.rpc('is_mod');if(!mr.error&&mr.data===true)role='mod'}
+  if(!role)return false;
+  ui.admin=true;ui.mod=role==='mod';applyRole();ls('malha-nocount','1');
   var pr=await sb.from('posts').select('*').order('created_at',{ascending:false});
   if(!pr.error&&pr.data)posts=pr.data.map(fromRow);
   var rr=await sb.from('reviews').select('*').order('created_at',{ascending:false});
   if(!rr.error&&rr.data)reviews=rr.data.map(reviewFromRow);
-  await loadMessages();
+  if(!ui.mod)await loadMessages();
   var ph=await sb.from('photos').select('*').order('sort',{ascending:true}).order('created_at',{ascending:true});
   if(ph.error)ph=await sb.from('photos').select('*').order('created_at',{ascending:true});
   if(!ph.error&&ph.data)photos=ph.data.map(photoFromRow);
@@ -2580,7 +2645,7 @@ function enterEdit(){
   ui.edit=true;root.classList.add('editing');$('fab').hidden=true;
   renderAll();
   var lb=ls('malha-lastbackup');
-  if(!lb||(Date.now()-new Date(lb).getTime())>30*864e5)setTimeout(function(){toast('تذكير: خذ نسخة احتياطية من 🎨 التحكم ثم عام.')},2500);
+  if(!ui.mod&&(!lb||(Date.now()-new Date(lb).getTime())>30*864e5))setTimeout(function(){toast('تذكير: خذ نسخة احتياطية من 🎨 التحكم ثم عام.')},2500);
 }
 function exitEdit(){
   flush();
@@ -2590,7 +2655,7 @@ function exitEdit(){
 async function logout(){
   flush();
   await sb.auth.signOut();
-  ui.admin=false;ui.edit=false;root.classList.remove('editing');$('fab').hidden=true;
+  ui.admin=false;ui.mod=false;applyRole();ui.edit=false;root.classList.remove('editing');$('fab').hidden=true;
   $('design').close();
   await loadData();renderAll();toast('تم تسجيل الخروج.');
 }
@@ -2972,6 +3037,7 @@ document.addEventListener('click',function(e){
   var a=tg.closest&&tg.closest('[data-act]');
   if(!a)return;
   var act=a.dataset.act,i=+a.dataset.i,id=a.dataset.id;
+  if(ui.mod&&MOD_BLOCK[act]){e.preventDefault();toast('هذه الأداة للمالك فقط.');return}
   if(!sb&&!OFFLINE_OK[act]){toast(t('offline'));return}
   switch(act){
     case'tab':ui.tab=a.dataset.tab;renderSec('stories');break;
@@ -2996,11 +3062,11 @@ document.addEventListener('click',function(e){
     case'poi-go':{var pp=(site.map.pois||[]).filter(function(x){return x.id===id})[0];if(pp&&mm){mmFlyTo(pp.lat,pp.lng,Math.max(mm.z,15));var box=$('mapbox');if(box)box.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});[].forEach.call(document.querySelectorAll('.mm-poi.on'),function(x){x.classList.remove('on')});if(mm.poi[id])mm.poi[id].el.classList.add('on')}break}
     case'login':{var d=$('login');d.innerHTML=loginHTML();openDlg(d);break}
     case'login-go':doLogin();break;
-    case'dir-add':site.directory.push({id:uid(),cat:'shop',name:{ar:'اسم جديد',en:''},addr:{ar:'',en:''},note:{ar:'',en:''},phone:''});queueSettings();renderSec('directory');break;
-    case'dir-del':if(confirmTap('dd'+i)){site.directory.splice(i,1);queueSettings();renderSec('directory')}break;
-    case'dir-up':if(moveIn(site.directory,i,-1)){queueSettings();renderSec('directory')}break;
-    case'dir-down':if(moveIn(site.directory,i,1)){queueSettings();renderSec('directory')}break;
-    case'dir-cat':{var dx=site.directory[i],ci=DIRCATS.map(function(c){return c.id}).indexOf(dx.cat);dx.cat=DIRCATS[(ci+1)%DIRCATS.length].id;queueSettings();renderSec('directory');break}
+    case'dir-add':ui.dirDirty=true;site.directory.push({id:uid(),cat:'shop',name:{ar:'اسم جديد',en:''},addr:{ar:'',en:''},note:{ar:'',en:''},phone:''});queueSettings();renderSec('directory');break;
+    case'dir-del':if(confirmTap('dd'+i)){ui.dirDirty=true;site.directory.splice(i,1);queueSettings();renderSec('directory')}break;
+    case'dir-up':if(moveIn(site.directory,i,-1)){ui.dirDirty=true;queueSettings();renderSec('directory')}break;
+    case'dir-down':if(moveIn(site.directory,i,1)){ui.dirDirty=true;queueSettings();renderSec('directory')}break;
+    case'dir-cat':{ui.dirDirty=true;var dx=site.directory[i],ci=DIRCATS.map(function(c){return c.id}).indexOf(dx.cat);dx.cat=DIRCATS[(ci+1)%DIRCATS.length].id;queueSettings();renderSec('directory');break}
     case'dir-filter':ui.dircat=a.dataset.c;renderSec('directory');break;
     case'install':{if(deferredInstall){var di=deferredInstall;deferredInstall=null;try{di.prompt()}catch(x){}}else openInstallHelp();break}
     case'phsub-open':openPhotoShare();break;
@@ -3052,7 +3118,7 @@ document.addEventListener('click',function(e){
     case'sec-align':site.sections[i].align=site.sections[i].align==='center'?'start':'center';queueSettings();renderAll();refreshDesign();break;
     case'sec-ts':site.sections[i].ts=a.dataset.ts;queueSettings();renderAll();refreshDesign();break;
     case'tile-go':{
-      if(ui.edit){e.preventDefault();break}
+      if(ui.edit&&!ui.mod){e.preventDefault();break}
       var tl=site.tiles.items[i];if(!tl)break;
       if(tl.k==='tab'){e.preventDefault();ui.tab=tl.v;renderSec('stories');var st=app.querySelector('[data-sec="stories"]');if(st)st.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}
       ui.menu=false;break}
@@ -3070,6 +3136,8 @@ document.addEventListener('click',function(e){
     case'tile-add':addTile();break;
     case'tile-icon-pick':{tileDraft.icon=a.dataset.ic;[].forEach.call(document.querySelectorAll('#tiledlg [data-act="tile-icon-pick"]'),function(bt){bt.setAttribute('aria-pressed',bt===a?'true':'false')});break}
     case'tile-save':saveTile();break;
+    case'mod-add':addMod();break;
+    case'mod-del':if(confirmTap('md'+id))delMod(id);break;
     case'blk-add':{var bid=uid();site.blocks.push({id:bid,title:{ar:'قسم جديد',en:'New section'},body:{ar:'',en:''},image:''});
       var at=site.sections.map(function(s){return s.id}).indexOf('contact');if(at<0)at=site.sections.length;
       site.sections.splice(at,0,{id:'blk_'+bid,on:true,bg:2});queueSettings();renderAll();refreshDesign();toast('تمت إضافة القسم. عدّل نصه مباشرة من الصفحة.');break}
