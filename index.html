@@ -542,6 +542,91 @@ html[lang="en"] .aud-title{font-family:var(--display-lat);text-transform:upperca
   .line>span,.proj-panel,.proj-name,.post-title,.plus,.loader,.cover img,.toast,.mm-tile,.menu,.person-img{transition:none}
 }
 
+/* =====================================================================
+   الشكل الجديد (look2): هيدر بسطرين، غلاف بحافة ممزقة، بلاطات، بطاقة نبذة
+   ===================================================================== */
+html.look2{--gold:#d9b44a;--tile-r:18px}
+html.look2 .logo svg.spin{color:var(--star,currentColor)}
+html.look2 .logo-t{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+html.look2 .logo-t b{font-weight:400;line-height:1}
+html.look2 .logo-t small{font-family:var(--display-lat);font-size:.36em;letter-spacing:.34em;text-transform:uppercase;line-height:1;opacity:.85}
+html.look2[lang="en"] .logo-t small{font-family:var(--display);letter-spacing:0;text-transform:none;font-size:.5em}
+html.look2 .sec{padding:calc(clamp(52px,8vw,110px) * var(--space)) var(--pad)}
+html.look2 .sec-title{font-size:clamp(2rem,6.4vw,3.6rem);text-align:center;margin:0 0 clamp(26px,4vw,48px);line-height:1.2}
+html.look2 .sec-title::after{content:"";display:block;width:76px;height:16px;margin:12px auto 0;background:var(--gold);-webkit-mask:var(--divider) center/contain no-repeat;mask:var(--divider) center/contain no-repeat}
+html.look2{--divider:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76 16'%3E%3Cpath d='M1 8h26M49 8h26' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M38 1.5v13M31.5 8h13M33.4 3.4l9.2 9.2M42.6 3.4l-9.2 9.2' stroke='black' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")}
+html.look2 .intro .sec-title{text-align:start}
+html.look2 .intro .sec-title::after{margin-inline:0}
+html.look2 .sec-lead{margin-inline:auto;text-align:center}
+html.look2 .intro .sec-lead{text-align:start;margin-inline:0}
+
+/* hero */
+html.look2 .hero{min-height:88svh;align-items:center;justify-content:center;text-align:center;padding:calc(var(--nav-h) + 26px) var(--pad) clamp(70px,12vw,110px)}
+html.look2 .hero.h-tall{min-height:76svh}html.look2 .hero.h-half{min-height:58svh}
+html.look2 .hero-in{display:flex;flex-direction:column;align-items:center}
+html.look2 .hero h1{margin-bottom:12px}
+html.look2 .hero .brand2{justify-content:center;font-size:clamp(.78rem,2.3vw,1.2rem);margin-bottom:clamp(16px,3vw,30px)}
+html.look2 .hero-meta{flex-direction:column;align-items:center;justify-content:center;gap:22px}
+html.look2 .hero-meta p{max-width:30ch;font-size:clamp(1rem,2.8vw,1.35rem);line-height:1.9}
+html.look2 .hero.has-cover .hero-meta p{text-shadow:0 1px 14px rgba(0,0,0,.45)}
+html.look2 .scroll{border:2px solid currentColor;border-radius:999px;padding:11px 26px;background:rgba(0,0,0,.2);font-size:1rem}
+html.look2 .scroll svg{width:18px;height:18px}
+html.look2 .cover::after{background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,calc(var(--dark,.4) * .55)) 45%,rgba(0,0,0,.5))}
+.hero-quote{position:absolute;z-index:2;inset-inline-start:var(--pad);bottom:clamp(64px,13vw,130px);margin:0;max-width:10em;font-family:"Aref Ruqaa",var(--display),serif;font-size:clamp(1.05rem,3.6vw,1.9rem);line-height:1.55;color:#f0dfa8;transform:rotate(-5deg);text-align:start;text-shadow:0 2px 12px rgba(0,0,0,.55)}
+.tear{position:absolute;z-index:1;left:0;right:0;bottom:-1px;width:100%;height:clamp(24px,4.4vw,52px);fill:currentColor;display:block}
+@media(max-width:520px){.hero-quote{bottom:74px;max-width:8em}}
+
+/* tiles */
+.tiles-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(10px,2vw,20px);max-width:1180px;margin-inline:auto}
+@media(min-width:900px){.tiles-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile-wrap{display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile-wrap.off .tile{opacity:.45}
+.tile-warn{font-size:.8rem;opacity:.75}
+.tile{position:relative;display:block;aspect-ratio:4/3;border-radius:var(--tile-r,18px);overflow:hidden;background:var(--bg1);color:#fff;text-decoration:none;isolation:isolate;box-shadow:0 8px 22px rgba(0,0,0,.16);transition:transform .35s var(--ease),box-shadow .35s}
+a.tile:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.24)}
+.tile-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s var(--ease)}
+a.tile:hover .tile-img{transform:scale(1.05)}
+.tile-bg{position:absolute;inset:0;z-index:-2;display:grid;place-items:center;background:radial-gradient(120% 90% at 70% 10%,color-mix(in srgb,var(--bg1) 76%,#fff),var(--bg1));color:rgba(255,255,255,.13)}
+.tile-bg svg{width:48%;height:auto}
+.tile-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 28%,rgba(0,0,0,.8))}
+.tile-row{position:absolute;inset-inline:12px;bottom:12px;display:flex;align-items:center;gap:9px}
+.tile-ic{width:24px;height:24px;flex:none}
+.tile-ic svg,.ti svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tile-t{flex:1;min-width:0;font-weight:700;font-size:clamp(.9rem,2.6vw,1.1rem);line-height:1.3;text-align:start;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.tile-go{flex:none;width:28px;height:28px;border:1.6px solid rgba(255,255,255,.85);border-radius:50%;display:grid;place-items:center}
+.tile-go svg{width:14px;height:14px}
+html[dir="rtl"] .tile-go svg{transform:scaleX(-1)}
+.tiles-lead{margin-top:-8px}
+.seg-b .ti{display:block;width:22px;height:22px}
+.tile-icons{flex-wrap:wrap;gap:6px}
+
+/* about card */
+.about2 .about-card{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr;gap:20px;background:color-mix(in srgb,var(--fg3) 7%,var(--bg3));border-radius:22px;padding:clamp(22px,4vw,42px);max-width:1080px;margin-inline:auto}
+@media(min-width:760px){.about2 .about-card{grid-template-columns:1.55fr 1fr;align-items:center;gap:36px}}
+.about-head{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,4.2vw,2.3rem);line-height:1.2;margin:0 0 12px}
+.about-head svg{width:.75em;height:.75em;flex:none;color:#b8962e}
+.about2 .statement{font-size:clamp(1.02rem,2.6vw,1.3rem);line-height:2;font-weight:400;max-width:none;margin:0}
+.about-quote{position:relative;margin:0;padding:6px 0;font-size:clamp(1.02rem,2.6vw,1.3rem);line-height:1.9;opacity:.9}
+.about-quote::before{content:"\201D";display:block;font-family:Georgia,serif;font-size:4.4rem;line-height:.7;color:color-mix(in srgb,var(--fg3) 28%,transparent)}
+.about-leaf{position:absolute;inset-inline-start:-6px;bottom:-8px;width:120px;height:auto;opacity:.14;pointer-events:none;color:var(--bg1)}
+.btn-more{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:11px 26px;border:0;border-radius:999px;background:var(--bg1);color:var(--fg1);font:inherit;font-weight:600;cursor:pointer}
+.btn-more svg{width:14px;height:14px}
+html[dir="rtl"] .btn-more svg{transform:scaleX(-1)}
+.about-more{max-width:1080px;margin:clamp(24px,4vw,44px) auto 0}
+.about-more[hidden]{display:none}
+
+/* footer band */
+.foot-band{position:relative;overflow:hidden;background:var(--bg1);color:var(--fg1);text-align:center;padding:clamp(30px,5vw,50px) var(--pad) 0}
+.foot-band p{margin:0 0 8px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:clamp(.95rem,2.6vw,1.2rem)}
+.foot-band p::before,.foot-band p::after{content:"";height:1px;width:clamp(24px,8vw,70px);background:currentColor;opacity:.45}
+.foot-hills{display:block;width:100%;height:clamp(56px,11vw,110px);color:color-mix(in srgb,var(--fg1) 20%,transparent);fill:currentColor;margin-top:6px}
+html.look2 .foot{border-top:0}
+
+@media(min-width:700px){html.look2 .hero h1 .line{display:inline-block;margin-inline:.14em}}
+
+.tile-wrap .row-tools{gap:6px}
+.tile-wrap .row-tools .tool{padding:5px 11px;font-size:.8rem;min-height:0;line-height:1.5}
+
 </style>
 <style id="theme-vars"></style>
 <noscript><style>.loader{display:none}.line>span{transform:none}html.loading,html.loading body{overflow:auto}</style></noscript>
@@ -577,6 +662,7 @@ var sb=null,liftLoader=null;
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}return null}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function safeUrl(u){return(typeof u==='string'&&/^https:\/\/[^\s"'<>]+$/.test(u)&&u.indexOf('/storage/v1/object/public/media/')>0)?u:''}
+function extLink(u){return(typeof u==='string'&&/^https?:\/\/[^\s"'<>]+$/i.test(u))?u:''}
 function safeHref(h){return/^(https?:\/\/|mailto:|tel:)/i.test(h||'')?h:'#'}
 function clamp(n,a,b){n=+n;return Math.max(a,Math.min(b,isNaN(n)?a:n))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
@@ -593,7 +679,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'مرّر للأسفل',owner_login:'دخول المالك',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',owner_login:'دخول المالك',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -626,7 +712,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش — درعا، سوريا'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Scroll down',owner_login:'Owner login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',owner_login:'Owner login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -687,7 +773,8 @@ var PRESETS=[
   {n:'تراب',c:['#b8583a','#2a1f1a','#efe6de']},
   {n:'سماء',c:['#3f6fb5','#14202f','#e8eef5']},
   {n:'أخضر سوري',c:['#007a3d','#111612','#eef2ec']},
-  {n:'ليل',c:['#1c1d1a','#d9a62e','#2b2c28']}
+  {n:'ليل',c:['#1c1d1a','#d9a62e','#2b2c28']},
+  {n:'أخضر زيتوني عميق',c:['#0a442d','#0d2117','#eeefe9']}
 ];
 var FONT_SPEC={
   'Lalezar':'Lalezar','Reem Kufi':'Reem+Kufi:wght@400..700','Aref Ruqaa':'Aref+Ruqaa:wght@400;700','El Messiri':'El+Messiri:wght@400..700',
@@ -704,6 +791,7 @@ var MAPICONS=['📍','🕌','🏫','💧','🌾','🌳','🏠','🏛️','🕯�
 
 var SECDEF={
   hero:{t:{ar:'الواجهة',en:'Home'},nav:false,fixed:true},
+  tiles:{t:{ar:'استكشف مليحة العطش',en:'Explore Muleiha Al-Atash'},nav:false},
   intro:{t:{ar:'كيف تستخدم الموقع',en:'How to use this site'},nav:false},
   featured:{t:{ar:'مختارات',en:'Featured'},nav:true},
   about:{t:{ar:'عنّا',en:'About'},nav:true,notitle:true},
@@ -716,22 +804,41 @@ var SECDEF={
   reviews:{t:{ar:'آراء الزوار',en:'Visitor Reviews'},nav:true},
   contact:{t:{ar:'شاركنا.',en:'Share with us.'},nav:true}
 };
-var SECORDER=['hero','intro','featured','about','history','stories','photos','audio','map','directory','reviews','contact'];
+var TILEICONS={
+  photos:'<rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.7"/><path d="M4 18l5-5 4 4 3-3 4 4"/>',
+  doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  pin:'<path d="M12 21s-6.5-5.6-6.5-10.5a6.5 6.5 0 0113 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/>',
+  drop:'<path d="M12 3s6.5 6.6 6.5 11.2a6.5 6.5 0 01-13 0C5.5 9.6 12 3 12 3z"/>',
+  leaf:'<path d="M5 19C5 10 10.5 5 20 5c0 9.5-5.5 15-14 15"/><path d="M5 19l9-9"/>',
+  mosque:'<path d="M12 3v3M8.5 21v-8a3.5 3.5 0 017 0v8M3.5 21h17M3.5 21v-8M20.5 21v-8"/>',
+  people:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9.5" r="2.4"/><path d="M3 20c0-3.6 2.8-6 6-6s6 2.4 6 6M15.5 14.3c3 0 5.5 1.8 5.5 5"/>',
+  columns:'<path d="M3 9l9-5 9 5M5.5 10v8M9.8 10v8M14.2 10v8M18.5 10v8M3 20h18"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 18v3"/>',
+  phone:'<path d="M6 3h3l2 5-2.4 1.6a11 11 0 006 6L16 13l5 2v3a3 3 0 01-3 3A15 15 0 013 6a3 3 0 013-3z"/>',
+  star:'<path d="M12 3v18M4 7.5l16 9M20 7.5l-16 9"/>',
+  heart:'<path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0112 7.4a4.2 4.2 0 017.5 2.4C19.5 15.4 12 20 12 20z"/>',
+  book:'<path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 016.5 18H20v3H6.5"/>',
+  home:'<path d="M4 11l8-7 8 7M6.5 9.5V20h11V9.5"/>',
+  chat:'<path d="M4 5h16v11H10l-5 4v-4H4z"/>',
+  link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>'
+};
+var SECORDER=['hero','tiles','intro','featured','about','history','stories','photos','audio','map','directory','reviews','contact'];
 var DIRCATS=[{id:'school',ic:'🏫',ar:'مدارس',en:'Schools'},{id:'health',ic:'🏥',ar:'صحة',en:'Health'},{id:'mosque',ic:'🕌',ar:'مساجد',en:'Mosques'},{id:'shop',ic:'🛒',ar:'محلات',en:'Shops'},{id:'food',ic:'🍽️',ar:'مطاعم',en:'Restaurants'},{id:'service',ic:'🔧',ar:'خدمات وورش',en:'Services'},{id:'farm',ic:'🌾',ar:'مزارع',en:'Farms'},{id:'other',ic:'📌',ar:'أخرى',en:'Other'}];
-var SECBG={hero:1,intro:3,featured:3,about:2,history:1,stories:3,photos:2,audio:1,directory:1,map:3,reviews:2,contact:1};
+var SECBG={hero:1,tiles:3,intro:3,featured:3,about:3,history:1,stories:3,photos:2,audio:1,directory:1,map:3,reviews:2,contact:1};
 
 function defaults(){return{
   v:2,
   brand:{ar:'مليحة العطش',en:'Muleiha Al-Atash'},
   theme:{c1:PRESETS[0].c[0],c2:PRESETS[0].c[1],c3:PRESETS[0].c[2]},
-  design:{disp:'Lalezar',dispLat:'Anton',body:'IBM Plex Sans Arabic',scale:1,tscale:1,shape:'soft',space:1,
+  design:{look:'v2',disp:'Lalezar',dispLat:'Anton',body:'IBM Plex Sans Arabic',scale:1,tscale:1,shape:'soft',space:1,
     heroV:'end',heroH:'start',heroSize:'full',titleStyle:'solid',tagline:true,cue:true,
     flagBar:true,flagWave:true,flagFoot:true,loader:true,langDefault:'ar'},
   emblem:'',
   loader:{a:{ar:'أهلاً',en:'Welcome'},b:{ar:'بكم',en:'Home'}},
   cover:{imgs:[],dark:40},
   intro:{id:'',text:{ar:'شاهد هذا الفيديو القصير لتعرف ما هو الموقع وكيف تستخدمه.',en:'Watch this short video to learn what this site is and how to use it.'}},
-  hero:{tag:{ar:'قرية في محافظة درعا، جنوب سوريا. هنا نجمع صورها وحكاياتها ومعلومات عنها في مكان واحد.',en:'A village in Daraa Governorate, southern Syria. Here we gather its photos, stories and information in one place.'}},
+  hero:{tag:{ar:'قرية في محافظة درعا، جنوب سوريا. هنا نجمع صورها وحكاياتها ومعلومات عنها في مكان واحد.',en:'A village in Daraa Governorate, southern Syria. Here we gather its photos, stories and information in one place.'},
+    quote:{ar:'هنا جذورنا .. وهنا حكايتنا',en:'Here are our roots .. and here is our story'}},
   sections:SECORDER.map(function(id){return{id:id,on:true,bg:SECBG[id]}}),
   cats:[
     {id:'story',name:{ar:'قصص',en:'Stories'},one:{ar:'قصة',en:'Story'},kind:'list',submit:true},
@@ -742,6 +849,8 @@ function defaults(){return{
   ],
   blocks:[],
   about:{
+    title:{ar:'نبذة عن القرية',en:'About the village'},
+    quote:{ar:'مليحة العطش .. ليست مجرد مكان، بل ذاكرة حيّة تُروى للأجيال.',en:'Muleiha Al-Atash .. is not just a place, but a living memory told to generations.'},
     statement:{ar:'مليحة العطش قرية في محافظة درعا، جنوب سوريا. هذا الموقع بيت لصورها ومعلوماتها، وكل ما فيه يأتي من أهلها.',en:'Muleiha Al-Atash is a village in Daraa Governorate, southern Syria. This site is a home for its photos and memories, and everything in it comes from its people.'},
     facts:[
       {k:{ar:'المحافظة',en:'Governorate'},v:{ar:'درعا',en:'Daraa'}},
@@ -766,6 +875,18 @@ function defaults(){return{
       {k:{ar:'فيسبوك',en:'Facebook'},v:'@username',href:'#'}
     ]},
   reviews:{auto:false},
+  tiles:{lead:{ar:'محتوى متكامل يوثّق تاريخ القرية وتراثها ومعالمها',en:'A complete record of the village: its history, heritage and landmarks'},
+    items:[
+      {id:'t1',title:{ar:'الحكايات',en:'Stories'},icon:'book',image:'',k:'sec',v:'stories',on:true},
+      {id:'t2',title:{ar:'الصور والفيديو',en:'Photos & Videos'},icon:'photos',image:'',k:'sec',v:'photos',on:true},
+      {id:'t3',title:{ar:'تاريخ القرية',en:'Village History'},icon:'doc',image:'',k:'sec',v:'history',on:true},
+      {id:'t4',title:{ar:'أين نحن',en:'Where We Are'},icon:'pin',image:'',k:'sec',v:'map',on:true},
+      {id:'t5',title:{ar:'شهداء القرية',en:'Village Martyrs'},icon:'star',image:'',k:'tab',v:'martyr',on:true},
+      {id:'t6',title:{ar:'أصوات من القرية',en:'Voices of the Village'},icon:'mic',image:'',k:'sec',v:'audio',on:true},
+      {id:'t7',title:{ar:'دليل القرية',en:'Village Directory'},icon:'phone',image:'',k:'sec',v:'directory',on:true},
+      {id:'t8',title:{ar:'آراء الزوار',en:'Visitor Reviews'},icon:'chat',image:'',k:'sec',v:'reviews',on:true}
+    ]},
+  foot:{line:{ar:'مليحة العطش .. دائماً في قلوبنا',en:'Muleiha Al-Atash .. always in our hearts'}},
   announce:{on:false,text:{ar:'',en:''},link:''},
   directory:[],
   seen:{}
@@ -794,12 +915,22 @@ function T2(v){
 }
 /* turn data saved by the first version (plain strings) into two-language objects */
 var V1_MAPTEXT='مليحة العطش في سهل حوران بمحافظة درعا، على بعد نحو 20 كم شمال شرق مدينة درعا ونحو 22 كم شمال غرب مدينة السويداء.';
+function normTiles(t){
+  var d=defaults().tiles;t=t&&typeof t==='object'?t:{};
+  var items=Array.isArray(t.items)?t.items:d.items;
+  return{lead:T2(t.lead),items:items.filter(function(x){return x&&x.id}).map(function(x){
+    return{id:String(x.id),title:T2(x.title),icon:TILEICONS[x.icon]?x.icon:'star',image:String(x.image||''),k:['sec','tab','url'].indexOf(x.k)>=0?x.k:'sec',v:String(x.v||''),on:x.on!==false}
+  })};
+}
 function normalize(s){
   if(s.map&&s.map.text===V1_MAPTEXT)s.map.text=defaults().map.text;
   s.hero.tag=T2(s.hero.tag);
   s.announce=s.announce&&typeof s.announce==='object'?s.announce:{};s.announce.on=!!s.announce.on;s.announce.text=T2(s.announce.text);s.announce.link=String(s.announce.link||'');
   s.intro=s.intro&&typeof s.intro==='object'?s.intro:{};s.intro.id=String(s.intro.id||'');s.intro.text=T2(s.intro.text);if(!s.intro.text.ar&&!s.intro.text.en)s.intro.text=defaults().intro.text;
-  s.about.statement=T2(s.about.statement);
+  s.about.statement=T2(s.about.statement);s.about.title=T2(s.about.title);s.about.quote=T2(s.about.quote);
+  s.hero.quote=T2(s.hero.quote);
+  s.tiles=normTiles(s.tiles);
+  s.foot=s.foot&&typeof s.foot==='object'?s.foot:{};s.foot.line=T2(s.foot.line);
   s.about.facts=(s.about.facts||[]).map(function(f){return{k:T2(f.k),v:T2(f.v)}});
   s.about.qa=(s.about.qa||[]).map(function(f){return{q:T2(f.q),a:T2(f.a)}});
   s.contact.intro=T2(s.contact.intro);
@@ -830,6 +961,7 @@ function normalize(s){
     s.sections.splice(idx+1,0,{id:id,on:true,bg:SECBG[id]});
   });
   s.sections.forEach(function(x){if(x.bg!==1&&x.bg!==2&&x.bg!==3)x.bg=SECBG[x.id]||2;x.on=x.on!==false});
+  if(!s.seen.look2){s.sections.forEach(function(x){if(x.id==='about'&&x.bg===2)x.bg=3});s.seen.look2=1}
   return s;
 }
 var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[];
@@ -841,7 +973,7 @@ function lum(h){var n=parseInt(h.slice(1),16),r=(n>>16&255)/255,g=(n>>8&255)/255
 function fgFor(bg){var L=lum(bg),D='#1c1d1a',W='#f5f3ee';return((L+.05)/(lum(D)+.05))>=((lum(W)+.05)/(L+.05))?D:W}
 function themeCSS(th){
   var c=[th.c1,th.c2,th.c3].map(function(x,i){return okHex(x)?x:PRESETS[0].c[i]});
-  return'--bg1:'+c[0]+';--fg1:'+fgFor(c[0])+';--bg2:'+c[1]+';--fg2:'+fgFor(c[1])+';--bg3:'+c[2]+';--fg3:'+fgFor(c[2]);
+  return'--bg1:'+c[0]+';--fg1:'+fgFor(c[0])+';--bg2:'+c[1]+';--fg2:'+fgFor(c[1])+';--bg3:'+c[2]+';--fg3:'+fgFor(c[2])+';--star:'+(lum(c[0])<.25?'#d9b44a':'currentColor');
 }
 function fontStack(name,fallback){return'"'+String(name).replace(/["\\]/g,'')+'",'+fallback}
 function ensureFont(name){
@@ -854,13 +986,14 @@ function ensureFont(name){
 }
 function designCSS(){
   var d=site.design,sh=SHAPES[d.shape]||SHAPES.soft;
-  ensureFont(d.disp);ensureFont(d.body);ensureFont(d.dispLat);
+  ensureFont(d.disp);ensureFont(d.body);ensureFont(d.dispLat);if(d.look!=='classic')ensureFont('Aref Ruqaa');
   return themeCSS(site.theme)+';--display:'+fontStack(d.disp,'Cairo,Tajawal,Impact,sans-serif')+';--display-lat:'+fontStack(d.dispLat,'Lalezar,Impact,sans-serif')+
     ';--body:'+fontStack(d.body,'"Segoe UI",Tahoma,sans-serif')+';--r:'+sh.r+';--btn-r:'+sh.b+';--space:'+clamp(d.space,.5,1.6)+';--scale:'+clamp(d.scale,.85,1.25)+';--tscale:'+clamp(d.tscale,.6,1.3);
 }
 function applyDesign(){
   $('theme-vars').textContent=':root{'+designCSS()+'}';
   root.classList.toggle('hasflag',!!site.design.flagBar);
+  root.classList.toggle('look2',site.design.look!=='classic');
   var nav=document.querySelector('.nav');
   root.style.setProperty('--nav-h',site.design.flagBar?'70px':'64px');
 }
@@ -881,6 +1014,12 @@ function pickLang(){
 /* ---------- small svg pieces ---------- */
 var STAR='<svg class="spin" viewBox="0 0 100 100" aria-hidden="true"><use href="#star"/></svg>';
 var STAR0='<svg viewBox="0 0 100 100" aria-hidden="true"><use href="#star"/></svg>';
+var CHEV='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var ARROWDN='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M5.5 12.5L12 19l6.5-6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var LEAF='<svg class="about-leaf" viewBox="0 0 120 160" aria-hidden="true"><path d="M60 158C58 110 52 70 20 30M60 158C62 118 78 80 108 44" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M60 124C40 116 24 100 14 76 34 78 52 92 60 124zM60 100C76 92 92 76 100 56 82 60 66 74 60 100zM58 74C44 66 34 52 30 32 46 36 56 50 58 74z" fill="currentColor"/></svg>';
+var TEAR=(function(){var s=7,r=function(){s=(s*9301+49297)%233280;return s/233280},p='M0 60V36';for(var x=0;x<=1200;x+=12)p+='L'+x+' '+(18+Math.round(r()*22));return p+'L1200 60Z'})();
+function isV2(){return site.design.look!=='classic'}
+function tileIcon(k){return'<svg viewBox="0 0 24 24" aria-hidden="true">'+(TILEICONS[k]||TILEICONS.star)+'</svg>'}
 var PLUS='<svg class="plus" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>';
 var PLAY='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>';
 var MENU='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>';
@@ -959,15 +1098,20 @@ function navHTML(){
   var menu=items.map(function(x){return'<a href="#'+esc(x.id)+'" data-act="menu-go">'+esc(x.t)+'</a>'}).join('');
   var short=lang==='ar'?site.brand.ar:site.brand.en;
   return(CONFIGURED?'':'<div class="cfgwarn">الموقع غير مربوط بقاعدة البيانات بعد: ضع رابط المشروع والمفتاح أعلى ملف index.html.</div>')+
-    '<header class="nav"><a class="logo" href="#top">'+STAR+'<span>'+esc(short)+'</span></a><div class="nav-r"><nav aria-label="'+t('menu')+'"><ul>'+li+'</ul></nav>'+
+    '<header class="nav"><a class="logo" href="#top">'+STAR+(isV2()?'<span class="logo-t"><b>'+esc(short)+'</b><small>'+esc(lang==='ar'?site.brand.en:site.brand.ar)+'</small></span>':'<span>'+esc(short)+'</span>')+'</a><div class="nav-r"><nav aria-label="'+t('menu')+'"><ul>'+li+'</ul></nav>'+
     (site.design.flagBar?'<span class="flag-ico">'+flagSVG()+'</span>':'')+
     '<button class="nav-btn" data-act="lang" aria-label="'+esc(t('lang_label'))+'">'+t('lang_btn')+'</button><button class="nav-btn nav-aa" data-act="fontsize" aria-label="'+esc(t('fs_label'))+'">Aa</button>'+
     '<button class="menu-btn" data-act="menu" aria-label="'+t('menu')+'">'+MENU+'</button></div></header>'+
     '<div class="menu" id="menu" role="dialog" aria-label="'+t('menu')+'"><button class="menu-x" data-act="menu-close" aria-label="'+t('close')+'">×</button>'+menu+'<div class="menu-tools"><button class="nav-btn" data-act="fontsize">Aa &nbsp;'+esc(t('fs_label'))+'</button></div></div>';
 }
+function footBand(){
+  var l=tx(site.foot.line);
+  return'<div class="foot-band">'+((l||ui.edit)?'<p'+ea('foot.line','عبارة أسفل الصفحة','',1)+'>'+esc(l)+'</p>':'')+
+    '<svg class="foot-hills" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V86C90 60 170 64 260 82S430 100 540 78 720 46 820 64 980 98 1060 80 1150 62 1200 72V120Z" opacity=".55"/><path d="M0 120V100C120 84 240 90 360 100S600 112 720 98 960 80 1080 92 1170 98 1200 96V120Z"/><path d="M924 74V44h12v30zM921 44h18l-9-13zM930 31V16M926 20h8" opacity=".9"/></svg></div>';
+}
 function footHTML(){
   var em=safeUrl(site.emblem);
-  return'<footer class="foot"><div class="foot-l">'+(site.design.flagFoot?'<span class="flag-ico">'+flagSVG()+'</span>':'')+(em?'<img class="emblem" alt="" src="'+em+'">':'')+
+  return(isV2()?footBand():'')+'<footer class="foot"><div class="foot-l">'+(site.design.flagFoot?'<span class="flag-ico">'+flagSVG()+'</span>':'')+(em?'<img class="emblem" alt="" src="'+em+'">':'')+
     '<span>'+esc(t('footer_note'))+'</span>'+(CONFIGURED?'<small class="count-note">'+esc(t('count_note'))+'</small>':'')+'</div>'+'<div class="foot-r"><button class="linkbtn" data-act="share-site" style="opacity:1">📤 '+esc(t('share_site'))+'</button>'+(isStandalone()?'':'<button class="linkbtn" data-act="install" style="opacity:1">'+esc(t('inst_btn'))+'</button>')+(CONFIGURED&&!ui.admin?'<button class="linkbtn" data-act="login">'+t('owner_login')+'</button>':'')+'</div></footer>';
 }
 
@@ -1023,11 +1167,17 @@ function heroHTML(s){
     '<div class="hero-in"><h1>'+words.map(function(w){return'<span class="line"><span>'+esc(w)+'</span></span>'}).join('')+'</h1>'+
     (secondary?'<div class="brand2" aria-hidden="true"><i></i><span lang="'+(lang==='ar'?'en':'ar')+'">'+esc(secondary)+'</span><i></i></div>':'')+
     '<div class="hero-meta">'+((d.tagline||ui.edit)?'<p'+ea('hero.tag','سطر تعريفي عن القرية','',1)+'>'+esc(tx(site.hero.tag))+'</p>':'<span></span>')+
-    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+STAR+t('scroll')+'</a>':'')+'</div></div></section>';
+    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+(isV2()?ARROWDN:STAR)+t('scroll')+'</a>':'')+'</div></div>'+(isV2()?heroExtras():'')+'</section>';
+}
+function nextBg(){var id=nextSecId(),s=site.sections.filter(function(x){return x.id===id})[0];return s?s.bg:3}
+function heroExtras(){
+  var q=tx(site.hero.quote);
+  return((q||ui.edit)?'<p class="hero-quote"'+ea('hero.quote','عبارة قصيرة (بخط اليد)','',1)+'>'+esc(q)+'</p>':'')+
+    '<svg class="tear" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" style="color:var(--bg'+nextBg()+')"><path d="'+TEAR+'"/></svg>';
 }
 function nextSecId(){
   var f=site.sections.filter(function(s){return s.on&&s.id!=='hero'});
-  for(var i=0;i<f.length;i++){if(f[i].id==='featured'&&!featuredList().length)continue;if(f[i].id==='intro'&&introIndex()<0&&!ui.edit)continue;if(f[i].id==='audio'&&!audioList().length&&!ui.edit)continue;if(f[i].id==='history'&&!shown().filter(isTL).length&&!ui.edit)continue;if(f[i].id==='directory'&&!site.directory.length&&!ui.edit)continue;return f[i].id}
+  for(var i=0;i<f.length;i++){if(f[i].id==='tiles'&&!ui.edit&&!site.tiles.items.some(function(it){return it.on!==false&&tileLive(it)}))continue;if(f[i].id==='featured'&&!featuredList().length)continue;if(f[i].id==='intro'&&introIndex()<0&&!ui.edit)continue;if(f[i].id==='audio'&&!audioList().length&&!ui.edit)continue;if(f[i].id==='history'&&!shown().filter(isTL).length&&!ui.edit)continue;if(f[i].id==='directory'&&!site.directory.length&&!ui.edit)continue;return f[i].id}
   return'top';
 }
 
@@ -1059,6 +1209,42 @@ function featuredHTML(s){
   return secOpen(s)+secTitle(s)+(list.length?'<div class="feat-grid">'+cards+'</div>':'<div class="ow-hint">لا توجد مواد مثبّتة بعد. من قسم الحكايات اضغط «تثبيت» على أي حكاية أو مقال ليظهر هنا في بداية الموقع.</div>')+'</section>';
 }
 
+/* ---------- explore tiles ---------- */
+function tileLive(it){
+  if(it.k==='url')return!!extLink(it.v);
+  if(it.k==='tab')return!!catOf(it.v)&&approved().some(function(p){return p.cat===it.v});
+  var s=site.sections.filter(function(x){return x.id===it.v})[0];
+  if(!s||!s.on)return false;
+  if(it.v==='audio')return audioList().length>0;
+  if(it.v==='history')return shown().filter(isTL).length>0;
+  if(it.v==='directory')return site.directory.length>0;
+  if(it.v==='featured')return featuredList().length>0;
+  if(it.v==='intro')return introIndex()>=0;
+  return true;
+}
+function tileHref(it){return it.k==='url'?(extLink(it.v)||'#'):it.k==='tab'?'#stories':'#'+it.v}
+function tilesHTML(s){
+  var all=site.tiles.items,items=all.filter(function(it){return ui.edit||(it.on!==false&&tileLive(it))});
+  if(!items.length&&!ui.edit)return'';
+  var cards=items.map(function(it){
+    var i=all.indexOf(it),img=safeUrl(it.image);
+    var face=(img?'<img class="tile-img" alt="" loading="lazy" src="'+img+'">':'<span class="tile-bg">'+STAR0+'</span>')+'<span class="tile-shade"></span>';
+    var row='<span class="tile-row"><span class="tile-ic">'+tileIcon(it.icon)+'</span><span class="tile-t"'+ea('tiles.items.'+i+'.title','عنوان البلاطة',1,1)+'>'+esc(tx(it.title))+'</span><span class="tile-go">'+CHEV+'</span></span>';
+    if(ui.edit){
+      var hidden=it.on===false,dead=!hidden&&!tileLive(it);
+      return'<div class="tile-wrap'+(hidden?' off':'')+'"><div class="tile">'+face+row+'</div><div class="row-tools">'+
+        '<button class="tool" data-act="tile-up" data-i="'+i+'">تقديم</button><button class="tool" data-act="tile-down" data-i="'+i+'">تأخير</button>'+
+        '<button class="tool" data-act="tile-img" data-i="'+i+'">'+(img?'تغيير الصورة':'＋ صورة')+'</button>'+(img?'<button class="tool danger" data-act="tile-img-del" data-i="'+i+'">إزالة الصورة</button>':'')+
+        '<button class="tool" data-act="tile-edit" data-i="'+i+'">الوجهة والأيقونة</button><button class="tool" data-act="tile-on" data-i="'+i+'">'+(hidden?'إظهار':'إخفاء')+'</button><button class="tool danger" data-act="tile-del" data-i="'+i+'">حذف</button></div>'+
+        (dead?'<small class="tile-warn">مخفية عن الزوار الآن: القسم فارغ أو غير ظاهر.</small>':'')+'</div>';
+    }
+    return'<a class="tile" href="'+esc(tileHref(it))+'" data-act="tile-go" data-i="'+i+'"'+(it.k==='url'?' target="_blank" rel="noopener"':'')+'>'+face+row+'</a>';
+  }).join('');
+  var lead=tx(site.tiles.lead);
+  return secOpen(s,'tiles-sec')+secTitle(s)+((lead||ui.edit)?'<p class="sec-lead tiles-lead"'+ea('tiles.lead','سطر تعريفي تحت العنوان','',1)+'>'+esc(lead)+'</p>':'')+
+    '<div class="tiles-grid">'+cards+'</div>'+(ui.edit?'<button class="add-btn" data-act="tile-add">＋ إضافة بلاطة</button>':'')+'</section>';
+}
+
 /* ---------- about ---------- */
 function qaHTML(){
   var q=site.about.qa;
@@ -1071,11 +1257,25 @@ function qaHTML(){
     return'<article class="proj'+(open?' open':'')+'"><button class="proj-btn" data-act="qa-toggle" aria-expanded="'+open+'" aria-controls="qa'+i+'"><span class="proj-name">'+esc(tx(x.q))+'</span>'+PLUS+'</button><div class="proj-panel" id="qa'+i+'"><div class="proj-body"'+(open?'':' inert')+'><p>'+esc(tx(x.a)).replace(/\n/g,'<br>')+'</p></div></div></article>';
   }).join('');
 }
-function aboutHTML(s){
+function aboutFacts(){
   var a=site.about;
-  var facts=a.facts.map(function(f,i){
+  return a.facts.map(function(f,i){
     return'<div><dt'+ea('about.facts.'+i+'.k','العنوان',1,1)+'>'+esc(tx(f.k))+'</dt><dd'+ea('about.facts.'+i+'.v','القيمة',1,1)+'>'+esc(tx(f.v))+'</dd>'+(ui.edit?'<button class="tool danger" data-act="fact-del" data-i="'+i+'">حذف</button>':'')+'</div>';
   }).join('');
+}
+function about2HTML(s){
+  var a=site.about,open=!!ui.edit,q=tx(a.quote);
+  return secOpen(s,'about2')+'<div class="about-card">'+LEAF+'<div class="about-main"><h2 class="about-head">'+STAR0+'<span'+ea('about.title','عنوان النبذة',1,1)+'>'+esc(tx(a.title))+'</span></h2>'+
+    '<p class="statement"'+ea('about.statement','نبذة عن القرية','',1)+'>'+esc(tx(a.statement))+'</p>'+
+    '<button class="btn-more" data-act="about-more" aria-expanded="'+open+'">'+esc(t(open?'about_less':'about_more'))+CHEV+'</button></div>'+
+    ((q||ui.edit)?'<blockquote class="about-quote"'+ea('about.quote','عبارة مقتبسة عن القرية','',1)+'>'+esc(q)+'</blockquote>':'')+'</div>'+
+    '<div class="about-more"'+(open?'':' hidden')+'><dl class="facts">'+aboutFacts()+'</dl>'+(ui.edit?'<button class="add-btn" data-act="fact-add">＋ إضافة معلومة</button>':'')+
+    '<div class="qa"><h2 class="sub-title">'+t('qa_title')+'</h2>'+qaHTML()+'</div></div></section>';
+}
+function aboutHTML(s){
+  if(isV2())return about2HTML(s);
+  var a=site.about;
+  var facts=aboutFacts();
   return secOpen(s)+'<div class="about-grid"><p class="statement"'+ea('about.statement','نبذة عن القرية','',1)+'>'+esc(tx(a.statement))+'</p>'+
     '<div><dl class="facts">'+facts+'</dl>'+(ui.edit?'<button class="add-btn" data-act="fact-add">＋ إضافة معلومة</button>':'')+'</div></div>'+
     '<div class="qa"><h2 class="sub-title">'+t('qa_title')+'</h2>'+qaHTML()+'</div></section>';
@@ -1294,7 +1494,7 @@ function blockHTML(s){
 }
 
 /* ---------- assemble ---------- */
-var BUILDERS={hero:heroHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,audio:audioHTML,history:historyHTML,directory:directoryHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
+var BUILDERS={hero:heroHTML,tiles:tilesHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,audio:audioHTML,history:historyHTML,directory:directoryHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
 function secHTML(s){
   if(s.id.indexOf('blk_')===0)return blockHTML(s);
   var f=BUILDERS[s.id];return f?f(s):'';
@@ -1344,11 +1544,12 @@ function fitHero(){
   var avail=hero.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
   var spans=[].slice.call(h.querySelectorAll('.line>span'));if(!spans.length||avail<=0)return;
   h.style.fontSize='100px';
-  var wmax=0;spans.forEach(function(s){wmax=Math.max(wmax,s.getBoundingClientRect().width)});
+  var one=isV2()&&window.innerWidth>=700,wmax=0;
+  spans.forEach(function(s){var w=s.getBoundingClientRect().width;wmax=one?wmax+w+28:Math.max(wmax,w)});
   if(!wmax)return;
   var lh=lang==='ar'?.95:.98,vh=window.innerHeight,frac=site.design.heroSize==='half'?.34:site.design.heroSize==='tall'?.42:.46;
-  var byW=100*avail*.98/wmax,byH=vh*frac/(spans.length*lh);
-  var fs=Math.min(byW,byH,460)*clamp(site.design.tscale,.5,1);
+  var byW=100*avail*.98/wmax,byH=vh*frac/((one?1:spans.length)*lh);
+  var fs=Math.min(byW*(isV2()?.66:1),byH,460)*clamp(site.design.tscale,.5,1);
   h.style.fontSize=Math.max(28,fs).toFixed(1)+'px';
 }
 /* if the links do not fit in one row (long English labels, many sections) use the menu button instead */
@@ -1786,7 +1987,7 @@ async function onFiles(files){
   for(var i=0;i<files.length;i++){
     toast('جاري رفع الصور ('+(i+1)+' من '+files.length+')...');
     var blob;try{blob=await readImage(files[i],max,.8,kind==='emblem')}catch(e){failed++;continue}
-    var up=await upload(blob,kind==='cover'?'covers':kind==='emblem'?'site':kind==='blk'?'blocks':'photos',kind==='emblem'?'png':'jpg',kind==='emblem'?'image/png':'image/jpeg');
+    var up=await upload(blob,kind==='cover'?'covers':kind==='emblem'?'site':(kind==='blk'||kind==='tile')?'blocks':'photos',kind==='emblem'?'png':'jpg',kind==='emblem'?'image/png':'image/jpeg');
     if(!up){failed++;continue}
     if(kind==='photos'){
       var r=await sb.from('photos').insert({url:up.url,kind:'image',caption:'',caption_en:'',sort:nextSort()}).select().single();
@@ -1794,6 +1995,7 @@ async function onFiles(files){
       photos.push(photoFromRow(r.data));
     }else if(kind==='cover'){site.cover.imgs.push(up.url);queueSettings()}
     else if(kind==='emblem'){if(site.emblem)removeFiles([site.emblem]);site.emblem=up.url;queueSettings()}
+    else if(kind==='tile'){var ti=site.tiles.items[ui.fileIdx];if(ti){if(ti.image)removeFiles([ti.image]);ti.image=up.url;queueSettings()}}
     else if(kind==='blk'){var bl=site.blocks[ui.fileIdx];if(bl){if(bl.image)removeFiles([bl.image]);bl.image=up.url;queueSettings()}}
     added++;
   }
@@ -1801,6 +2003,7 @@ async function onFiles(files){
     if(kind==='photos')renderSec('photos');
     else if(kind==='cover'){renderSec('hero');refreshDesign()}
     else if(kind==='emblem'){renderAll();refreshDesign()}
+    else if(kind==='tile'){renderSec('tiles')}
     else if(kind==='blk'){var bs=site.sections.filter(function(x){return x.id==='blk_'+(site.blocks[ui.fileIdx]||{}).id})[0];if(bs)renderSec(bs.id)}
   }
   toast(failed?'تعذّر رفع '+failed+' من الصور. تأكد من الاتصال وحجم الصورة.':added?'تمت الإضافة.':'ما تمت إضافة شيء.');
@@ -1930,6 +2133,7 @@ function buildChrome(){
     '<dialog id="design" class="sheet owner" aria-label="لوحة التحكم"></dialog>'+
     '<dialog id="editor" class="sheet owner" aria-label="محرر المحتوى"></dialog>'+
     '<dialog id="poidlg" class="sheet owner" aria-label="مكان جديد"></dialog>'+
+    '<dialog id="tiledlg" class="sheet owner" aria-label="تعديل البلاطة"></dialog>'+
     '<dialog id="ytdlg" class="sheet owner" aria-label="فيديو يوتيوب"></dialog>'+
     '<dialog id="recdlg" class="sheet owner" aria-label="تسجيل صوتي"></dialog>'+
     '<dialog id="submit" class="sheet" aria-label="submit"></dialog>'+
@@ -1941,7 +2145,7 @@ function buildChrome(){
     d.addEventListener('click',function(e){if(e.target===d)d.close()});
     d.addEventListener('close',function(){
       if(d.id==='recdlg')recCleanup();
-      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
+      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
       if(d.id==='reader'||d.id==='viewer'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
       if(d.id==='reader')d.innerHTML='';
       if(!document.querySelector('dialog[open]'))root.classList.remove('modal');
@@ -2049,10 +2253,10 @@ hero:function(){
   var grid='';
   ['start','center','end'].forEach(function(v){['start','center','end'].forEach(function(h){grid+='<button data-act="hero-pos" data-v="'+(v==='start'?'start':v)+'" data-h="'+h+'" aria-pressed="'+(d.heroV===v&&d.heroH===h)+'" aria-label="'+v+'-'+h+'"></button>'})});
   var em=safeUrl(site.emblem);
-  return'<h4>اسم القرية</h4>'+textRow('الاسم بالعربي','brand','ar')+textRow('الاسم بالإنجليزي','brand','en',' dir="ltr"')+
+  return segRow('شكل الموقع','design.look',[['v2','الجديد'],['classic','الكلاسيكي']])+'<h4>اسم القرية</h4>'+textRow('الاسم بالعربي','brand','ar')+textRow('الاسم بالإنجليزي','brand','en',' dir="ltr"')+
     '<h4>مكان النص في الواجهة</h4><div class="grid3" dir="'+root.dir+'">'+grid+'</div>'+
     segRow('ارتفاع الواجهة','design.heroSize',[['full','كامل الشاشة'],['tall','مرتفعة'],['half','نصف الشاشة']])+
-    toggleRow('إظهار السطر التعريفي','design.tagline')+toggleRow('إظهار زر «مرّر للأسفل»','design.cue')+
+    toggleRow('إظهار السطر التعريفي','design.tagline')+toggleRow('إظهار زر «استكشف المزيد»','design.cue')+
     '<h4>صور الغلاف</h4><p class="hint">تظهر خلف اسم القرية، وإذا أضفت أكثر من صورة تتبدّل تلقائياً.</p><div class="covers">'+covs+'</div><button class="add-btn light" data-act="cover-add">＋ إضافة صورة غلاف</button>'+
     '<label class="fld" style="margin-top:14px">عتمة الطبقة فوق الصورة<input type="range" data-range="cover.dark" min="0" max="80" step="1" value="'+clamp(+site.cover.dark,0,80)+'"></label>'+
     '<h4>الطابع السوري</h4>'+toggleRow('شريط العلم أعلى الصفحة (أخضر وأبيض وأسود) مع علم صغير','design.flagBar')+toggleRow('علم يرفرف في الواجهة','design.flagWave')+toggleRow('علم في أسفل الصفحة','design.flagFoot')+
@@ -2237,6 +2441,37 @@ async function movePhoto(i,dir){
   renderAll();
   await sb.from('photos').update({sort:a.sort}).eq('id',a.id);
   await sb.from('photos').update({sort:b.sort}).eq('id',b.id);
+}
+
+/* ---------- explore tiles: destination + icon dialog ---------- */
+var tileDraft=null;
+function tileDestOptions(){
+  var cur=tileDraft.k==='url'?'url':tileDraft.k+':'+tileDraft.v,h='<optgroup label="أقسام الموقع">';
+  site.sections.forEach(function(s){if(s.id==='hero'||s.id==='tiles')return;var v='sec:'+s.id;h+='<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(titleOf(s)||s.id)+'</option>'});
+  h+='</optgroup><optgroup label="تبويبات الحكايات">';
+  site.cats.forEach(function(c){var v='tab:'+c.id;h+='<option value="'+esc(v)+'"'+(v===cur?' selected':'')+'>'+esc(c.name.ar||c.name.en)+'</option>'});
+  return h+'</optgroup><option value="url"'+(cur==='url'?' selected':'')+'>رابط خارجي (فيسبوك، يوتيوب...)</option>';
+}
+function openTileDlg(i){
+  var it=site.tiles.items[i];if(!it)return;
+  tileDraft={i:i,k:it.k,v:it.v,icon:it.icon};
+  var d=$('tiledlg');
+  d.innerHTML='<div class="dlg-in"><h3>تعديل البلاطة</h3><label class="fld">إلى أين تذهب البلاطة؟<select id="tile-dest">'+tileDestOptions()+'</select></label>'+
+    '<label class="fld" id="tile-url-fld"'+(it.k==='url'?'':' hidden')+'>الرابط<input id="tile-url" dir="ltr" placeholder="https://..." value="'+esc(it.k==='url'?it.v:'')+'"></label>'+
+    '<h4>الأيقونة</h4><div class="seg tile-icons">'+Object.keys(TILEICONS).map(function(k){return'<button class="seg-b" data-act="tile-icon-pick" data-ic="'+k+'" aria-pressed="'+(k===it.icon)+'" aria-label="'+k+'"><span class="ti">'+tileIcon(k)+'</span></button>'}).join('')+'</div>'+
+    '<div class="ed-actions"><button class="primary" data-act="tile-save">حفظ</button><button data-close>إلغاء</button></div></div>';
+  openDlg(d);
+}
+function saveTile(){
+  var it=site.tiles.items[tileDraft.i];if(!it)return;
+  var val=$('tile-dest').value,k,v;
+  if(val==='url'){k='url';v=$('tile-url').value.trim();if(!extLink(v)){toast('اكتب رابطاً صحيحاً يبدأ بـ https://');return}}
+  else{k=val.slice(0,3);v=val.slice(4)}
+  it.k=k;it.v=v;it.icon=tileDraft.icon;queueSettings();tileDraft=null;$('tiledlg').close();renderSec('tiles');toast('تم حفظ البلاطة.');
+}
+function addTile(){
+  var it={id:uid(),title:{ar:'بلاطة جديدة',en:'New tile'},icon:'star',image:'',k:'sec',v:'stories',on:true};
+  site.tiles.items.push(it);queueSettings();renderSec('tiles');openTileDlg(site.tiles.items.length-1);
 }
 
 /* ---------- map place dialog + youtube dialog ---------- */
@@ -2727,7 +2962,7 @@ async function sendPhotos(){
 
 
 /* ---------- events ---------- */
-var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1};
+var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1};
 function setLang(l){lang=l;ls('malha-lang',l);ui.menu=false;root.classList.remove('menuopen');renderAll()}
 function moveIn(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return false;var x=arr[i];arr[i]=arr[j];arr[j]=x;return true}
 document.addEventListener('click',function(e){
@@ -2816,6 +3051,25 @@ document.addEventListener('click',function(e){
     case'sec-bg':site.sections[i].bg=+a.dataset.bg;queueSettings();renderAll();refreshDesign();break;
     case'sec-align':site.sections[i].align=site.sections[i].align==='center'?'start':'center';queueSettings();renderAll();refreshDesign();break;
     case'sec-ts':site.sections[i].ts=a.dataset.ts;queueSettings();renderAll();refreshDesign();break;
+    case'tile-go':{
+      if(ui.edit){e.preventDefault();break}
+      var tl=site.tiles.items[i];if(!tl)break;
+      if(tl.k==='tab'){e.preventDefault();ui.tab=tl.v;renderSec('stories');var st=app.querySelector('[data-sec="stories"]');if(st)st.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}
+      ui.menu=false;break}
+    case'about-more':{
+      var abx=a.closest('.about2'),box=abx&&abx.querySelector('.about-more');if(!box)break;
+      var wasHidden=box.hidden;box.hidden=!wasHidden;a.setAttribute('aria-expanded',wasHidden?'true':'false');
+      a.firstChild.textContent=t(wasHidden?'about_less':'about_more');break}
+    case'tile-up':if(moveIn(site.tiles.items,i,-1)){queueSettings();renderSec('tiles')}break;
+    case'tile-down':if(moveIn(site.tiles.items,i,1)){queueSettings();renderSec('tiles')}break;
+    case'tile-on':if(site.tiles.items[i]){site.tiles.items[i].on=site.tiles.items[i].on===false;queueSettings();renderSec('tiles')}break;
+    case'tile-del':if(confirmTap('td'+i)){var td=site.tiles.items.splice(i,1)[0];if(td&&td.image)removeFiles([td.image]);queueSettings();renderSec('tiles')}break;
+    case'tile-img':ui.fileIdx=i;pickFiles('tile','image/*',false);break;
+    case'tile-img-del':if(site.tiles.items[i]&&site.tiles.items[i].image){removeFiles([site.tiles.items[i].image]);site.tiles.items[i].image='';queueSettings();renderSec('tiles')}break;
+    case'tile-edit':openTileDlg(i);break;
+    case'tile-add':addTile();break;
+    case'tile-icon-pick':{tileDraft.icon=a.dataset.ic;[].forEach.call(document.querySelectorAll('#tiledlg [data-act="tile-icon-pick"]'),function(bt){bt.setAttribute('aria-pressed',bt===a?'true':'false')});break}
+    case'tile-save':saveTile();break;
     case'blk-add':{var bid=uid();site.blocks.push({id:bid,title:{ar:'قسم جديد',en:'New section'},body:{ar:'',en:''},image:''});
       var at=site.sections.map(function(s){return s.id}).indexOf('contact');if(at<0)at=site.sections.length;
       site.sections.splice(at,0,{id:'blk_'+bid,on:true,bg:2});queueSettings();renderAll();refreshDesign();toast('تمت إضافة القسم. عدّل نصه مباشرة من الصفحة.');break}
@@ -2893,6 +3147,7 @@ document.addEventListener('input',function(e){
 document.addEventListener('change',function(e){
   var tg=e.target;
   if(tg.id==='p-cat'){applyKind($('editor'),tg.value)}
+  if(tg.id==='tile-dest'){var uf=$('tile-url-fld');if(uf)uf.hidden=tg.value!=='url'}
   if(tg.id==='s-cat'){applySubmitKind($('submit'))}
   if(tg.id==='file'){onFiles([].slice.call(tg.files))}
   if(tg.dataset&&tg.dataset.nocount!==undefined){ls('malha-nocount',tg.checked?'1':null);return}
