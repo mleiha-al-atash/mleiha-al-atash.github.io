@@ -403,7 +403,7 @@ html[lang="en"] dialog.sheet:not(.owner) .dlg-in h3{font-family:var(--display-la
 .fld input,.fld textarea,.fld select{width:100%;font:inherit;font-weight:400;font-size:1rem;padding:12px;border:1.5px solid var(--ui);border-radius:8px;background:#fff;color:var(--ui)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .k-only{display:none}
-dialog[data-kind="event"] .k-event,dialog[data-kind="people"] .k-people{display:grid}
+dialog[data-kind="event"] .k-event,dialog[data-kind="people"] .k-people,dialog[data-kind="team"] .k-team{display:grid}
 dialog[data-kind="people"] .k-nopeople{display:none}
 .seg{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
 .seg-b{padding:8px 16px;border:2px solid var(--ui);border-radius:999px;background:#fff;color:var(--ui);font-weight:600;font-size:.9rem;cursor:pointer;font-family:inherit}
@@ -681,6 +681,16 @@ html.look2 .foot{border-top:0}
 .ad-code{font-family:ui-monospace,Menlo,monospace;font-size:1.7rem;font-weight:700;letter-spacing:.1em;text-align:center;padding:14px;border:2px dashed currentColor;border-radius:14px;margin:8px 0;user-select:all}
 .ad-terms-mini{font-size:.85rem;line-height:1.7}
 
+/* team cards: colour photos in a round frame, unlike the black-and-white martyr cards */
+.team-card{border-width:0;background:color-mix(in srgb,currentColor 8%,transparent);padding:20px 12px 14px;align-items:center;text-align:center}
+.team-card .person-img,.team-card .person-ph{width:min(150px,72%);aspect-ratio:1/1;border-radius:50%;margin-inline:auto}
+.team-card .person-img{object-fit:cover;object-position:center top;filter:none;border:4px solid var(--gold,#d9b44a);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.team-card .person-btn:hover .person-img{filter:none;transform:scale(1.03)}
+.team-card .person-name{padding:12px 6px 4px}
+.team-role{display:inline-block;margin:2px 0 8px;padding:3px 14px;border:1.5px solid currentColor;border-radius:999px;font-size:.85rem;opacity:.92}
+.rd.team img{max-width:360px;margin-inline:auto;border-radius:18px;filter:none}
+dialog[data-kind="team"] .k-nodate{display:none}
+
 </style>
 <style id="theme-vars"></style>
 <noscript><style>.loader{display:none}.line>span{transform:none}html.loading,html.loading body{overflow:auto}</style></noscript>
@@ -734,7 +744,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',f_role:'الدور أو المسؤولية',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -767,7 +777,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش | قرية في درعا، سوريا',doc_desc:'موقع قرية مليحة العطش في محافظة درعا، جنوب سوريا: حكايات وصور وتاريخ وخدمات وإعلانات من أهلها.'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',f_role:'Role or responsibility',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -1015,7 +1025,7 @@ function normalize(s){
   s.map.pois=(s.map.pois||[]).map(function(p){return{id:p.id||uid(),name:T2(p.name),lat:+p.lat,lng:+p.lng,icon:p.icon||'📍'}});
   s.loader.a=T2(s.loader.a);s.loader.b=T2(s.loader.b);
   s.brand=T2(s.brand);if(!s.brand.ar)s.brand.ar=DEF.brand.ar;if(!s.brand.en)s.brand.en=DEF.brand.en;
-  s.cats=(s.cats||[]).filter(function(c){return c&&c.id}).map(function(c){return{id:String(c.id),name:T2(c.name),one:T2(c.one),kind:['list','event','people','timeline'].indexOf(c.kind)>=0?c.kind:'list',submit:c.submit!==false}});
+  s.cats=(s.cats||[]).filter(function(c){return c&&c.id}).map(function(c){return{id:String(c.id),name:T2(c.name),one:T2(c.one),kind:['list','event','people','timeline','team'].indexOf(c.kind)>=0?c.kind:'list',submit:c.submit!==false}});
   if(!s.cats.length)s.cats=defaults().cats;
   s.seen=s.seen&&typeof s.seen==='object'?s.seen:{};
   if(!s.seen.history){if(!s.cats.some(function(c){return c.id==='history'}))s.cats.push(defaults().cats.filter(function(c){return c.id==='history'})[0]);s.seen.history=1}
@@ -1161,6 +1171,7 @@ function postMeta(p){
   var bits=[];
   if(c&&c.kind==='timeline'){var yl=yearLabel(p);if(yl)bits.push(dig(yl))}
   else if(c&&c.kind==='people'){var ll=lifeLine(p);if(ll)bits.push(ll);if(p.place)bits.push(p.place)}
+  else if(c&&c.kind==='team'){if(p.place)bits.push(p.place)}
   else{if(p.date)bits.push(fdate(p.date));if(p.time)bits.push(ftime(p.time));if(p.place)bits.push(p.place)}
   if(p.author)bits.push(t('by')+' '+p.author);
   return h+(bits.length?'<span class="pm">'+bits.map(esc).join(lang==='ar'?'، ':', ')+'</span>':'');
@@ -1394,6 +1405,11 @@ function postRow(p,tools){
   return'<article class="post" data-s="'+esc((pTitle(p)+' '+pBody(p)).toLowerCase().slice(0,700))+'"><button class="post-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="post-thumb" alt="" loading="lazy" src="'+img+'">':'')+
     '<span class="post-text"><span class="post-title">'+esc(pTitle(p))+'</span><span class="post-meta">'+postMeta(p)+'</span></span></button>'+tools+'</article>';
 }
+function teamCard(p){
+  var img=safeUrl(p.image);
+  return'<article class="person team-card" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><button class="person-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
+    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(p.place?'<span class="team-role">'+esc(p.place)+'</span>':'')+'</button>'+ownerTools(p)+'</article>';
+}
 function personCard(p){
   var img=safeUrl(p.image),ll=lifeLine(p);
   return'<article class="person" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><button class="person-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
@@ -1409,6 +1425,9 @@ function storiesHTML(s){
   var cat=catOf(tab),body;
   if(cat&&cat.kind==='people'){
     body='<div class="people">'+list.map(personCard).join('')+'</div>';
+  }else if(cat&&cat.kind==='team'){
+    var tl=list.slice().sort(function(a,b){if(!!a.pinned!==!!b.pinned)return a.pinned?-1:1;return(a.created||'')<(b.created||'')?-1:1});
+    body='<div class="people team">'+tl.map(teamCard).join('')+'</div>';
   }else{
     body='<div class="post-list">'+list.map(function(p){return postRow(p,ownerTools(p))}).join('')+'</div>';
   }
@@ -2436,9 +2455,9 @@ cats:function(){
     return'<div style="border:1.5px solid rgba(0,0,0,.2);border-radius:12px;padding:10px 12px;margin:0 0 10px"><div class="rowline" style="border:0;padding:0"><span class="grow">'+esc(tx(c.name))+'</span><button class="mini" data-act="cat-up" data-i="'+i+'">↑</button><button class="mini" data-act="cat-down" data-i="'+i+'">↓</button><button class="mini del" data-act="cat-del" data-i="'+i+'">حذف</button></div>'+
       '<div class="rowline" style="border:0;padding:6px 0 0"><input type="text" placeholder="الاسم بالعربي (جمع)" data-model="cats.'+i+'.name" data-l="ar" data-re="1" value="'+esc(c.name.ar)+'"><input type="text" dir="ltr" placeholder="Name (plural)" data-model="cats.'+i+'.name" data-l="en" data-re="1" value="'+esc(c.name.en)+'"></div>'+
       '<div class="rowline" style="border:0;padding:6px 0 0"><input type="text" placeholder="المفرد بالعربي" data-model="cats.'+i+'.one" data-l="ar" data-re="1" value="'+esc(c.one.ar)+'"><input type="text" dir="ltr" placeholder="Singular" data-model="cats.'+i+'.one" data-l="en" data-re="1" value="'+esc(c.one.en)+'"></div>'+
-      '<div class="rowline" style="border:0;padding:6px 0 0"><span>النوع</span>'+[['list','قائمة'],['event','فعاليات'],['people','أشخاص (بطاقات)'],['timeline','خط زمني']].map(function(k){return'<button class="mini" data-act="cat-kind" data-i="'+i+'" data-k="'+k[0]+'" aria-pressed="'+(c.kind===k[0])+'">'+k[1]+'</button>'}).join('')+'<button class="mini" data-act="cat-submit" data-i="'+i+'" aria-pressed="'+c.submit+'" style="margin-inline-start:8px">'+(c.submit?'يسمح للزوار بالمشاركة':'الزوار لا يشاركون')+'</button></div></div>';
+      '<div class="rowline" style="border:0;padding:6px 0 0"><span>النوع</span>'+[['list','قائمة'],['event','فعاليات'],['people','أشخاص (بطاقات)'],['team','فريق (صور ملوّنة)'],['timeline','خط زمني']].map(function(k){return'<button class="mini" data-act="cat-kind" data-i="'+i+'" data-k="'+k[0]+'" aria-pressed="'+(c.kind===k[0])+'">'+k[1]+'</button>'}).join('')+'<button class="mini" data-act="cat-submit" data-i="'+i+'" aria-pressed="'+c.submit+'" style="margin-inline-start:8px">'+(c.submit?'يسمح للزوار بالمشاركة':'الزوار لا يشاركون')+'</button></div></div>';
   }).join('');
-  return'<p class="hint">التصنيفات هي التبويبات داخل قسم الحكايات (قصص، مقالات، أحداث، شهداء القرية...). «قائمة» صفوف عادية، «فعاليات» فيها تاريخ ووقت ومكان، «أشخاص» بطاقات بصور.</p>'+rows+'<button class="add-btn light" data-act="cat-add">＋ إضافة تصنيف جديد</button>';
+  return'<p class="hint">التصنيفات هي التبويبات داخل قسم الحكايات (قصص، مقالات، أحداث، شهداء القرية...). «قائمة» صفوف عادية، «فعاليات» فيها تاريخ ووقت ومكان، «أشخاص» بطاقات بصور بالأبيض والأسود (للشهداء)، و«فريق» بطاقات دائرية بصور ملوّنة مع الدور أو المسؤولية (لأعضاء فريق أو لجنة).</p>'+rows+'<button class="add-btn light" data-act="cat-add">＋ إضافة تصنيف جديد</button>';
 },
 map:function(){
   return segRow('شكل الخريطة','map.style',[['duo','بألوان الموقع'],['mono','رمادي'],['plain','ألوان الخريطة الأصلية']])+
@@ -2534,7 +2553,7 @@ function editorHTML(){
     '<label class="fld k-only k-people">تاريخ الميلاد (سنة أو تاريخ)<input id="p-born" maxlength="20" value="'+esc(p.extra&&p.extra.born||'')+'"></label>'+
     '<label class="fld k-only k-timeline">السنة أو الفترة<input id="p-year" maxlength="20" placeholder="مثال: 1956 أو 1960s" value="'+esc(p.extra&&p.extra.year||'')+'"></label>'+
     '<div class="row2 k-nodate"><label class="fld"><span id="l-date">التاريخ</span><input type="date" id="p-date" value="'+esc(p.date)+'"></label><label class="fld k-only k-event">الوقت<input type="time" id="p-time" value="'+esc(p.time)+'"></label></div>'+
-    '<label class="fld k-only k-event k-people"><span id="l-place">المكان</span><input id="p-place" maxlength="200" value="'+esc(p.place)+'"></label>'+
+    '<label class="fld k-only k-event k-people k-team"><span id="l-place">المكان</span><input id="p-place" maxlength="200" value="'+esc(p.place)+'"></label>'+
     '<div class="fld">الصورة<div class="pimg" id="p-img"></div><button class="add-btn light" data-act="post-img" style="margin-top:0">اختيار صورة</button></div>'+
     '<label class="fld"><span id="l-body">النص (عربي)</span><textarea id="p-body" rows="9" maxlength="20000">'+esc(p.body.ar)+'</textarea></label>'+
     '<label class="fld"><span>Text (English, optional)</span><textarea id="p-body-en" dir="ltr" rows="6" maxlength="20000">'+esc(p.body.en)+'</textarea></label>'+
@@ -2548,7 +2567,8 @@ function applyKind(dlg,catId){
   set('l-title',k==='people'?'الاسم (عربي)':k==='timeline'?'عنوان المحطة (عربي)':'العنوان (عربي)');
   set('l-body',k==='people'?'نبذة عنه (عربي)':'النص (عربي)');
   set('l-date',k==='people'?'تاريخ الوفاة أو الاستشهاد':'التاريخ');
-  set('l-place',k==='people'?'المكان أو الظروف':'المكان');
+  set('l-place',k==='people'?'المكان أو الظروف':k==='team'?'الدور أو المسؤولية (مثل: رئيس الفريق)':'المكان');
+  if(k==='team'){set('l-title','الاسم (عربي)');set('l-body','نبذة (عربي)')}
 }
 function refreshEditorImg(){
   var box=$('p-img');if(!box)return;
@@ -2569,7 +2589,7 @@ async function savePost(approveToo){
   var kind=kindOf(edPost.cat);
   edPost.date=$('p-date').value;
   edPost.time=kind==='event'?$('p-time').value:'';
-  edPost.place=(kind==='event'||kind==='people')?$('p-place').value.trim():'';
+  edPost.place=(kind==='event'||kind==='people'||kind==='team')?$('p-place').value.trim():'';
   edPost.extra=edPost.extra||{};
   if(kind==='people')edPost.extra.born=$('p-born').value.trim();else delete edPost.extra.born;
   if(kind==='timeline'){
@@ -2692,7 +2712,7 @@ function openYt(){
 /* ---------- reader / viewer ---------- */
 function openReader(id){
   var p=posts.filter(function(x){return x.id===id})[0];if(!p)return;
-  var img=safeUrl(p.image),c=catOf(p.cat),people=c&&c.kind==='people';
+  var img=safeUrl(p.image),c=catOf(p.cat),people=c&&c.kind==='people',team=c&&c.kind==='team';
   var body=String(pBody(p)||'').split(/\n{2,}/).filter(function(s){return s.trim()}).map(function(s){return'<p>'+esc(s).replace(/\n/g,'<br>')+'</p>'}).join('');
   var tools='';
   if(ui.edit){
@@ -2700,7 +2720,7 @@ function openReader(id){
     tools='<div class="row-tools">'+(p.status==='pending'?'<button class="tool" data-act="post-approve" data-id="'+i+'">قبول ونشر</button>':'')+'<button class="tool" data-act="post-edit" data-id="'+i+'">تعديل</button><button class="tool danger" data-act="post-del" data-id="'+i+'">حذف</button></div>';
   }
   var d=$('reader');
-  d.innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button><article class="rd'+(people?' people':'')+'">'+(img?'<img alt="" src="'+img+'">':'')+'<div class="post-meta">'+postMeta(p)+'</div><h2>'+esc(pTitle(p))+'</h2>'+
+  d.innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button><article class="rd'+(people?' people':'')+(team?' team':'')+'">'+(img?'<img alt="" src="'+img+'">':'')+'<div class="post-meta">'+postMeta(p)+'</div><h2>'+esc(pTitle(p))+'</h2>'+
     (people&&lifeLine(p)?'<div class="lifeline">'+esc(lifeLine(p))+'</div>':'')+(c&&c.kind==='timeline'&&yearLabel(p)?'<div class="lifeline">'+esc(dig(yearLabel(p)))+'</div>':'')+'<div class="rd-body">'+body+'</div>'+shareBar('p',p.id,pTitle(p))+cmtBtn('post',p.id)+tools+'</article>';
   try{history.replaceState(null,'','#p='+encodeURIComponent(p.id))}catch(e){}
   d.scrollTop=0;openDlg(d);
@@ -3014,7 +3034,7 @@ function submitHTML(){
     '<label class="fld k-only k-people">'+t('f_born')+'<input id="s-born" maxlength="20"></label>'+
     '<label class="fld k-only k-timeline">'+t('hist_year')+'<input id="s-year" maxlength="20" placeholder="'+esc(t('hist_year_p'))+'"></label>'+
     '<div class="row2 k-nodate"><label class="fld"><span id="sl-date">'+t('f_date')+'</span><input type="date" id="s-date" value="'+todayISO()+'"></label><label class="fld k-only k-event">'+t('f_time')+'<input type="time" id="s-time"></label></div>'+
-    '<label class="fld k-only k-event k-people"><span id="sl-place">'+t('f_place')+'</span><input id="s-place" maxlength="200"></label>'+
+    '<label class="fld k-only k-event k-people k-team"><span id="sl-place">'+t('f_place')+'</span><input id="s-place" maxlength="200"></label>'+
     '<label class="fld"><span id="sl-body">'+t('f_body')+'</span><textarea id="s-body" rows="8" maxlength="20000"></textarea></label>'+
     '<div class="fld">'+t('f_image')+'<div class="pimg" id="p-img"></div><button class="add-btn light" data-act="submit-img" style="margin-top:0">'+t('f_pick')+'</button></div>'+
     '<div class="hp" aria-hidden="true"><label>Website<input id="s-web" tabindex="-1" autocomplete="off"></label></div>'+
@@ -3024,10 +3044,10 @@ function submitHTML(){
 function applySubmitKind(d){
   var sel=d.querySelector('#s-cat'),k=kindOf(sel?sel.value:'story');d.dataset.kind=k;
   var set=function(id,txt){var e=d.querySelector('#'+id);if(e)e.textContent=txt};
-  set('sl-title',k==='people'?t('f_name'):t('f_title'));
-  set('sl-body',k==='people'?t('f_bio'):t('f_body'));
+  set('sl-title',(k==='people'||k==='team')?t('f_name'):t('f_title'));
+  set('sl-body',(k==='people'||k==='team')?t('f_bio'):t('f_body'));
   set('sl-date',k==='people'?t('f_died'):t('f_date'));
-  set('sl-place',k==='people'?t('f_place_p'):t('f_place'));
+  set('sl-place',k==='people'?t('f_place_p'):k==='team'?t('f_role'):t('f_place'));
 }
 function openSubmit(catId){
   if(!site.cats.some(function(c){return c.submit})){toast(t('offline'));return}
@@ -3042,7 +3062,7 @@ async function sendSubmission(){
   if(Date.now()-last<60000){serr(t('cooldown'));return}
   var cat=$('s-cat').value,kind=kindOf(cat);
   var title=$('s-title').value.trim(),body=$('s-body').value.trim();
-  if(!title){serr(kind==='people'?t('err_name'):t('err_title'));return}
+  if(!title){serr((kind==='people'||kind==='team')?t('err_name'):t('err_title'));return}
   if(kind==='list'&&body.length<20){serr(t('err_body'));return}
   var yr=kind==='timeline'?$('s-year').value.trim():'';
   if(kind==='timeline'&&!yr){serr(t('err_year'));return}
@@ -3058,7 +3078,7 @@ async function sendSubmission(){
   var extra={};if(kind==='people'){var bv=$('s-born').value.trim();if(bv)extra.born=bv}
   if(kind==='timeline')extra.year=yr;
   var row={type:cat,title:title,body:body,post_date:kind==='timeline'?(/^\d{4}$/.test(yr)?yr+'-01-01':null):($('s-date').value||todayISO()),post_time:kind==='event'?($('s-time').value||null):null,
-    place:(kind==='event'||kind==='people')?$('s-place').value.trim():'',image_url:imageUrl,author_name:$('s-author').value.trim(),status:'pending',extra:extra};
+    place:(kind==='event'||kind==='people'||kind==='team')?$('s-place').value.trim():'',image_url:imageUrl,author_name:$('s-author').value.trim(),status:'pending',extra:extra};
   var res=await sb.from('posts').insert(row);
   btn.disabled=false;btn.textContent=t('send');
   if(res.error){serr(t('send_fail'));return}
@@ -3179,7 +3199,7 @@ function cmtItem(type,id){
 function cmtAllowed(type,id){
   if(!ui.cmtOK)return false;
   var it=cmtItem(type,id);if(!it)return false;
-  if(type==='post'){var c=catOf(it.cat);return it.status==='approved'&&!(c&&c.kind==='people')&&it.cat!=='martyr'}
+  if(type==='post'){var c=catOf(it.cat);return it.status==='approved'&&!(c&&(c.kind==='people'||c.kind==='team'))&&it.cat!=='martyr'}
   return !isPending(it);
 }
 function cmtList(type,id,all){
