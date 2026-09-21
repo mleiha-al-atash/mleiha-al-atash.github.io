@@ -1185,7 +1185,14 @@ function titleOf(s){
   if(c)return c;
   var d=SECDEF[s.id];return d?d.t[lang]:'';
 }
-function featuredList(){return sortPosts(approved().filter(function(p){return p.pinned})).slice(0,4)}
+function featuredList(){
+  return sortPosts(approved().filter(function(p){var c=catOf(p.cat),k=c&&c.kind;return p.pinned&&k!=='team'})).slice(0,4);
+}
+/* posts already shown in the featured block are not repeated in the "all" list of the stories section */
+function featuredShownIds(){
+  var s=site.sections.filter(function(x){return x.id==='featured'})[0];
+  return(s&&s.on&&!ui.edit)?featuredList().map(function(p){return p.id}):[];
+}
 function navItems(){
   var out=[];
   site.sections.forEach(function(s){
@@ -1421,7 +1428,8 @@ function storiesHTML(s){
   var tabs='<button data-act="tab" data-tab="all" aria-pressed="'+(tab==='all')+'">'+t('all')+'</button>'+site.cats.filter(function(c){
     return c.kind!=='timeline'&&(ui.edit||base.some(function(p){return p.cat===c.id}));
   }).map(function(c){return'<button data-act="tab" data-tab="'+esc(c.id)+'" aria-pressed="'+(tab===c.id)+'">'+esc(tx(c.name))+'</button>'}).join('');
-  var list=sortPosts(base.filter(function(p){return tab==='all'||p.cat===tab}));
+  var fids=tab==='all'?featuredShownIds():[];
+  var list=sortPosts(base.filter(function(p){return(tab==='all'||p.cat===tab)&&fids.indexOf(p.id)<0}));
   var cat=catOf(tab),body;
   if(cat&&cat.kind==='people'){
     body='<div class="people">'+list.map(personCard).join('')+'</div>';
@@ -3547,6 +3555,16 @@ async function adDelete(id){
 var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1,'cmt-open':1,'sug-open':1,'ad-open':1,'ad-img':1,'ad-filter':1};
 function setLang(l){lang=l;ls('malha-lang',l);ui.menu=false;root.classList.remove('menuopen');renderAll()}
 function moveIn(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return false;var x=arr[i];arr[i]=arr[j];arr[j]=x;return true}
+
+/* double taps: an owner action that talks to the server runs once until it finishes; "add" buttons ignore a second tap within 0.7s */
+var busy={},ADD_ONCE={'dir-add':1,'blk-add':1,'tile-add':1,'fact-add':1,'qa-add':1,'chip-add':1,'link-add':1,'cat-add':1},lastAdd={act:'',t:0};
+function guard(name,fn){return async function(){if(busy[name])return;busy[name]=true;try{return await fn.apply(this,arguments)}finally{busy[name]=false}}}
+savePost=(function(orig){return async function(a){
+  if(busy.savePost||!edPost)return;busy.savePost=true;
+  var bs=[].slice.call(document.querySelectorAll('#editor [data-act^="post-save"]'));bs.forEach(function(x){x.disabled=true});
+  try{return await orig(a)}finally{busy.savePost=false;bs.forEach(function(x){x.disabled=false})}
+}})(savePost);
+addYouTube=guard('yt',addYouTube);addVideo=guard('video',addVideo);addAudio=guard('audio',addAudio);savePoi=guard('poi',savePoi);recSave=guard('rec',recSave);addMod=guard('mod',addMod);
 document.addEventListener('click',function(e){
   var tg=e.target;
   var close=tg.closest&&tg.closest('[data-close]');
@@ -3554,6 +3572,7 @@ document.addEventListener('click',function(e){
   var a=tg.closest&&tg.closest('[data-act]');
   if(!a)return;
   var act=a.dataset.act,i=+a.dataset.i,id=a.dataset.id;
+  if(ADD_ONCE[act]){var nowT=Date.now();if(lastAdd.act===act&&nowT-lastAdd.t<700){e.preventDefault();return}lastAdd={act:act,t:nowT}}
   if(ui.mod&&MOD_BLOCK[act]){e.preventDefault();toast('هذه الأداة للمالك فقط.');return}
   if(!sb&&!OFFLINE_OK[act]){toast(t('offline'));return}
   switch(act){
