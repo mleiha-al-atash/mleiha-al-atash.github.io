@@ -48,7 +48,7 @@
   --nav-h:64px;
 }
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:var(--nav-h);-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:var(--top-h,var(--nav-h));-webkit-text-size-adjust:100%}
 html[dir="ltr"]{--dir:-1}
 html.loading,html.loading body,html.modal,html.modal body,html.menuopen,html.menuopen body{overflow:hidden}
 body{
@@ -77,7 +77,7 @@ html[lang="en"] .loader-row{font-family:var(--display-lat);font-size:min(13vw,9r
 /* ---------- flag ---------- */
 .flag-svg{display:block;width:100%;height:100%}
 .flag-ico{display:inline-block;width:30px;height:20px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
-.flag-wave{position:absolute;z-index:2;inset-block-start:calc(var(--nav-h) + 22px);inset-inline-end:var(--pad);width:clamp(64px,9vw,110px);aspect-ratio:3/2;transform-origin:left center;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));animation:wave 4.2s ease-in-out infinite alternate}
+.flag-wave{position:absolute;z-index:2;inset-block-start:calc(var(--top-h,var(--nav-h)) + 22px);inset-inline-end:var(--pad);width:clamp(64px,9vw,110px);aspect-ratio:3/2;transform-origin:left center;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));animation:wave 4.2s ease-in-out infinite alternate}
 @keyframes wave{from{transform:perspective(500px) rotateY(-14deg) skewY(2deg)}to{transform:perspective(500px) rotateY(10deg) skewY(-2deg)}}
 
 /* ---------- nav ---------- */
@@ -101,7 +101,7 @@ html.menuopen .menu{transform:none;visibility:visible;transition:transform .5s v
 .menu a{display:block;font-family:var(--display);font-size:clamp(2.4rem,9vw,4.5rem);line-height:1.25;text-decoration:none;border-bottom:1px solid color-mix(in srgb,currentColor 25%,transparent);padding:6px 0}
 html[lang="en"] .menu a{font-family:var(--display-lat);text-transform:uppercase}
 .menu-x{position:absolute;inset-block-start:calc(6px + 10px);inset-inline-end:var(--pad);width:44px;height:40px;border:2px solid currentColor;border-radius:var(--btn-r);background:none;color:inherit;font-size:1.4rem;line-height:1;cursor:pointer}
-.cfgwarn{position:fixed;inset-inline:0;top:var(--nav-h);z-index:15;background:#b3261e;color:#fff;padding:8px var(--pad);font-size:.9rem;text-align:center}
+.cfgwarn{position:fixed;inset-inline:0;top:var(--top-h,var(--nav-h));z-index:15;background:#b3261e;color:#fff;padding:8px var(--pad);font-size:.9rem;text-align:center}
 
 /* ---------- sections ---------- */
 .sec{padding:calc(clamp(72px,12vw,180px) * var(--space)) var(--pad)}
@@ -124,7 +124,7 @@ html[lang="en"] .sub-title{font-family:var(--display-lat);text-transform:upperca
 .ow-hint{border:2px dashed currentColor;border-radius:var(--r);padding:14px 18px;margin:0 0 20px;font-size:.95rem;opacity:.8}
 
 /* ---------- hero ---------- */
-.hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:var(--hv,flex-end);align-items:var(--hh,flex-start);padding:calc(var(--nav-h) + var(--pad) * 1.6) var(--pad) var(--pad);background:var(--bg1);color:var(--fg1);text-align:var(--ha,start)}
+.hero{position:relative;isolation:isolate;min-height:100svh;display:flex;flex-direction:column;justify-content:var(--hv,flex-end);align-items:var(--hh,flex-start);padding:calc(var(--top-h,var(--nav-h)) + var(--pad) * 1.6) var(--pad) var(--pad);background:var(--bg1);color:var(--fg1);text-align:var(--ha,start)}
 .hero.h-tall{min-height:78svh}.hero.h-half{min-height:56svh}
 .hero.has-cover{color:#fff}
 .cover{position:absolute;inset:0;z-index:-1;overflow:hidden}
@@ -507,8 +507,6 @@ html[lang="en"] .aud-title{font-family:var(--display-lat);text-transform:upperca
 .aud-by{margin:4px 0 0;font-size:.95rem;opacity:.85}
 .aud audio{width:100%;height:48px}
 /* announcement, share, search, font size */
-.ann{margin-top:var(--nav-h);display:flex;justify-content:center;align-items:center;gap:12px;padding:10px calc(var(--pad) + 30px);background:#d9a62e;color:#161614;font-weight:700;font-size:.95rem;text-align:center;position:relative}
-.ann a{color:inherit}
 .ann-x{position:absolute;inset-inline-end:calc(var(--pad) - 6px);top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;background:none;color:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
 .share{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 0}
 .share-l{font-weight:700;font-size:.9rem;opacity:.8}
@@ -566,7 +564,7 @@ html.look2 .sec-lead{margin-inline:auto;text-align:center}
 html.look2 .intro .sec-lead{text-align:start;margin-inline:0}
 
 /* hero */
-html.look2 .hero{min-height:88svh;align-items:center;justify-content:center;text-align:center;padding:calc(var(--nav-h) + 26px) var(--pad) clamp(70px,12vw,110px)}
+html.look2 .hero{min-height:88svh;align-items:center;justify-content:center;text-align:center;padding:calc(var(--top-h,var(--nav-h)) + 26px) var(--pad) clamp(70px,12vw,110px)}
 html.look2 .hero.h-tall{min-height:76svh}html.look2 .hero.h-half{min-height:58svh}
 html.look2 .hero-in{display:flex;flex-direction:column;align-items:center}
 html.look2 .hero h1{margin-bottom:12px}
@@ -691,89 +689,50 @@ html.look2 .foot{border-top:0}
 .rd.team img{max-width:360px;margin-inline:auto;border-radius:18px;filter:none}
 dialog[data-kind="team"] .k-nodate{display:none}
 
-/* ---------- sticky announcement bar ---------- */
-html.has-ann{--nav-h:118px}
-@media(min-width:700px){html.has-ann{--nav-h:96px}}
-.ann{position:fixed;top:64px;inset-inline:0;z-index:19;margin-top:0;display:flex;align-items:center;gap:10px;padding:12px calc(var(--pad) + 34px);background:#d9a62e;color:#161614;font-weight:700;font-size:.92rem;min-height:44px;box-shadow:0 3px 10px rgba(0,0,0,.12)}
-@media(min-width:700px){.ann{top:64px}}
-.ann-in,.ann a{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;overflow:hidden;flex:1;min-width:0}
-.ann-ic{flex:none;font-size:1.05em}
-.ann-txt{overflow:hidden;white-space:nowrap;flex:1;min-width:0}
-.ann-txt bdi{display:inline-block}
-.ann-scroll bdi{padding-inline-start:100%;animation:ann-marquee 14s linear infinite}
-@keyframes ann-marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-html[dir="rtl"] .ann-scroll bdi{animation-direction:reverse}
-
-/* ---------- lockdown / maintenance ---------- */
-.lock-bar{position:relative;z-index:14;background:#b3261e;color:#fff;text-align:center;padding:10px var(--pad);font-weight:600;font-size:.92rem}
-.maint-sec{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center}
-.maint-box{max-width:520px;padding:40px 24px}
-.maint-box svg{width:56px;height:56px;color:var(--gold,#d9a62e);margin-bottom:16px}
-.maint-box h1{font-family:var(--display);font-size:2rem;margin-bottom:12px}
-.maint-box p{font-size:1.05rem;line-height:1.9;opacity:.9}
-.pause-notice{background:color-mix(in srgb,#b3261e 10%,transparent);border:1px dashed #b3261e;border-radius:12px;padding:10px 14px;margin:0 0 16px}
-
-/* ---------- nav contact button + dialog ---------- */
-.nav-contact svg{width:20px;height:20px;display:block}
-
-/* ---------- news badge ---------- */
-.news-badge{display:inline-block;background:#b3261e;color:#fff;border-radius:6px;padding:1px 8px;font-size:.75em;font-weight:700;vertical-align:middle;margin-inline-end:4px}
-
-/* ---------- visit counter ---------- */
-.visit-badge{display:flex;align-items:center;gap:10px;margin-top:18px;padding:10px 20px;border:1.5px solid currentColor;border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(2px)}
-.visit-badge[hidden]{display:none}
-.vb-star svg{width:20px;height:20px;color:var(--gold,#d9a62e);display:block}
-.vb-num{font-family:var(--display-lat,var(--display));font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
-.vb-lbl{font-size:.85rem;opacity:.92}
-
-/* ---------- owner: content table / activity log rows ---------- */
-.ap-row{border:1px solid rgba(0,0,0,.15);border-radius:12px;padding:10px 12px;margin:0 0 8px}
-.ap-row-t{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.ap-row-t b{flex:1;min-width:0}
-.ap-row-m{font-size:.85rem;opacity:.7;margin-top:4px}
-#ap-catf{flex-wrap:wrap;margin:10px 0}
-
-/* ===== batch: deaths/volunteers groups, news, counters, lockdown, maintenance, contact dlg, admin panel ===== */
-.pause-notice{opacity:.85}
-.post-news .news-badge{display:inline-block;background:#c0392b;color:#fff;border-radius:6px;padding:1px 8px;font-size:.72em;font-weight:700;vertical-align:middle;margin-inline-end:6px}
-
-/* sticky, nicer announcement bar */
-html.has-ann{--nav-h:calc(64px + 46px)}
-.ann{position:fixed;top:64px;inset-inline:0;z-index:19;margin-top:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 calc(var(--pad) + 34px);background:linear-gradient(180deg,#e3b545,#d9a62e);color:#161614;font-weight:700;font-size:.92rem;box-shadow:0 2px 8px rgba(0,0,0,.15);overflow:hidden}
+/* ---------- sticky announcement bar (height factored into --nav-h by applyDesign() in JS) ---------- */
+.ann{position:fixed;top:var(--nav-h);inset-inline:0;z-index:19;display:flex;align-items:center;gap:10px;padding:0 calc(var(--pad) + 34px);height:46px;background:linear-gradient(180deg,#e3b545,#d9a62e);color:#161614;font-weight:700;font-size:.92rem;box-shadow:0 3px 10px rgba(0,0,0,.15)}
 .ann-in,.ann a{display:flex;align-items:center;gap:8px;width:100%;overflow:hidden;color:inherit;text-decoration:none}
 .ann-ic{flex:none;font-size:1.05em}
 .ann-txt{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
 .ann-txt bdi{display:inline-block}
-.ann-scroll bdi{padding-inline-start:100%;animation:annmarquee 14s linear infinite}
-@keyframes annmarquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.ann-scroll bdi{padding-inline-start:100%;animation:ann-marquee 14s linear infinite}
+@keyframes ann-marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 html[dir="rtl"] .ann-scroll bdi{animation-direction:reverse}
 
-/* nav contact button + dialog reuses .links from before */
-.nav-contact svg{width:19px;height:19px}
-
-/* visit counter badge in the hero */
-.visit-badge{display:flex;align-items:center;gap:8px;margin-top:14px;padding:8px 18px;border:1.5px solid currentColor;border-radius:999px;background:rgba(0,0,0,.18);font-size:.92rem;opacity:0;transition:opacity .6s}
-.visit-badge:not([hidden]){opacity:1}
-.visit-badge .vb-star{width:16px;height:16px;color:#d9b44a}
-.visit-badge .vb-star svg{width:100%;height:100%}
-.vb-num{font-weight:800;font-size:1.15em}
-
-/* maintenance screen */
-.maint-sec{min-height:70svh;display:flex;align-items:center;justify-content:center;text-align:center}
-.maint-box{max-width:520px;margin-inline:auto}
-.maint-box svg{width:64px;height:64px;color:#d9b44a;margin-bottom:14px}
-.maint-box h1{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,5vw,2.4rem);margin-bottom:10px}
-
-/* sitewide lockdown notice */
-.lock-bar{position:relative;z-index:18;text-align:center;padding:10px var(--pad);background:#3a2f10;color:#f0dfa8;font-weight:600;font-size:.9rem;margin-top:var(--nav-h)}
-html.has-ann .lock-bar{margin-top:0}
+/* ---------- lockdown / maintenance ---------- */
+.lock-bar{position:relative;z-index:14;background:#3a2f10;color:#f0dfa8;text-align:center;padding:10px var(--pad);font-weight:600;font-size:.92rem;margin-top:var(--top-h,var(--nav-h))}
+.maint-sec{min-height:70svh;padding-top:var(--top-h,var(--nav-h));display:flex;align-items:center;justify-content:center;text-align:center}
+.maint-box{max-width:520px;margin-inline:auto;padding:40px 24px}
+.maint-box svg{width:56px;height:56px;color:var(--gold,#d9a62e);margin-bottom:16px}
+.maint-box h1{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,5vw,2.4rem);margin-bottom:12px}
+.maint-box p{font-size:1.05rem;line-height:1.9;opacity:.9}
+.pause-notice{background:color-mix(in srgb,#b3261e 10%,transparent);border:1px dashed #b3261e;border-radius:12px;padding:10px 14px;margin:0 0 16px;opacity:.9}
 html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.lockdown #cm-send,html.lockdown .cmt-form{display:none}
 
-/* admin panel: content table + log rows */
+/* ---------- nav contact button + dialog (reuses .links) ---------- */
+.nav-contact svg{width:20px;height:20px;display:block}
+
+/* ---------- news badge ---------- */
+.news-badge{display:inline-block;background:#b3261e;color:#fff;border-radius:6px;padding:1px 8px;font-size:.75em;font-weight:700;vertical-align:middle;margin-inline-end:6px}
+
+/* ---------- weather + visit counter: a small stack pinned to the hero's top corner ---------- */
+.hero-corner{position:absolute;top:calc(var(--top-h,var(--nav-h)) + 14px);inset-inline-start:14px;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.hc-weather,.visit-badge{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;border:1.3px solid rgba(255,255,255,.55);background:rgba(0,0,0,.32);backdrop-filter:blur(3px);color:#fff;font-size:.86rem;line-height:1;opacity:0;transition:opacity .6s}
+.hc-weather:not([hidden]),.visit-badge:not([hidden]){opacity:1}
+.hc-weather[hidden],.visit-badge[hidden]{display:flex;opacity:0;pointer-events:none}
+.hc-ic{font-size:1.05em}
+.hc-temp{font-weight:800;font-size:1.05em;font-variant-numeric:tabular-nums}
+.visit-badge .vb-star{width:13px;height:13px;color:#d9b44a;flex:none}
+.visit-badge .vb-star svg{width:100%;height:100%;display:block}
+.vb-num{font-weight:800;font-size:1.05em;font-variant-numeric:tabular-nums}
+@media(max-width:420px){.hero-corner{top:calc(var(--top-h,var(--nav-h)) + 10px);inset-inline-start:10px}.hc-weather,.visit-badge{padding:5px 11px;font-size:.8rem}}
+
+/* ---------- owner: content table / activity log rows ---------- */
 .ap-row{border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:12px;padding:10px 12px;margin:0 0 8px}
 .ap-row-t{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .ap-row-t b{flex:1;min-width:0}
 .ap-row-m{font-size:.85rem;opacity:.75;margin-top:4px}
+#ap-catf{flex-wrap:wrap;margin:10px 0}
 
 </style>
 <style id="theme-vars"></style>
@@ -1212,8 +1171,11 @@ function applyDesign(){
   $('theme-vars').textContent=':root{'+designCSS()+'}';
   root.classList.toggle('hasflag',!!site.design.flagBar);
   root.classList.toggle('look2',site.design.look!=='classic');
-  var nav=document.querySelector('.nav');
-  root.style.setProperty('--nav-h',site.design.flagBar?'70px':'64px');
+  /* --nav-h is the nav bar's own height; --top-h is the total space reserved at the
+     top of the page (nav bar plus the sticky announcement bar, when it is shown) */
+  var base=site.design.flagBar?70:64,ann=root.classList.contains('has-ann')?46:0;
+  root.style.setProperty('--nav-h',base+'px');
+  root.style.setProperty('--top-h',(base+ann)+'px');
 }
 function applyLang(){
   root.lang=lang;root.dir=lang==='ar'?'rtl':'ltr';
@@ -1404,13 +1366,18 @@ function heroHTML(s){
   var map={start:'flex-start',center:'center',end:'flex-end'};
   var cls='hero'+(covs.length?' has-cover':'')+(d.heroSize==='tall'?' h-tall':d.heroSize==='half'?' h-half':'')+(d.titleStyle==='outline'?' t-outline':'')+(d.heroH==='center'?' h-cn':'');
   var style='--dark:'+(clamp(+site.cover.dark,0,80)/100)+';--hv:'+(map[d.heroV]||'flex-end')+';--hh:'+(map[d.heroH]||'flex-start')+';--ha:'+(d.heroH==='center'?'center':d.heroH==='end'?'end':'start');
+  var hasLoc=isFinite(+site.map.lat)&&isFinite(+site.map.lng)&&(+site.map.lat||+site.map.lng);
+  var corner=(hasLoc||site.showVisitCounter)?'<div class="hero-corner">'+
+    (hasLoc?'<div class="hc-weather" id="hc-weather" hidden aria-live="polite"><span class="hc-ic" id="hc-wicon" aria-hidden="true">🌤️</span><b class="hc-temp" id="hc-temp">--</b>°</div>':'')+
+    (site.showVisitCounter?'<div class="visit-badge" id="visit-badge" hidden aria-live="polite"><span class="vb-star" aria-hidden="true">'+STAR0+'</span><b class="vb-num" id="vb-num">0</b></div>':'')+
+    '</div>':'';
   return'<section class="'+cls+'" data-sec="hero" id="hero" style="'+style+'">'+
     (covs.length?'<div class="cover" aria-hidden="true">'+covs.map(function(u){return'<img alt="" src="'+u+'">'}).join('')+'</div>':'')+
-    (d.flagWave?'<div class="flag-wave" aria-hidden="true">'+flagSVG()+'</div>':'')+
+    (d.flagWave?'<div class="flag-wave" aria-hidden="true">'+flagSVG()+'</div>':'')+corner+
     '<div class="hero-in"><h1>'+words.map(function(w){return'<span class="line"><span>'+esc(w)+'</span></span>'}).join('')+'</h1>'+
     (secondary?'<div class="brand2" aria-hidden="true"><i></i><span lang="'+(lang==='ar'?'en':'ar')+'">'+esc(secondary)+'</span><i></i></div>':'')+
     '<div class="hero-meta">'+((d.tagline||ui.edit)?'<p'+ea('hero.tag','سطر تعريفي عن القرية','',1)+'>'+esc(tx(site.hero.tag))+'</p>':'<span></span>')+
-    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+(isV2()?ARROWDN:STAR)+t('scroll')+'</a>':'')+(site.showVisitCounter?'<div class="visit-badge" id="visit-badge" hidden aria-live="polite"><span class="vb-star" aria-hidden="true">'+STAR0+'</span><b class="vb-num" id="vb-num">0</b><span class="vb-lbl">'+esc(t('visit_counter_lbl'))+'</span></div>':'')+'</div></div>'+(isV2()?heroExtras():'')+'</section>';
+    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+(isV2()?ARROWDN:STAR)+t('scroll')+'</a>':'')+'</div></div>'+(isV2()?heroExtras():'')+'</section>';
 }
 function nextBg(){var id=nextSecId(),s=site.sections.filter(function(x){return x.id===id})[0];return s?s.bg:3}
 function heroExtras(){
@@ -1808,11 +1775,12 @@ function secHTML(s){
   var f=BUILDERS[s.id];return f?f(s):'';
 }
 function renderAll(){
-  applyLang();applyDesign();
+  applyLang();
   var maint=site.maintenance&&site.maintenance.on&&!ui.admin;
   var lock=!!site.lockdown&&!ui.admin;
   root.classList.toggle('lockdown',lock);
   var a=annHTML();root.classList.toggle('has-ann',!!a);
+  applyDesign();
   app.innerHTML=navHTML()+a+(lock&&!maint?'<div class="lock-bar" role="status">⏸ '+esc(t('lockdown_notice'))+'</div>':'')+(maint?maintHTML():'<main id="top">'+site.sections.filter(function(s){return s.on}).map(secHTML).join('')+'</main>')+footHTML();
   afterRender();
 }
@@ -2377,20 +2345,6 @@ async function loadData(){
   await loadComments();await checkSuggestOK();await loadAds();
   return !s.error&&!p.error&&!h.error;
 }
-async function loadVisitCount(){
-  if(!site.showVisitCounter)return;
-  var r=await withTimeout(sb.rpc('visit_count'),8000,{error:{message:'timeout'}});
-  if(r.error||typeof r.data!=='number')return;
-  var el=$('visit-badge'),num=$('vb-num');if(!el||!num)return;
-  el.hidden=false;
-  var target=Math.max(0,Math.round(r.data)),start=0,t0=null,dur=1200;
-  function step(ts){
-    if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/dur),eased=1-Math.pow(1-p,3);
-    num.textContent=nf(Math.round(start+(target-start)*eased));
-    if(p<1)requestAnimationFrame(step);else num.textContent=nf(target);
-  }
-  requestAnimationFrame(step);
-}
 async function initBackend(){
   if(!CONFIGURED)return;
   var ok=await loadLib();
@@ -2412,7 +2366,36 @@ async function initBackend(){
     }
     recordVisit().catch(function(){});
     loadVisitCount().catch(function(){});
-    loadVisitCount().catch(function(){});
+    loadWeather().catch(function(){});
+  }catch(e){}
+}
+var WMO_ICON={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',56:'🌧️',57:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',66:'🌧️',67:'🌧️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'🌧️',85:'❄️',86:'❄️',95:'⛈️',96:'⛈️',99:'⛈️'};
+/* weather: a free, keyless, CORS-open API (Open-Meteo) — the owner's village map pin decides the location */
+async function loadWeather(){
+  var lat=+site.map.lat,lng=+site.map.lng;
+  if(!isFinite(lat)||!isFinite(lng)||(!lat&&!lng))return;
+  var el=$('hc-weather');if(!el)return;
+  try{
+    var cached=null;try{cached=JSON.parse(ls('malha-wx')||'null')}catch(e){}
+    var data;
+    if(cached&&cached.lat===lat&&cached.lng===lng&&(Date.now()-cached.t)<15*60*1000){
+      data=cached;
+    }else{
+      var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+      var to=ctrl?setTimeout(function(){ctrl.abort()},8000):null;
+      var res=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current=temperature_2m,weather_code&timezone=auto',ctrl?{signal:ctrl.signal}:{});
+      if(to)clearTimeout(to);
+      if(!res.ok)return;
+      var j=await res.json();
+      if(!j.current||typeof j.current.temperature_2m!=='number')return;
+      data={lat:lat,lng:lng,temp:j.current.temperature_2m,code:j.current.weather_code,t:Date.now()};
+      try{ls('malha-wx',JSON.stringify(data))}catch(e){}
+    }
+    el=$('hc-weather');if(!el)return;
+    var num=$('hc-temp'),ic=$('hc-wicon');
+    if(num)num.textContent=nf(Math.round(data.temp));
+    if(ic)ic.textContent=WMO_ICON[data.code]||'🌤️';
+    el.hidden=false;
   }catch(e){}
 }
 async function loadVisitCount(){
