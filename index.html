@@ -403,7 +403,7 @@ html[lang="en"] dialog.sheet:not(.owner) .dlg-in h3{font-family:var(--display-la
 .fld input,.fld textarea,.fld select{width:100%;font:inherit;font-weight:400;font-size:1rem;padding:12px;border:1.5px solid var(--ui);border-radius:8px;background:#fff;color:var(--ui)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .k-only{display:none}
-dialog[data-kind="event"] .k-event,dialog[data-kind="people"] .k-people,dialog[data-kind="team"] .k-team{display:grid}
+dialog[data-kind="event"] .k-event,dialog[data-kind="people"] .k-people,dialog[data-kind="team"] .k-team,dialog[data-kind="news"] .k-news{display:grid}
 dialog[data-kind="people"] .k-nopeople{display:none}
 .seg{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
 .seg-b{padding:8px 16px;border:2px solid var(--ui);border-radius:999px;background:#fff;color:var(--ui);font-weight:600;font-size:.9rem;cursor:pointer;font-family:inherit}
@@ -691,6 +691,90 @@ html.look2 .foot{border-top:0}
 .rd.team img{max-width:360px;margin-inline:auto;border-radius:18px;filter:none}
 dialog[data-kind="team"] .k-nodate{display:none}
 
+/* ---------- sticky announcement bar ---------- */
+html.has-ann{--nav-h:118px}
+@media(min-width:700px){html.has-ann{--nav-h:96px}}
+.ann{position:fixed;top:64px;inset-inline:0;z-index:19;margin-top:0;display:flex;align-items:center;gap:10px;padding:12px calc(var(--pad) + 34px);background:#d9a62e;color:#161614;font-weight:700;font-size:.92rem;min-height:44px;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+@media(min-width:700px){.ann{top:64px}}
+.ann-in,.ann a{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;overflow:hidden;flex:1;min-width:0}
+.ann-ic{flex:none;font-size:1.05em}
+.ann-txt{overflow:hidden;white-space:nowrap;flex:1;min-width:0}
+.ann-txt bdi{display:inline-block}
+.ann-scroll bdi{padding-inline-start:100%;animation:ann-marquee 14s linear infinite}
+@keyframes ann-marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+html[dir="rtl"] .ann-scroll bdi{animation-direction:reverse}
+
+/* ---------- lockdown / maintenance ---------- */
+.lock-bar{position:relative;z-index:14;background:#b3261e;color:#fff;text-align:center;padding:10px var(--pad);font-weight:600;font-size:.92rem}
+.maint-sec{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center}
+.maint-box{max-width:520px;padding:40px 24px}
+.maint-box svg{width:56px;height:56px;color:var(--gold,#d9a62e);margin-bottom:16px}
+.maint-box h1{font-family:var(--display);font-size:2rem;margin-bottom:12px}
+.maint-box p{font-size:1.05rem;line-height:1.9;opacity:.9}
+.pause-notice{background:color-mix(in srgb,#b3261e 10%,transparent);border:1px dashed #b3261e;border-radius:12px;padding:10px 14px;margin:0 0 16px}
+
+/* ---------- nav contact button + dialog ---------- */
+.nav-contact svg{width:20px;height:20px;display:block}
+
+/* ---------- news badge ---------- */
+.news-badge{display:inline-block;background:#b3261e;color:#fff;border-radius:6px;padding:1px 8px;font-size:.75em;font-weight:700;vertical-align:middle;margin-inline-end:4px}
+
+/* ---------- visit counter ---------- */
+.visit-badge{display:flex;align-items:center;gap:10px;margin-top:18px;padding:10px 20px;border:1.5px solid currentColor;border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(2px)}
+.visit-badge[hidden]{display:none}
+.vb-star svg{width:20px;height:20px;color:var(--gold,#d9a62e);display:block}
+.vb-num{font-family:var(--display-lat,var(--display));font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums}
+.vb-lbl{font-size:.85rem;opacity:.92}
+
+/* ---------- owner: content table / activity log rows ---------- */
+.ap-row{border:1px solid rgba(0,0,0,.15);border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.ap-row-t{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ap-row-t b{flex:1;min-width:0}
+.ap-row-m{font-size:.85rem;opacity:.7;margin-top:4px}
+#ap-catf{flex-wrap:wrap;margin:10px 0}
+
+/* ===== batch: deaths/volunteers groups, news, counters, lockdown, maintenance, contact dlg, admin panel ===== */
+.pause-notice{opacity:.85}
+.post-news .news-badge{display:inline-block;background:#c0392b;color:#fff;border-radius:6px;padding:1px 8px;font-size:.72em;font-weight:700;vertical-align:middle;margin-inline-end:6px}
+
+/* sticky, nicer announcement bar */
+html.has-ann{--nav-h:calc(64px + 46px)}
+.ann{position:fixed;top:64px;inset-inline:0;z-index:19;margin-top:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 calc(var(--pad) + 34px);background:linear-gradient(180deg,#e3b545,#d9a62e);color:#161614;font-weight:700;font-size:.92rem;box-shadow:0 2px 8px rgba(0,0,0,.15);overflow:hidden}
+.ann-in,.ann a{display:flex;align-items:center;gap:8px;width:100%;overflow:hidden;color:inherit;text-decoration:none}
+.ann-ic{flex:none;font-size:1.05em}
+.ann-txt{flex:1;min-width:0;overflow:hidden;white-space:nowrap}
+.ann-txt bdi{display:inline-block}
+.ann-scroll bdi{padding-inline-start:100%;animation:annmarquee 14s linear infinite}
+@keyframes annmarquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+html[dir="rtl"] .ann-scroll bdi{animation-direction:reverse}
+
+/* nav contact button + dialog reuses .links from before */
+.nav-contact svg{width:19px;height:19px}
+
+/* visit counter badge in the hero */
+.visit-badge{display:flex;align-items:center;gap:8px;margin-top:14px;padding:8px 18px;border:1.5px solid currentColor;border-radius:999px;background:rgba(0,0,0,.18);font-size:.92rem;opacity:0;transition:opacity .6s}
+.visit-badge:not([hidden]){opacity:1}
+.visit-badge .vb-star{width:16px;height:16px;color:#d9b44a}
+.visit-badge .vb-star svg{width:100%;height:100%}
+.vb-num{font-weight:800;font-size:1.15em}
+
+/* maintenance screen */
+.maint-sec{min-height:70svh;display:flex;align-items:center;justify-content:center;text-align:center}
+.maint-box{max-width:520px;margin-inline:auto}
+.maint-box svg{width:64px;height:64px;color:#d9b44a;margin-bottom:14px}
+.maint-box h1{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,5vw,2.4rem);margin-bottom:10px}
+
+/* sitewide lockdown notice */
+.lock-bar{position:relative;z-index:18;text-align:center;padding:10px var(--pad);background:#3a2f10;color:#f0dfa8;font-weight:600;font-size:.9rem;margin-top:var(--nav-h)}
+html.has-ann .lock-bar{margin-top:0}
+html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.lockdown #cm-send,html.lockdown .cmt-form{display:none}
+
+/* admin panel: content table + log rows */
+.ap-row{border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.ap-row-t{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ap-row-t b{flex:1;min-width:0}
+.ap-row-m{font-size:.85rem;opacity:.75;margin-top:4px}
+
 </style>
 <style id="theme-vars"></style>
 <noscript><style>.loader{display:none}.line>span{transform:none}html.loading,html.loading body{overflow:auto}</style></noscript>
@@ -744,7 +828,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',f_role:'الدور أو المسؤولية',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',f_role:'الدور أو المسؤولية',news_badge:'عاجل',news_expiry:'يختفي هذا الخبر تلقائياً بعد 10 أيام من نشره.',err_author:'الاسم إلزامي لهذا النوع من المشاركات.',visit_counter_lbl:'زيارة لموقع القرية',contact_btn:'تواصل معنا',maint_title:'الموقع قيد التحديث',lockdown_notice:'المشاركات موقوفة مؤقتاً من إدارة الموقع.',share_btn_deaths:'＋ شارك اسماً',share_btn_volunteers:'＋ شارك خبراً أو اقترح عضواً',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -777,7 +861,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش | قرية في درعا، سوريا',doc_desc:'موقع قرية مليحة العطش في محافظة درعا، جنوب سوريا: حكايات وصور وتاريخ وخدمات وإعلانات من أهلها.'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',f_role:'Role or responsibility',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',f_role:'Role or responsibility',news_badge:'Breaking',news_expiry:'This news item disappears automatically 10 days after it is published.',err_author:'A name is required for this kind of post.',visit_counter_lbl:'visits to the village site',contact_btn:'Contact us',maint_title:'The site is being updated',lockdown_notice:'Visitor submissions are temporarily paused by the site owner.',share_btn_deaths:'＋ Add a name',share_btn_volunteers:'＋ Share news or suggest a member',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -861,6 +945,8 @@ var SECDEF={
   featured:{t:{ar:'مختارات',en:'Featured'},nav:true},
   about:{t:{ar:'عنّا',en:'About'},nav:true,notitle:true},
   stories:{t:{ar:'حكايات القرية',en:'Village Stories'},nav:true},
+  deaths:{t:{ar:'وفيات القرية',en:'Village Deaths'},nav:true},
+  volunteers:{t:{ar:'فريق مليحة العطش التطوعي',en:'Muleiha Al-Atash Volunteer Team'},nav:true},
   photos:{t:{ar:'الصور والفيديو',en:'Photos & Videos'},nav:true},
   audio:{t:{ar:'أصوات من القرية',en:'Voices of the Village'},nav:true},
   history:{t:{ar:'تاريخ القرية',en:'Village History'},nav:true},
@@ -889,7 +975,7 @@ var TILEICONS={
   tag:'<path d="M3 12V4h8l10 10-8 8L3 12z"/><circle cx="7.5" cy="8.5" r="1.3"/>',
   link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>'
 };
-var SECORDER=['hero','tiles','intro','featured','about','history','stories','photos','audio','map','directory','ads','reviews','contact'];
+var SECORDER=['hero','tiles','intro','featured','about','history','stories','deaths','photos','audio','map','directory','ads','volunteers','reviews','contact'];
 var DIRCATS=[
   {id:'pharmacy',ic:'💊',ar:'صيدليات',en:'Pharmacies'},
   {id:'doctor',ic:'🩺',ar:'أطباء وعيادات',en:'Doctors & clinics'},
@@ -904,7 +990,7 @@ var DIRCATS=[
   {id:'service',ic:'🔧',ar:'خدمات عامة',en:'General services'},
   {id:'farm',ic:'🌾',ar:'مزارع وزراعة',en:'Farms & agriculture'},
   {id:'other',ic:'📌',ar:'أخرى',en:'Other'}];
-var SECBG={hero:1,tiles:3,intro:3,featured:3,about:3,history:1,stories:3,photos:2,audio:1,directory:1,ads:3,map:3,reviews:2,contact:1};
+var SECBG={hero:1,tiles:3,intro:3,featured:3,about:3,history:1,stories:3,deaths:1,photos:2,audio:1,directory:1,ads:3,volunteers:2,map:3,reviews:2,contact:1};
 
 function defaults(){return{
   v:2,
@@ -921,11 +1007,15 @@ function defaults(){return{
     quote:{ar:'هنا جذورنا .. وهنا حكايتنا',en:'Here are our roots .. and here is our story'}},
   sections:SECORDER.map(function(id){return{id:id,on:true,bg:SECBG[id]}}),
   cats:[
-    {id:'story',name:{ar:'قصص',en:'Stories'},one:{ar:'قصة',en:'Story'},kind:'list',submit:true},
-    {id:'article',name:{ar:'مقالات',en:'Articles'},one:{ar:'مقال',en:'Article'},kind:'list',submit:true},
-    {id:'event',name:{ar:'أحداث',en:'Events'},one:{ar:'حدث',en:'Event'},kind:'event',submit:true},
-    {id:'martyr',name:{ar:'شهداء القرية',en:'Village Martyrs'},one:{ar:'شهيد',en:'Martyr'},kind:'people',submit:true},
-    {id:'history',name:{ar:'تاريخ القرية',en:'Village History'},one:{ar:'محطة',en:'Milestone'},kind:'timeline',submit:true}
+    {id:'story',name:{ar:'قصص',en:'Stories'},one:{ar:'قصة',en:'Story'},kind:'list',group:'stories',submit:true},
+    {id:'article',name:{ar:'مقالات',en:'Articles'},one:{ar:'مقال',en:'Article'},kind:'list',group:'stories',submit:true},
+    {id:'event',name:{ar:'أحداث',en:'Events'},one:{ar:'حدث',en:'Event'},kind:'event',group:'stories',submit:true},
+    {id:'news',name:{ar:'أخبار عاجلة',en:'Breaking News'},one:{ar:'خبر',en:'News item'},kind:'news',group:'stories',submit:true},
+    {id:'martyr',name:{ar:'شهداء الثورة السورية',en:'Martyrs of the Syrian Revolution'},one:{ar:'شهيد',en:'Martyr'},kind:'people',group:'deaths',submit:true},
+    {id:'general_death',name:{ar:'وفيات عامة',en:'General Deaths'},one:{ar:'شخص',en:'Person'},kind:'people',group:'deaths',submit:true},
+    {id:'team_news',name:{ar:'أعمال الفريق',en:'Team Activities'},one:{ar:'خبر',en:'Update'},kind:'list',group:'volunteers',submit:true},
+    {id:'team_roster',name:{ar:'أعضاء الفريق',en:'Team Members'},one:{ar:'عضو',en:'Member'},kind:'team',group:'volunteers',submit:true},
+    {id:'history',name:{ar:'تاريخ القرية',en:'Village History'},one:{ar:'محطة',en:'Milestone'},kind:'timeline',group:'stories',submit:true}
   ],
   blocks:[],
   about:{
@@ -963,14 +1053,18 @@ function defaults(){return{
       {id:'t2',title:{ar:'الصور والفيديو',en:'Photos & Videos'},icon:'photos',image:'',k:'sec',v:'photos',on:true},
       {id:'t3',title:{ar:'تاريخ القرية',en:'Village History'},icon:'doc',image:'',k:'sec',v:'history',on:true},
       {id:'t4',title:{ar:'أين نحن',en:'Where We Are'},icon:'pin',image:'',k:'sec',v:'map',on:true},
-      {id:'t5',title:{ar:'شهداء القرية',en:'Village Martyrs'},icon:'star',image:'',k:'tab',v:'martyr',on:true},
+      {id:'t5',title:{ar:'وفيات القرية',en:'Village Deaths'},icon:'star',image:'',k:'sec',v:'deaths',on:true},
       {id:'t6',title:{ar:'أصوات من القرية',en:'Voices of the Village'},icon:'mic',image:'',k:'sec',v:'audio',on:true},
       {id:'t7',title:{ar:'خدمات القرية',en:'Village Services'},icon:'phone',image:'',k:'sec',v:'directory',on:true},
       {id:'t8',title:{ar:'آراء الزوار',en:'Visitor Reviews'},icon:'chat',image:'',k:'sec',v:'reviews',on:true},
-      {id:'t9',title:{ar:'إعلانات القرية',en:'Village Classifieds'},icon:'tag',image:'',k:'sec',v:'ads',on:true}
+      {id:'t9',title:{ar:'إعلانات القرية',en:'Village Classifieds'},icon:'tag',image:'',k:'sec',v:'ads',on:true},
+      {id:'t10',title:{ar:'فريق مليحة العطش التطوعي',en:'Volunteer Team'},icon:'people',image:'',k:'sec',v:'volunteers',on:true}
     ]},
   foot:{line:{ar:'مليحة العطش .. دائماً في قلوبنا',en:'Muleiha Al-Atash .. always in our hearts'}},
   announce:{on:false,text:{ar:'',en:''},link:''},
+  lockdown:false,
+  maintenance:{on:false,text:{ar:'الموقع قيد التحديث حالياً، وراح يرجع قريباً. شكراً لصبركم.',en:'The site is being updated right now and will be back soon. Thank you for your patience.'}},
+  showVisitCounter:true,
   directory:[],
   seen:{}
 }}
@@ -1025,7 +1119,7 @@ function normalize(s){
   s.map.pois=(s.map.pois||[]).map(function(p){return{id:p.id||uid(),name:T2(p.name),lat:+p.lat,lng:+p.lng,icon:p.icon||'📍'}});
   s.loader.a=T2(s.loader.a);s.loader.b=T2(s.loader.b);
   s.brand=T2(s.brand);if(!s.brand.ar)s.brand.ar=DEF.brand.ar;if(!s.brand.en)s.brand.en=DEF.brand.en;
-  s.cats=(s.cats||[]).filter(function(c){return c&&c.id}).map(function(c){return{id:String(c.id),name:T2(c.name),one:T2(c.one),kind:['list','event','people','timeline','team'].indexOf(c.kind)>=0?c.kind:'list',submit:c.submit!==false}});
+  s.cats=(s.cats||[]).filter(function(c){return c&&c.id}).map(function(c){return{id:String(c.id),name:T2(c.name),one:T2(c.one),kind:['list','event','people','timeline','team','news'].indexOf(c.kind)>=0?c.kind:'list',group:['stories','deaths','volunteers'].indexOf(c.group)>=0?c.group:'stories',submit:c.submit!==false}});
   if(!s.cats.length)s.cats=defaults().cats;
   s.seen=s.seen&&typeof s.seen==='object'?s.seen:{};
   if(!s.seen.history){if(!s.cats.some(function(c){return c.id==='history'}))s.cats.push(defaults().cats.filter(function(c){return c.id==='history'})[0]);s.seen.history=1}
@@ -1045,7 +1139,7 @@ function normalize(s){
     s.sections.forEach(function(x,j){if(x.id===prev)idx=j});
     s.sections.splice(idx+1,0,{id:id,on:true,bg:SECBG[id]});
   });
-  s.sections.forEach(function(x){if(x.bg!==1&&x.bg!==2&&x.bg!==3)x.bg=SECBG[x.id]||2;x.on=x.on!==false});
+  s.sections.forEach(function(x){if(x.bg!==1&&x.bg!==2&&x.bg!==3)x.bg=SECBG[x.id]||2;x.on=x.on!==false;x.pausedSubmit=!!x.pausedSubmit});
   if(!s.seen.svc){
     var SVC={ar:'خدمات القرية',en:'Village Services'};
     s.tiles.items.forEach(function(it){if(it.v==='directory'&&it.title.ar==='دليل القرية')it.title={ar:SVC.ar,en:SVC.en}});
@@ -1057,10 +1151,39 @@ function normalize(s){
     s.seen.ads=1;
   }
   if(!s.seen.look2){s.sections.forEach(function(x){if(x.id==='about'&&x.bg===2)x.bg=3});s.seen.look2=1}
+
+  if(!s.seen.deaths){
+    var mc=s.cats.filter(function(c){return c.id==='martyr'})[0];
+    if(mc){mc.name={ar:'شهداء الثورة السورية',en:'Martyrs of the Syrian Revolution'};mc.group='deaths'}
+    if(!s.cats.some(function(c){return c.id==='general_death'}))s.cats.push({id:'general_death',name:{ar:'وفيات عامة',en:'General Deaths'},one:{ar:'شخص',en:'Person'},kind:'people',group:'deaths',submit:true});
+    var DT={ar:'وفيات القرية',en:'Village Deaths'};
+    s.tiles.items.forEach(function(it){if(it.k==='tab'&&it.v==='martyr'){it.k='sec';it.v='deaths';it.title=DT}});
+    if(!s.tiles.items.some(function(it){return it.k==='sec'&&it.v==='deaths'}))s.tiles.items.push({id:uid(),title:DT,icon:'star',image:'',k:'sec',v:'deaths',on:true});
+    s.seen.deaths=1;
+  }
+  if(!s.seen.volunteers){
+    if(!s.cats.some(function(c){return c.id==='team_news'}))s.cats.push({id:'team_news',name:{ar:'أعمال الفريق',en:'Team Activities'},one:{ar:'خبر',en:'Update'},kind:'list',group:'volunteers',submit:true});
+    if(!s.cats.some(function(c){return c.id==='team_roster'}))s.cats.push({id:'team_roster',name:{ar:'أعضاء الفريق',en:'Team Members'},one:{ar:'عضو',en:'Member'},kind:'team',group:'volunteers',submit:true});
+    if(!s.tiles.items.some(function(it){return it.k==='sec'&&it.v==='volunteers'})){
+      var ix=-1;s.tiles.items.forEach(function(it,j){if(it.v==='ads')ix=j});
+      s.tiles.items.splice(ix>=0?ix+1:s.tiles.items.length,0,{id:uid(),title:{ar:'فريق مليحة العطش التطوعي',en:'Volunteer Team'},icon:'people',image:'',k:'sec',v:'volunteers',on:true});
+    }
+    s.seen.volunteers=1;
+  }
+  if(!s.seen.news){
+    if(!s.cats.some(function(c){return c.id==='news'})){
+      var six=-1;s.cats.forEach(function(c,j){if(c.id==='event')six=j});
+      s.cats.splice(six>=0?six+1:s.cats.length,0,{id:'news',name:{ar:'أخبار عاجلة',en:'Breaking News'},one:{ar:'خبر',en:'News item'},kind:'news',group:'stories',submit:true});
+    }
+    s.seen.news=1;
+  }
+  s.lockdown=!!s.lockdown;
+  s.maintenance=s.maintenance&&typeof s.maintenance==='object'?s.maintenance:{};s.maintenance.on=!!s.maintenance.on;s.maintenance.text=T2(s.maintenance.text);if(!s.maintenance.text.ar&&!s.maintenance.text.en)s.maintenance.text=defaults().maintenance.text;
+  s.showVisitCounter=s.showVisitCounter!==false;
   return s;
 }
 var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[],comments=[],suggestions=[],ads=[];
-var ui={cmtOK:false,svcOK:false,dq:'',adsOK:false,adcat:'all',adq:'',ablobs:[],edit:false,admin:false,tab:'all',pending:null,fileFor:null,vi:0,dtab:'look',menu:false};
+var ui={lastTab:'',apQ:'',apCat:'',cmtOK:false,svcOK:false,dq:'',adsOK:false,adcat:'all',adq:'',ablobs:[],edit:false,admin:false,tab:'',pending:null,fileFor:null,vi:0,dtab:'look',menu:false};
 
 /* ---------- theme + design ---------- */
 function okHex(h){return/^#[0-9a-fA-F]{6}$/.test(h||'')}
@@ -1124,6 +1247,7 @@ function pickLang(){
 var STAR='<svg class="spin" viewBox="0 0 100 100" aria-hidden="true"><use href="#star"/></svg>';
 var STAR0='<svg viewBox="0 0 100 100" aria-hidden="true"><use href="#star"/></svg>';
 var CHEV='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var MAIL='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var ARROWDN='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M5.5 12.5L12 19l6.5-6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var LEAF='<svg class="about-leaf" viewBox="0 0 120 160" aria-hidden="true"><path d="M60 158C58 110 52 70 20 30M60 158C62 118 78 80 108 44" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M60 124C40 116 24 100 14 76 34 78 52 92 60 124zM60 100C76 92 92 76 100 56 82 60 66 74 60 100zM58 74C44 66 34 52 30 32 46 36 56 50 58 74z" fill="currentColor"/></svg>';
 var TEAR=(function(){var s=7,r=function(){s=(s*9301+49297)%233280;return s/233280},p='M0 60V36';for(var x=0;x<=1200;x+=12)p+='L'+x+' '+(18+Math.round(r()*22));return p+'L1200 60Z'})();
@@ -1218,6 +1342,7 @@ function navHTML(){
   return(CONFIGURED?'':'<div class="cfgwarn">الموقع غير مربوط بقاعدة البيانات بعد: ضع رابط المشروع والمفتاح أعلى ملف index.html.</div>')+
     '<header class="nav"><a class="logo" href="#top">'+STAR+(isV2()?'<span class="logo-t"><b>'+esc(short)+'</b><small>'+esc(lang==='ar'?site.brand.en:site.brand.ar)+'</small></span>':'<span>'+esc(short)+'</span>')+'</a><div class="nav-r"><nav aria-label="'+t('menu')+'"><ul>'+li+'</ul></nav>'+
     (site.design.flagBar?'<span class="flag-ico">'+flagSVG()+'</span>':'')+
+    ((site.contact.links.length||ui.edit)?'<button class="nav-btn nav-contact" data-act="contact-open" aria-label="'+esc(t('contact_btn'))+'">'+MAIL+'</button>':'')+
     '<button class="nav-btn" data-act="lang" aria-label="'+esc(t('lang_label'))+'">'+t('lang_btn')+'</button><button class="nav-btn nav-aa" data-act="fontsize" aria-label="'+esc(t('fs_label'))+'">Aa</button>'+
     '<button class="menu-btn" data-act="menu" aria-label="'+t('menu')+'">'+MENU+'</button></div></header>'+
     '<div class="menu" id="menu" role="dialog" aria-label="'+t('menu')+'"><button class="menu-x" data-act="menu-close" aria-label="'+t('close')+'">×</button>'+menu+'<div class="menu-tools"><button class="nav-btn" data-act="fontsize">Aa &nbsp;'+esc(t('fs_label'))+'</button></div></div>';
@@ -1241,8 +1366,8 @@ function annHTML(){
   var a=site.announce;if(!a||!a.on)return'';
   var txt=tx(a.text);if(!txt&&!ui.edit)return'';
   if(!ui.edit&&ls('malha-ann')===annKey())return'';
-  var link=safeHref(a.link),inner=esc(txt||'(نص الإعلان)');
-  return'<div class="ann" id="ann" role="status">'+(link!=='#'?'<a href="'+esc(link)+'"'+(/^https?:/i.test(link)?' target="_blank" rel="noopener"':'')+'>'+inner+'</a>':'<span>'+inner+'</span>')+(ui.edit?'':'<button class="ann-x" data-act="ann-close" aria-label="'+esc(t('ann_close'))+'">×</button>')+'</div>';
+  var link=safeHref(a.link),long=txt.length>42,inner='<span class="ann-ic" aria-hidden="true">📢</span><span class="ann-txt'+(long?' ann-scroll':'')+'"><bdi>'+esc(txt||'(نص الإعلان)')+'</bdi></span>';
+  return'<div class="ann" id="ann" role="status">'+(link!=='#'?'<a href="'+esc(link)+'"'+(/^https?:/i.test(link)?' target="_blank" rel="noopener"':'')+'>'+inner+'</a>':'<span class="ann-in">'+inner+'</span>')+(ui.edit?'':'<button class="ann-x" data-act="ann-close" aria-label="'+esc(t('ann_close'))+'">×</button>')+'</div>';
 }
 
 /* ---------- share ---------- */
@@ -1285,7 +1410,7 @@ function heroHTML(s){
     '<div class="hero-in"><h1>'+words.map(function(w){return'<span class="line"><span>'+esc(w)+'</span></span>'}).join('')+'</h1>'+
     (secondary?'<div class="brand2" aria-hidden="true"><i></i><span lang="'+(lang==='ar'?'en':'ar')+'">'+esc(secondary)+'</span><i></i></div>':'')+
     '<div class="hero-meta">'+((d.tagline||ui.edit)?'<p'+ea('hero.tag','سطر تعريفي عن القرية','',1)+'>'+esc(tx(site.hero.tag))+'</p>':'<span></span>')+
-    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+(isV2()?ARROWDN:STAR)+t('scroll')+'</a>':'')+'</div></div>'+(isV2()?heroExtras():'')+'</section>';
+    (d.cue?'<a class="scroll" href="#'+esc(nextSecId())+'">'+(isV2()?ARROWDN:STAR)+t('scroll')+'</a>':'')+(site.showVisitCounter?'<div class="visit-badge" id="visit-badge" hidden aria-live="polite"><span class="vb-star" aria-hidden="true">'+STAR0+'</span><b class="vb-num" id="vb-num">0</b><span class="vb-lbl">'+esc(t('visit_counter_lbl'))+'</span></div>':'')+'</div></div>'+(isV2()?heroExtras():'')+'</section>';
 }
 function nextBg(){var id=nextSecId(),s=site.sections.filter(function(x){return x.id===id})[0];return s?s.bg:3}
 function heroExtras(){
@@ -1337,6 +1462,7 @@ function tileLive(it){
   if(it.v==='history')return shown().filter(isTL).length>0;
   if(it.v==='directory')return site.directory.length>0;
   if(it.v==='ads')return ui.adsOK;
+  if(it.v==='deaths'||it.v==='volunteers')return approved().some(function(p){var c=catOf(p.cat);return c&&(c.group||'stories')===it.v});
   if(it.v==='featured')return featuredList().length>0;
   if(it.v==='intro')return introIndex()>=0;
   return true;
@@ -1408,9 +1534,9 @@ function ownerTools(p){
   return'<div class="row-tools"><button class="tool" data-act="post-pin" data-id="'+id+'">'+(p.pinned?'إلغاء التثبيت':'📌 تثبيت')+'</button><button class="tool" data-act="post-hide" data-id="'+id+'">'+(p.status==='draft'?'نشر':'إخفاء')+'</button><button class="tool" data-act="post-edit" data-id="'+id+'">تعديل</button><button class="tool danger" data-act="post-del" data-id="'+id+'">حذف</button></div>';
 }
 function postRow(p,tools){
-  var img=safeUrl(p.image);
-  return'<article class="post" data-s="'+esc((pTitle(p)+' '+pBody(p)).toLowerCase().slice(0,700))+'"><button class="post-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="post-thumb" alt="" loading="lazy" src="'+img+'">':'')+
-    '<span class="post-text"><span class="post-title">'+esc(pTitle(p))+'</span><span class="post-meta">'+postMeta(p)+'</span></span></button>'+tools+'</article>';
+  var img=safeUrl(p.image),isNews=(function(){var c=catOf(p.cat);return c&&c.kind==='news'})();
+  return'<article class="post'+(isNews?' post-news':'')+'" data-s="'+esc((pTitle(p)+' '+pBody(p)).toLowerCase().slice(0,700))+'"><button class="post-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="post-thumb" alt="" loading="lazy" src="'+img+'">':'')+
+    '<span class="post-text"><span class="post-title">'+(isNews?'<b class="news-badge">'+esc(t('news_badge'))+'</b> ':'')+esc(pTitle(p))+'</span><span class="post-meta">'+postMeta(p)+'</span></span></button>'+tools+'</article>';
 }
 function teamCard(p){
   var img=safeUrl(p.image);
@@ -1420,16 +1546,33 @@ function teamCard(p){
 function personCard(p){
   var img=safeUrl(p.image),ll=lifeLine(p);
   return'<article class="person" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><button class="person-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
-    '<span class="person-name">'+esc(pTitle(p))+'</span><span class="person-dates">'+esc(ll)+(p.place?(ll?' · ':'')+esc(p.place):'')+'</span></button>'+ownerTools(p)+'</article>';
+    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(ll?'<span class="person-dates">'+esc(ll)+'</span>':'')+'</button>'+ownerTools(p)+'</article>';
 }
-function storiesHTML(s){
-  var base=shown().filter(function(p){return!isTL(p)}),tab=ui.tab;
-  if(tab!=='all'&&(!catOf(tab)||catOf(tab).kind==='timeline'))tab=ui.tab='all';
-  var tabs='<button data-act="tab" data-tab="all" aria-pressed="'+(tab==='all')+'">'+t('all')+'</button>'+site.cats.filter(function(c){
-    return c.kind!=='timeline'&&(ui.edit||base.some(function(p){return p.cat===c.id}));
-  }).map(function(c){return'<button data-act="tab" data-tab="'+esc(c.id)+'" aria-pressed="'+(tab===c.id)+'">'+esc(tx(c.name))+'</button>'}).join('');
-  var fids=tab==='all'?featuredShownIds():[];
-  var list=sortPosts(base.filter(function(p){return(tab==='all'||p.cat===tab)&&fids.indexOf(p.id)<0}));
+/* posts in a category "group": stories (قصص/مقالات/أحداث/أخبار), deaths (وفيات القرية) or volunteers (فريق التطوع).
+   each group is its own page section with its own tab bar, drawn by the same generic code. */
+function groupTabState(group){
+  var base=shown().filter(function(p){var c=catOf(p.cat);return!isTL(p)&&c&&(c.group||'stories')===group});
+  var live=site.cats.filter(function(c){return(c.group||'stories')===group&&c.kind!=='timeline'&&(ui.edit||base.some(function(p){return p.cat===c.id}));});
+  var key='tab_'+group,cur=ui[key];
+  var tab=live.some(function(c){return c.id===cur})?cur:(ui[key]=(live[0]&&live[0].id)||(site.cats.filter(function(c){return(c.group||'stories')===group})[0]||{}).id||cur);
+  return{base:base,live:live,tab:tab};
+}
+function pendPostsHTML(group,elId){
+  var pend=pendingPosts().filter(function(p){var c=catOf(p.cat);return(c?(c.group||'stories'):'stories')===group});
+  if(!pend.length)return'';
+  return'<div class="pending-box" id="'+elId+'"><h3 class="sub-title">بانتظار مراجعتك ('+nf(pend.length)+')</h3>'+sortPosts(pend).map(function(p){
+    var id=esc(p.id);
+    return postRow(p,'<div class="row-tools"><button class="tool" data-act="post-open" data-id="'+id+'">قراءة</button><button class="tool" data-act="post-approve" data-id="'+id+'">قبول ونشر</button><button class="tool" data-act="post-edit" data-id="'+id+'">تعديل</button><button class="tool danger" data-act="post-del" data-id="'+id+'">حذف</button></div>');
+  }).join('')+'</div>';
+}
+function groupPauseNotice(sec){
+  if(!sec.pausedSubmit||ui.edit)return'';
+  return'<p class="hint pause-notice">⏸ '+esc(t('lockdown_notice'))+'</p>';
+}
+function postGroupHTML(s,group,pendElId,addLabel){
+  var st=groupTabState(group),base=st.base,live=st.live,tab=st.tab;
+  var tabs=live.map(function(c){return'<button data-act="tab" data-g="'+esc(group)+'" data-tab="'+esc(c.id)+'" aria-pressed="'+(tab===c.id)+'">'+esc(tx(c.name))+'</button>'}).join('');
+  var list=sortPosts(base.filter(function(p){return p.cat===tab}));
   var cat=catOf(tab),body;
   if(cat&&cat.kind==='people'){
     body='<div class="people">'+list.map(personCard).join('')+'</div>';
@@ -1439,17 +1582,16 @@ function storiesHTML(s){
   }else{
     body='<div class="post-list">'+list.map(function(p){return postRow(p,ownerTools(p))}).join('')+'</div>';
   }
-  var pend=pendingPosts(),pendBox='';
-  if(pend.length){
-    pendBox='<div class="pending-box" id="pending"><h3 class="sub-title">بانتظار مراجعتك ('+nf(pend.length)+')</h3>'+sortPosts(pend).map(function(p){
-      var id=esc(p.id);
-      return postRow(p,'<div class="row-tools"><button class="tool" data-act="post-open" data-id="'+id+'">قراءة</button><button class="tool" data-act="post-approve" data-id="'+id+'">قبول ونشر</button><button class="tool" data-act="post-edit" data-id="'+id+'">تعديل</button><button class="tool danger" data-act="post-del" data-id="'+id+'">حذف</button></div>');
-    }).join('')+'</div>';
-  }
+  var sec=site.sections.filter(function(x){return x.id===s.id})[0]||{};
+  var searchId=group==='stories'?'q':'q_'+group;
   var empty=list.length?'':'<p class="empty">'+(approved().length?t('empty_cat'):t('empty_soon'))+'</p>';
-  return secOpen(s)+secTitle(s)+pendBox+pendCmtHTML()+(base.length>=3?'<input class="search" id="q" type="search" placeholder="'+esc(t('search_ph'))+'" aria-label="'+esc(t('search_ph'))+'" autocomplete="off">':'')+'<div class="tabs" role="group">'+tabs+'</div>'+body+'<p class="empty" id="nores" hidden>'+esc(t('search_none'))+'</p>'+empty+
-    (ui.edit?'<button class="add-btn" data-act="post-add">＋ إضافة قصة أو مقال أو حدث</button>':(CONFIGURED?'<button class="add-btn" data-act="submit-open">'+t('share_btn')+'</button><p class="note">'+t('share_note')+'</p>':''))+'</section>';
+  var canSubmit=cat&&cat.submit&&!sec.pausedSubmit;
+  return secOpen(s)+secTitle(s)+pendPostsHTML(group,pendElId)+(group==='stories'?pendCmtHTML():'')+groupPauseNotice(sec)+(base.length>=3?'<input class="search" id="'+searchId+'" data-g="'+esc(group)+'" type="search" placeholder="'+esc(t('search_ph'))+'" aria-label="'+esc(t('search_ph'))+'" autocomplete="off">':'')+'<div class="tabs" role="group">'+tabs+'</div>'+body+'<p class="empty nores" id="nores_'+group+'" hidden>'+esc(t('search_none'))+'</p>'+empty+
+    (ui.edit?'<button class="add-btn" data-act="post-add" data-g="'+esc(group)+'">＋ '+esc(addLabel)+'</button>':(CONFIGURED&&canSubmit?'<button class="add-btn" data-act="submit-open" data-cat="'+esc(tab)+'" data-g="'+esc(group)+'">'+(group==='stories'?t('share_btn'):t('share_btn_'+group))+'</button><p class="note">'+t('share_note')+(cat&&cat.kind==='news'?' '+esc(t('news_expiry')):'')+'</p>':''))+'</section>';
 }
+function storiesHTML(s){return postGroupHTML(s,'stories','pending','إضافة قصة أو مقال أو حدث أو خبر')}
+function deathsHTML(s){return postGroupHTML(s,'deaths','pending-deaths','إضافة اسم')}
+function volunteersHTML(s){return postGroupHTML(s,'volunteers','pending-volunteers','إضافة خبر أو عضو')}
 
 /* ---------- photos and videos ---------- */
 function mediaThumb(m){
@@ -1608,6 +1750,12 @@ function mapHTML(s){
 
 /* ---------- reviews ---------- */
 function starRow(n,label){var h='';for(var i=1;i<=5;i++)h+=starIcon(i<=Math.round(n));return'<span class="stars" role="img" aria-label="'+esc(label||n)+'">'+h+'</span>'}
+function pendReviewsHTML(){
+  var pend=pendingReviews();if(!pend.length)return'';
+  return'<div class="pending-box" id="pending-rev"><h3 class="sub-title">آراء بانتظار مراجعتك ('+nf(pend.length)+')</h3>'+pend.map(function(r){
+    return'<article class="rev-item"><div class="rev-head"><span class="rev-name">'+esc(r.name)+'</span>'+starRow(r.rating)+'</div>'+(r.comment?'<p class="rev-text">'+esc(r.comment)+'</p>':'')+'<div class="row-tools" style="padding-top:8px"><button class="tool" data-act="rev-ok" data-id="'+esc(r.id)+'">قبول ونشر</button><button class="tool danger" data-act="rev-del" data-id="'+esc(r.id)+'">حذف</button></div></article>';
+  }).join('')+'</div>';
+}
 function reviewsHTML(s){
   var ok=reviews.filter(function(r){return r.status==='approved'}),n=ok.length,sum=0,cnt=[0,0,0,0,0,0];
   ok.forEach(function(r){sum+=r.rating;cnt[r.rating]++});
@@ -1619,10 +1767,7 @@ function reviewsHTML(s){
     return'<article class="rev-item"><div class="rev-head"><span class="rev-name">'+esc(r.name)+'</span>'+starRow(r.rating,r.rating+' '+t('rev_stars'))+'<span class="rev-date">'+esc(fdate((r.created||'').slice(0,10)))+'</span></div>'+(r.comment?'<p class="rev-text">'+esc(r.comment)+'</p>':'')+
       (ui.edit?'<div class="row-tools" style="padding-top:8px"><button class="tool danger" data-act="rev-del" data-id="'+esc(r.id)+'">حذف</button></div>':'')+'</article>';
   }).join('');
-  var pend=pendingReviews(),pendBox='';
-  if(pend.length)pendBox='<div class="pending-box" id="pending-rev"><h3 class="sub-title">آراء بانتظار مراجعتك ('+nf(pend.length)+')</h3>'+pend.map(function(r){
-    return'<article class="rev-item"><div class="rev-head"><span class="rev-name">'+esc(r.name)+'</span>'+starRow(r.rating)+'</div>'+(r.comment?'<p class="rev-text">'+esc(r.comment)+'</p>':'')+'<div class="row-tools" style="padding-top:8px"><button class="tool" data-act="rev-ok" data-id="'+esc(r.id)+'">قبول ونشر</button><button class="tool danger" data-act="rev-del" data-id="'+esc(r.id)+'">حذف</button></div></article>';
-  }).join('')+'</div>';
+  var pendBox=pendReviewsHTML();
   var form=CONFIGURED&&!ui.edit?'<form class="rev-form" id="revform" onsubmit="return false"><h3>'+t('rev_write')+'</h3><div class="starpick" id="starpick" role="radiogroup" aria-label="'+t('rev_rating')+'">'+[1,2,3,4,5].map(function(k){return'<button type="button" data-act="rev-star" data-n="'+k+'" role="radio" aria-checked="false" aria-label="'+k+'">'+starIcon(true)+'</button>'}).join('')+'</div>'+
     '<label>'+t('rev_name')+'<input id="rv-name" maxlength="60" autocomplete="name"></label><label>'+t('rev_comment')+'<textarea id="rv-text" rows="4" maxlength="1000"></textarea></label>'+
     '<div class="hp" aria-hidden="true"><input id="rv-web" tabindex="-1" autocomplete="off"></div><p class="err" id="rv-err" hidden></p><button type="button" class="tool" data-act="rev-send" id="rv-send" style="padding:10px 22px;font-size:1rem">'+t('rev_send')+'</button></form>':'';
@@ -1631,16 +1776,21 @@ function reviewsHTML(s){
 
 /* ---------- contact and custom blocks ---------- */
 function contactHTML(s){
+  var c=site.contact,i=secIndex(s.id);
+  return secOpen(s,'contact')+'<h2'+ea('sections.'+i+'.title','عنوان القسم',1,1)+'>'+esc(titleOf(s))+'</h2><p class="contact-intro"'+ea('contact.intro','سطر الدعوة للمشاركة','',1)+'>'+esc(tx(c.intro))+'</p>'+
+    (!ui.edit&&CONFIGURED?'<button class="add-btn" data-act="submit-open">'+t('write_btn')+'</button><button class="add-btn" data-act="msg-open" style="margin-top:12px">'+t('msg_btn')+'</button>':'')+
+    (ui.edit?'<p class="hint" style="margin-top:14px">وسائل التواصل (البريد والواتساب وفيسبوك) صارت بزر «'+esc(t('contact_btn'))+'» أعلى الصفحة، جنب زر اللغة.</p>':'')+'</section>';
+}
+function contactLinksHTML(){
   var c=site.contact;
-  var links=c.links.map(function(l,i){
+  return c.links.map(function(l,i){
     if(ui.edit)return'<li class="link-edit"><div class="le-top"><span'+ea('contact.links.'+i+'.k','الاسم',1,1)+'>'+esc(tx(l.k))+'</span><bdi'+ea('contact.links.'+i+'.v','النص الظاهر',1)+'>'+esc(l.v)+'</bdi></div><div class="le-href" dir="ltr"'+ea('contact.links.'+i+'.href','الرابط مثل https://... أو mailto:...',1)+'>'+esc(l.href)+'</div><button class="tool danger" data-act="link-del" data-i="'+i+'">حذف</button></li>';
     var h=safeHref(l.href);
     return'<li><a href="'+esc(h)+'"'+(/^https?:/i.test(h)?' target="_blank" rel="noopener"':'')+'><span>'+esc(tx(l.k))+'</span><bdi>'+esc(l.v)+'</bdi></a></li>';
   }).join('');
-  var i=secIndex(s.id);
-  return secOpen(s,'contact')+'<h2'+ea('sections.'+i+'.title','عنوان القسم',1,1)+'>'+esc(titleOf(s))+'</h2><p class="contact-intro"'+ea('contact.intro','سطر الدعوة للمشاركة','',1)+'>'+esc(tx(c.intro))+'</p>'+
-    (!ui.edit&&CONFIGURED?'<button class="add-btn" data-act="submit-open">'+t('write_btn')+'</button><button class="add-btn" data-act="msg-open" style="margin-top:12px">'+t('msg_btn')+'</button>':'')+
-    '<ul class="links">'+links+'</ul>'+(ui.edit?'<button class="add-btn" data-act="link-add">＋ إضافة رابط</button>':'')+'</section>';
+}
+function contactDlgHTML(){
+  return'<div class="dlg-in"><h3>'+esc(t('contact_btn'))+'</h3><ul class="links">'+contactLinksHTML()+'</ul>'+(ui.edit?'<button class="add-btn" data-act="link-add">＋ إضافة رابط</button>':'')+'<div class="ed-actions"><button data-close>'+t('close')+'</button></div></div>';
 }
 function blockHTML(s){
   var j=-1;site.blocks.forEach(function(b,k){if('blk_'+b.id===s.id)j=k});
@@ -1652,15 +1802,22 @@ function blockHTML(s){
 }
 
 /* ---------- assemble ---------- */
-var BUILDERS={hero:heroHTML,tiles:tilesHTML,ads:adsHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,photos:photosHTML,audio:audioHTML,history:historyHTML,directory:directoryHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
+var BUILDERS={hero:heroHTML,tiles:tilesHTML,ads:adsHTML,intro:introHTML,featured:featuredHTML,about:aboutHTML,stories:storiesHTML,deaths:deathsHTML,volunteers:volunteersHTML,photos:photosHTML,audio:audioHTML,history:historyHTML,directory:directoryHTML,map:mapHTML,reviews:reviewsHTML,contact:contactHTML};
 function secHTML(s){
   if(s.id.indexOf('blk_')===0)return blockHTML(s);
   var f=BUILDERS[s.id];return f?f(s):'';
 }
 function renderAll(){
   applyLang();applyDesign();
-  app.innerHTML=navHTML()+annHTML()+'<main id="top">'+site.sections.filter(function(s){return s.on}).map(secHTML).join('')+'</main>'+footHTML();
+  var maint=site.maintenance&&site.maintenance.on&&!ui.admin;
+  var lock=!!site.lockdown&&!ui.admin;
+  root.classList.toggle('lockdown',lock);
+  var a=annHTML();root.classList.toggle('has-ann',!!a);
+  app.innerHTML=navHTML()+a+(lock&&!maint?'<div class="lock-bar" role="status">⏸ '+esc(t('lockdown_notice'))+'</div>':'')+(maint?maintHTML():'<main id="top">'+site.sections.filter(function(s){return s.on}).map(secHTML).join('')+'</main>')+footHTML();
   afterRender();
+}
+function maintHTML(){
+  return'<main id="top"><section class="sec s-bg2 maint-sec"><div class="maint-box">'+STAR0+'<h1>'+esc(t('maint_title'))+'</h1><p>'+esc(tx(site.maintenance.text))+'</p></div></section></main>';
 }
 function renderSec(id){
   var s=site.sections.filter(function(x){return x.id===id})[0];
@@ -1945,13 +2102,14 @@ function bindMap(box){
 function fromRow(r){
   return{id:r.id,cat:r.type||'story',title:{ar:r.title||'',en:r.title_en||''},body:{ar:r.body||'',en:r.body_en||''},
     date:r.post_date||'',time:(r.post_time||'').slice(0,5),place:r.place||'',image:r.image_url||'',author:r.author_name||'',
-    status:r.status||'approved',pinned:!!r.pinned,extra:(r.extra&&typeof r.extra==='object')?r.extra:{},created:r.created_at||''};
+    status:r.status||'approved',pinned:!!r.pinned,extra:(r.extra&&typeof r.extra==='object')?r.extra:{},created:r.created_at||'',
+    publishAt:r.publish_at||'',expiresAt:r.expires_at||''};
 }
 function toRow(p){
   var ti=(p.title.ar||p.title.en||'').slice(0,200);
   return{type:p.cat,title:ti,title_en:(p.title.en||'').slice(0,200),body:(p.body.ar||p.body.en||'').slice(0,20000),body_en:(p.body.en||'').slice(0,20000),
     post_date:p.date||null,post_time:p.time||null,place:(p.place||'').slice(0,200),image_url:p.image||null,author_name:(p.author||'').slice(0,100),
-    pinned:!!p.pinned,extra:p.extra||{},status:p.status||'approved'};
+    pinned:!!p.pinned,extra:p.extra||{},status:p.status||'approved',publish_at:p.publishAt||null,expires_at:p.expiresAt||null};
 }
 function photoFromRow(r){
   return{id:r.id,url:r.url,kind:r.kind||'image',poster:r.poster_url||'',yt:r.yt_id||'',cap:{ar:r.caption||'',en:r.caption_en||''},speaker:r.speaker||'',status:r.status||'approved',author:r.author_name||'',year:r.year||'',sort:r.sort||0};
@@ -2219,6 +2377,20 @@ async function loadData(){
   await loadComments();await checkSuggestOK();await loadAds();
   return !s.error&&!p.error&&!h.error;
 }
+async function loadVisitCount(){
+  if(!site.showVisitCounter)return;
+  var r=await withTimeout(sb.rpc('visit_count'),8000,{error:{message:'timeout'}});
+  if(r.error||typeof r.data!=='number')return;
+  var el=$('visit-badge'),num=$('vb-num');if(!el||!num)return;
+  el.hidden=false;
+  var target=Math.max(0,Math.round(r.data)),start=0,t0=null,dur=1200;
+  function step(ts){
+    if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/dur),eased=1-Math.pow(1-p,3);
+    num.textContent=nf(Math.round(start+(target-start)*eased));
+    if(p<1)requestAnimationFrame(step);else num.textContent=nf(target);
+  }
+  requestAnimationFrame(step);
+}
 async function initBackend(){
   if(!CONFIGURED)return;
   var ok=await loadLib();
@@ -2239,7 +2411,23 @@ async function initBackend(){
       if(isAdmin)renderAll();
     }
     recordVisit().catch(function(){});
+    loadVisitCount().catch(function(){});
+    loadVisitCount().catch(function(){});
   }catch(e){}
+}
+async function loadVisitCount(){
+  if(!site.showVisitCounter)return;
+  var r=await withTimeout(sb.rpc('visit_count'),8000,null);
+  var badge=$('visit-badge');if(!badge||!r||r.error||r.data==null)return;
+  var target=+r.data||0,el=$('vb-num');if(!el)return;
+  badge.hidden=false;
+  var start=0,steps=Math.min(40,Math.max(1,target)),dur=900,t0=null;
+  function tick(ts){
+    if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/dur),v=Math.round(target*(1-Math.pow(1-p,3)));
+    el.textContent=nf(v);
+    if(p<1)requestAnimationFrame(tick);else el.textContent=nf(target);
+  }
+  requestAnimationFrame(tick);
 }
 
 /* ---------- visit counter: anonymous (no name, no IP, no cookies) ---------- */
@@ -2310,6 +2498,7 @@ function buildChrome(){
     '<dialog id="poidlg" class="sheet owner" aria-label="مكان جديد"></dialog>'+
     '<dialog id="tiledlg" class="sheet owner" aria-label="تعديل البلاطة"></dialog>'+
     '<dialog id="cmtdlg" class="sheet" aria-label="comments"></dialog>'+
+    '<dialog id="contactdlg" class="sheet" aria-label="contact"></dialog>'+
     '<dialog id="adlg" class="reader" aria-label="ad"></dialog>'+
     '<dialog id="ytdlg" class="sheet owner" aria-label="فيديو يوتيوب"></dialog>'+
     '<dialog id="recdlg" class="sheet owner" aria-label="تسجيل صوتي"></dialog>'+
@@ -2322,7 +2511,7 @@ function buildChrome(){
     d.addEventListener('click',function(e){if(e.target===d)d.close()});
     d.addEventListener('close',function(){
       if(d.id==='recdlg')recCleanup();
-      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='cmtdlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
+      if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='cmtdlg'||d.id==='contactdlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
       if(d.id==='reader'||d.id==='viewer'||d.id==='adlg'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
       if(d.id==='reader'||d.id==='adlg')d.innerHTML='';
       if(!document.querySelector('dialog[open]'))root.classList.remove('modal');
@@ -2341,7 +2530,7 @@ function confirmTap(key,msg){
 
 /* ---------- design panel (owner) ---------- */
 var DTABS_MOD=[['acct','⚙ حسابي']];
-var DTABS=[['inbox','📩 الرسائل'],['stats','📊 الزوار'],['mods','👥 المشرفون'],['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
+var DTABS=[['review','🗂 المراجعة'],['inbox','📩 الرسائل'],['stats','📊 الزوار'],['allposts','📋 كل المحتوى'],['log','📜 السجل'],['mods','👥 المشرفون'],['look','المظهر'],['type','الخطوط'],['hero','الواجهة والهوية'],['secs','الأقسام'],['cats','التصنيفات'],['map','الخريطة'],['gen','عام']];
 function parseVal(v){
   if(v==='true')return true;if(v==='false')return false;
   if(/^-?\d+(\.\d+)?$/.test(v))return +v;
@@ -2449,9 +2638,11 @@ secs:function(){
     var titleAr=isBlk?(site.blocks.filter(function(b){return'blk_'+b.id===s.id})[0]||{title:{}}).title.ar:(s.title&&s.title.ar)||SECDEF[s.id].t.ar;
     var titleEn=isBlk?(site.blocks.filter(function(b){return'blk_'+b.id===s.id})[0]||{title:{}}).title.en:(s.title&&s.title.en)||SECDEF[s.id].t.en;
     var bIdx=isBlk?site.blocks.map(function(b){return'blk_'+b.id}).indexOf(s.id):-1;
+    var pausable=s.id==='deaths'||s.id==='volunteers';
     return'<div style="border:1.5px solid rgba(0,0,0,.2);border-radius:12px;padding:10px 12px;margin:0 0 10px"><div class="rowline" style="border:0;padding:0"><span class="grow">'+esc(titleOf(s)||SECDEF[s.id].t.ar)+'</span>'+
       '<button class="mini" data-act="sec-up" data-i="'+i+'">↑</button><button class="mini" data-act="sec-down" data-i="'+i+'">↓</button>'+
       '<button class="mini" data-act="sec-on" data-i="'+i+'" aria-pressed="'+s.on+'">'+(s.on?'ظاهر':'مخفي')+'</button>'+(isBlk?'<button class="mini del" data-act="blk-del" data-i="'+bIdx+'">حذف</button>':'')+'</div>'+
+      (pausable?'<div class="rowline" style="border:0;padding:6px 0 0"><span>مشاركات الزوار</span><button class="mini" data-act="sec-pause" data-sid="'+s.id+'" aria-pressed="'+(!s.pausedSubmit)+'">'+(s.pausedSubmit?'موقوفة، اضغط للسماح':'مسموحة، اضغط للإيقاف')+'</button></div>':'')+
       '<div class="rowline" style="border:0;padding:6px 0 0"><span>الخلفية</span>'+bg+'<span style="margin-inline-start:8px">المحاذاة</span><button class="mini" data-act="sec-align" data-i="'+i+'" aria-pressed="'+(s.align==='center')+'">وسط</button><span style="margin-inline-start:8px">العنوان</span>'+
       ['s','m','l'].map(function(z){return'<button class="mini" data-act="sec-ts" data-i="'+i+'" data-ts="'+z+'" aria-pressed="'+((s.ts||'m')===z)+'">'+({s:'صغير',m:'عادي',l:'كبير'})[z]+'</button>'}).join('')+'</div>'+
       (hasTitle?'<div class="rowline" style="border:0;padding:6px 0 0"><input type="text" placeholder="العنوان بالعربي" data-model="'+(isBlk?'blocks.'+bIdx+'.title':'sections.'+i+'.title')+'" data-l="ar" data-re="1" value="'+esc(titleAr||'')+'"><input type="text" dir="ltr" placeholder="English title" data-model="'+(isBlk?'blocks.'+bIdx+'.title':'sections.'+i+'.title')+'" data-l="en" data-re="1" value="'+esc(titleEn||'')+'"></div>':'')+'</div>';
@@ -2463,9 +2654,10 @@ cats:function(){
     return'<div style="border:1.5px solid rgba(0,0,0,.2);border-radius:12px;padding:10px 12px;margin:0 0 10px"><div class="rowline" style="border:0;padding:0"><span class="grow">'+esc(tx(c.name))+'</span><button class="mini" data-act="cat-up" data-i="'+i+'">↑</button><button class="mini" data-act="cat-down" data-i="'+i+'">↓</button><button class="mini del" data-act="cat-del" data-i="'+i+'">حذف</button></div>'+
       '<div class="rowline" style="border:0;padding:6px 0 0"><input type="text" placeholder="الاسم بالعربي (جمع)" data-model="cats.'+i+'.name" data-l="ar" data-re="1" value="'+esc(c.name.ar)+'"><input type="text" dir="ltr" placeholder="Name (plural)" data-model="cats.'+i+'.name" data-l="en" data-re="1" value="'+esc(c.name.en)+'"></div>'+
       '<div class="rowline" style="border:0;padding:6px 0 0"><input type="text" placeholder="المفرد بالعربي" data-model="cats.'+i+'.one" data-l="ar" data-re="1" value="'+esc(c.one.ar)+'"><input type="text" dir="ltr" placeholder="Singular" data-model="cats.'+i+'.one" data-l="en" data-re="1" value="'+esc(c.one.en)+'"></div>'+
-      '<div class="rowline" style="border:0;padding:6px 0 0"><span>النوع</span>'+[['list','قائمة'],['event','فعاليات'],['people','أشخاص (بطاقات)'],['team','فريق (صور ملوّنة)'],['timeline','خط زمني']].map(function(k){return'<button class="mini" data-act="cat-kind" data-i="'+i+'" data-k="'+k[0]+'" aria-pressed="'+(c.kind===k[0])+'">'+k[1]+'</button>'}).join('')+'<button class="mini" data-act="cat-submit" data-i="'+i+'" aria-pressed="'+c.submit+'" style="margin-inline-start:8px">'+(c.submit?'يسمح للزوار بالمشاركة':'الزوار لا يشاركون')+'</button></div></div>';
+      '<div class="rowline" style="border:0;padding:6px 0 0"><span>النوع</span>'+[['list','قائمة'],['event','فعاليات'],['people','أشخاص (بطاقات)'],['team','فريق (صور ملوّنة)'],['news','خبر عاجل'],['timeline','خط زمني']].map(function(k){return'<button class="mini" data-act="cat-kind" data-i="'+i+'" data-k="'+k[0]+'" aria-pressed="'+(c.kind===k[0])+'">'+k[1]+'</button>'}).join('')+'<button class="mini" data-act="cat-submit" data-i="'+i+'" aria-pressed="'+c.submit+'" style="margin-inline-start:8px">'+(c.submit?'يسمح للزوار بالمشاركة':'الزوار لا يشاركون')+'</button></div>'+
+      '<div class="rowline" style="border:0;padding:6px 0 0"><span>يظهر ضمن</span>'+[['stories','حكايات القرية'],['deaths','وفيات القرية'],['volunteers','فريق التطوع']].map(function(k){return'<button class="mini" data-act="cat-group" data-i="'+i+'" data-g="'+k[0]+'" aria-pressed="'+((c.group||'stories')===k[0])+'">'+k[1]+'</button>'}).join('')+'</div></div>';
   }).join('');
-  return'<p class="hint">التصنيفات هي التبويبات داخل قسم الحكايات (قصص، مقالات، أحداث، شهداء القرية...). «قائمة» صفوف عادية، «فعاليات» فيها تاريخ ووقت ومكان، «أشخاص» بطاقات بصور بالأبيض والأسود (للشهداء)، و«فريق» بطاقات دائرية بصور ملوّنة مع الدور أو المسؤولية (لأعضاء فريق أو لجنة).</p>'+rows+'<button class="add-btn light" data-act="cat-add">＋ إضافة تصنيف جديد</button>';
+  return'<p class="hint">التصنيفات هي التبويبات داخل «حكايات القرية» أو «وفيات القرية» أو «فريق التطوع»، حسب ما تختاره لكل تصنيف. «قائمة» صفوف عادية، «فعاليات» فيها تاريخ ووقت ومكان، «أشخاص» بطاقات بصور بالأبيض والأسود (للوفيات)، «فريق» بطاقات دائرية بصور ملوّنة مع الدور أو المسؤولية، و«خبر عاجل» يحتاج اسم مقدّمه ويختفي تلقائياً بعد 10 أيام من نشره.</p>'+rows+'<button class="add-btn light" data-act="cat-add">＋ إضافة تصنيف جديد</button>';
 },
 map:function(){
   return segRow('شكل الخريطة','map.style',[['duo','بألوان الموقع'],['mono','رمادي'],['plain','ألوان الخريطة الأصلية']])+
@@ -2479,17 +2671,39 @@ gen:function(){
     textRow('First welcome word (English)','loader.a','en',' dir="ltr"')+textRow('Second welcome word (English)','loader.b','en',' dir="ltr"')+
     '<h4>شريط إعلان أعلى الموقع</h4><p class="hint">للأفراح والتعازي والفعاليات. الزائر يقدر يغلقه.</p>'+toggleRow('إظهار الشريط','announce.on')+textRow('نص الإعلان (عربي)','announce.text','ar')+textRow('Announcement text (English)','announce.text','en',' dir="ltr"')+textRow('رابط عند الضغط (اختياري)','announce.link','',' dir="ltr" placeholder="https://..."')+
     '<h4>آراء الزوار</h4>'+toggleRow('نشر آراء الزوار مباشرة بدون مراجعة (غير مفضّل)','reviews.auto')+
-    '<h4>تعليقات الزوار</h4><p class="hint">التعليقات على الحكايات والمقالات والصور والفيديو والتسجيلات، وليس على شهداء القرية.</p>'+toggleRow('نشر التعليقات مباشرة بدون مراجعة (غير مفضّل)','comments.auto')+
+    '<h4>تعليقات الزوار</h4><p class="hint">التعليقات على الحكايات والمقالات والصور والفيديو والتسجيلات، وليس على وفيات القرية.</p>'+toggleRow('نشر التعليقات مباشرة بدون مراجعة (غير مفضّل)','comments.auto')+
+    '<h4>عداد الزيارات</h4>'+toggleRow('إظهار عداد زيارات الموقع للزوار بأعلى الصفحة','showVisitCounter')+
+    '<h4>الموقع قيد الصيانة</h4><p class="hint">يظهر للزوار رسالة بسيطة بدل الموقع، وأنت والمشرفون تدخلون وتعملون عادي.</p>'+toggleRow('تفعيل وضع الصيانة','maintenance.on')+textRow('نص الصيانة (عربي)','maintenance.text','ar')+textRow('Maintenance text (English)','maintenance.text','en',' dir="ltr"')+
+    '<h4>إيقاف طارئ شامل</h4><p class="hint">يوقف كل مشاركات الزوار بالموقع دفعة وحدة (حكايات، وفيات، فريق، صور، آراء، تعليقات، خدمات، إعلانات). للمالك فقط.</p><div class="ed-actions"><button class="'+(site.lockdown?'primary':'')+'" data-act="lockdown-toggle">'+(site.lockdown?'⏸ الإيقاف الطارئ مفعّل — اضغط للإلغاء':'تفعيل الإيقاف الطارئ')+'</button></div>'+
     '<h4>نسخة احتياطية</h4><p class="hint">تنزّل ملفاً فيه الحكايات والإعدادات والتعليقات والرسائل وروابط المعرض. الصور والفيديوهات نفسها تبقى في Supabase. خذ نسخة كل شهر واحفظها في مكان آمن.'+(ls('malha-lastbackup')?' آخر نسخة من هذا الجهاز: '+esc(ls('malha-lastbackup'))+'.':' لم تأخذ نسخة من هذا الجهاز بعد.')+'</p><div class="ed-actions"><button data-act="backup">📥 تنزيل نسخة احتياطية</button></div>'+
     pwHTML()+
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
 },
 acct:function(){
+  var dS=site.sections.filter(function(x){return x.id==='deaths'})[0]||{},vS=site.sections.filter(function(x){return x.id==='volunteers'})[0]||{},nc=site.cats.filter(function(c){return c.id==='news'})[0];
   return'<p class="hint">حساب مشرف: تكتب وتنشر وتراجع المشاركات وتدير دليل القرية. إعدادات الموقع وشكله للمالك فقط.</p>'+pwHTML()+
+    '<h4>مشاركات الزوار</h4><p class="hint">توقف أو تسمح بمشاركات الزوار الجديدة. المشاركات المنشورة سابقاً تبقى كما هي.</p>'+
+    '<div class="rowline" style="border:0;padding:4px 0"><span class="grow">وفيات القرية</span><button class="mini" data-act="sec-pause" data-sid="deaths" aria-pressed="'+(!dS.pausedSubmit)+'">'+(dS.pausedSubmit?'موقوفة، اضغط للسماح':'مسموحة، اضغط للإيقاف')+'</button></div>'+
+    '<div class="rowline" style="border:0;padding:4px 0"><span class="grow">فريق التطوع</span><button class="mini" data-act="sec-pause" data-sid="volunteers" aria-pressed="'+(!vS.pausedSubmit)+'">'+(vS.pausedSubmit?'موقوفة، اضغط للسماح':'مسموحة، اضغط للإيقاف')+'</button></div>'+
+    (nc?'<div class="rowline" style="border:0;padding:4px 0"><span class="grow">الأخبار العاجلة</span><button class="mini" data-act="news-pause" aria-pressed="'+nc.submit+'">'+(nc.submit?'مسموحة، اضغط للإيقاف':'موقوفة، اضغط للسماح')+'</button></div>':'')+
+    '<h4>الموقع قيد الصيانة</h4><p class="hint">يظهر للزوار رسالة بسيطة بدل الموقع. أنت والمالك تدخلون وتعملون عادي.</p><div class="ed-actions"><button class="'+(site.maintenance.on?'primary':'')+'" data-act="maint-toggle">'+(site.maintenance.on?'⏸ وضع الصيانة مفعّل — اضغط للإلغاء':'تفعيل وضع الصيانة')+'</button></div>'+
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="logout">تسجيل الخروج</button></div>';
 },
+review:function(){
+  var parts=[pendPostsHTML('stories','rv-pending-stories'),pendPostsHTML('deaths','rv-pending-deaths'),pendPostsHTML('volunteers','rv-pending-volunteers'),pendPhotosHTML(),pendReviewsHTML(),pendCmtHTML(),pendSuggestHTML(),adStaffHTML()].filter(Boolean);
+  var um=unreadMessages(),msgLine=um?'<div class="pending-box"><h3 class="sub-title">رسائل خاصة غير مقروءة ('+nf(um)+')</h3><div class="ed-actions"><button data-act="dtab" data-t="inbox">فتح صندوق الرسائل</button></div></div>':'';
+  var any=parts.length||um;
+  return'<p class="hint">كل شي بانتظار مراجعتك بمكان واحد.</p>'+msgLine+(any?parts.join(''):'<p class="hint">ما في شي بانتظار المراجعة الآن. 🎉</p>');
+},
+log:function(){return'<div id="logbox"><p class="hint">جاري التحميل...</p></div>'},
+allposts:function(){
+  return'<label class="fld">ابحث بالعنوان<input type="search" id="ap-q" value="'+esc(ui.apQ||'')+'" placeholder="اكتب جزءاً من العنوان..." autocomplete="off"></label>'+
+    '<div class="seg" id="ap-catf" style="flex-wrap:wrap">'+[['','الكل']].concat(site.cats.map(function(c){return[c.id,tx(c.name)]})).map(function(k){return'<button class="seg-b" data-act="ap-filter" data-c="'+esc(k[0])+'" aria-pressed="'+((ui.apCat||'')===k[0])+'">'+esc(k[1])+'</button>'}).join('')+'</div>'+
+    '<div id="ap-list">'+allPostsListHTML(ui.apQ||'',ui.apCat||'')+'</div>';
+}
+,
 mods:function(){
-  return'<p class="hint">المشرف يكتب وينشر المواد، يراجع المشاركات والآراء والصور، ويدير دليل القرية. لا يغيّر شكل الموقع ولا إعداداته، ولا يقرأ الرسائل الخاصة، ولا يرى الإحصائيات ولا النسخ الاحتياطية.</p>'+
+  return'<p class="hint">المشرف يكتب وينشر المواد، يراجع المشاركات والآراء والصور، ويدير دليل القرية، ويقدر يوقف مشاركات الزوار بوفيات القرية وفريق التطوع والأخبار العاجلة، ويفعّل وضع الصيانة. لا يغيّر شكل الموقع ولا إعداداته، ولا يقرأ الرسائل الخاصة، ولا يرى الإحصائيات ولا النسخ الاحتياطية ولا الإيقاف الطارئ الشامل.</p>'+
     '<h4>إضافة مشرف</h4><p class="hint">١. من Supabase: Authentication ثم Users ثم Add user، اكتب البريد وكلمة سر، وفعّل Auto Confirm.<br>٢. اكتب نفس البريد هنا واضغط إضافة. أعطِ المشرف الكلمة وقل له يغيّرها بعد أول دخول.</p>'+
     '<label class="fld">بريد المشرف<input id="mod-email" type="email" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false"></label><p class="err" id="mod-err" dir="auto" hidden></p>'+
     '<div class="ed-actions"><button class="primary" data-act="mod-add">إضافة مشرف</button></div>'+
@@ -2515,13 +2729,40 @@ async function addMod(){
     err.textContent=/no_account/.test(m)?'ما لقيت حساباً بهذا البريد. أنشئه أولاً من Supabase: Authentication ثم Users ثم Add user.':/not_allowed/.test(m)?'هذا الإجراء للمالك فقط.':/could not find|PGRST202/i.test(m)?'شغّل ملف update6.sql في Supabase أولاً.':'تعذّرت الإضافة. ['+m.slice(0,80)+']';
     err.hidden=false;return;
   }
-  $('mod-email').value='';toast('تمت إضافة المشرف.');loadMods();
+  $('mod-email').value='';toast('تمت إضافة المشرف.');loadMods();logActivity('mod-add',em);
 }
 async function delMod(id){
   var r=await sb.from('moderators').delete().eq('user_id',id).select('user_id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف.');return}
-  toast('تم حذف المشرف. لم يعد يقدر يعدّل شيئاً.');loadMods();
+  toast('تم حذف المشرف. لم يعد يقدر يعدّل شيئاً.');loadMods();logActivity('mod-delete',id);
 }
+var AP_ST={approved:'منشور',pending:'بانتظار المراجعة',draft:'مسودة'};
+function allPostsListHTML(q,cat){
+  q=String(q||'').trim().toLowerCase();
+  var list=posts.filter(function(p){
+    if(cat&&p.cat!==cat)return false;
+    if(q&&(pTitle(p)+' '+(p.author||'')).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  }).sort(function(a,b){return(a.created||'')<(b.created||'')?1:-1});
+  if(!list.length)return'<p class="hint">ما في نتائج.</p>';
+  return list.slice(0,300).map(function(p){
+    var c=catOf(p.cat),id=esc(p.id);
+    return'<div class="ap-row"><div class="ap-row-t"><b>'+esc(pTitle(p)||'(بدون عنوان)')+'</b><span class="tag">'+esc(c?tx(c.name):p.cat)+'</span><span class="tag">'+esc(AP_ST[p.status]||p.status)+'</span></div>'+
+      '<div class="ap-row-m">'+esc(fdate((p.date||p.created||'').slice(0,10)))+(p.author?' · '+esc(p.author):'')+'</div>'+
+      '<div class="row-tools"><button class="tool" data-act="post-edit" data-id="'+id+'">فتح للتعديل</button>'+(p.status==='pending'?'<button class="tool" data-act="post-approve" data-id="'+id+'">قبول ونشر</button>':'')+'<button class="tool danger" data-act="post-del" data-id="'+id+'">حذف</button></div></div>';
+  }).join('')+(list.length>300?'<p class="hint">وأكتر... استعمل البحث لتضييق النتائج.</p>':'');
+}
+async function loadActivityLog(){
+  var box=$('logbox');if(!box||!sb)return;
+  var r=await withTimeout(sb.from('activity_log').select('*').order('created_at',{ascending:false}).limit(200),9000,{error:{message:'timeout'}});
+  box=$('logbox');if(!box)return;
+  if(r.error){box.innerHTML='<p class="err">تعذّر تحميل السجل.</p><p class="hint">إذا لم تشغّل ملف update10.sql بعد، شغّله أولاً. ('+esc(String(r.error.message||'').slice(0,80))+')</p>';return}
+  var rows=r.data||[];
+  box.innerHTML=rows.length?rows.map(function(x){
+    return'<div class="ap-row"><div class="ap-row-t"><b>'+esc(LOG_NAMES[x.action]||x.action)+'</b></div><div class="ap-row-m">'+esc((x.actor_email||'').split('@')[0])+' · '+esc(fdate((x.created_at||'').slice(0,10)))+(x.detail?' · '+esc(x.detail):'')+'</div></div>';
+  }).join(''):'<p class="hint">لا يوجد نشاط مسجَّل بعد.</p>';
+}
+var LOG_NAMES={'post-approve':'نشر مشاركة','post-delete':'حذف مشاركة','review-approve':'نشر رأي','review-delete':'حذف رأي','comment-approve':'نشر تعليق','comment-delete':'حذف تعليق','service-approve':'نشر خدمة','ad-approve':'نشر إعلان','ad-delete':'حذف إعلان','photo-approve':'نشر صورة','photo-delete':'حذف صورة','mod-add':'إضافة مشرف','mod-delete':'حذف مشرف','lockdown':'الإيقاف الطارئ','maintenance':'وضع الصيانة','section-pause':'إيقاف/تشغيل مشاركات قسم','news-pause':'إيقاف/تشغيل مشاركات الأخبار'};
 function pwHTML(){
   return'<h4>تغيير كلمة السر</h4><p class="hint">10 خانات أو أكثر، أحرف إنجليزية وأرقام (بدون عربي أو مسافات). بعد التغيير يُسجَّل خروجك من أي جهاز آخر.</p>'+
     '<label class="fld">كلمة السر الحالية<input id="pw-cur" type="password" autocomplete="current-password" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>'+
@@ -2535,8 +2776,8 @@ function designHTML(){
   if(ui.mod)ui.dtab='acct';
   return'<div class="dlg-in"><h3>'+(ui.mod?'حسابي':'لوحة التحكم')+'</h3><div class="dtabs">'+(ui.mod?DTABS_MOD:DTABS).map(function(x){return'<button class="dtab" data-act="dtab" data-t="'+x[0]+'" aria-pressed="'+(ui.dtab===x[0])+'">'+x[1]+(x[0]==='inbox'&&unreadMessages()?' ('+unreadMessages()+')':'')+'</button>'}).join('')+'</div><div id="dbody">'+DBODY[ui.dtab]()+'</div><div class="ed-actions"><button class="primary" data-close>تم</button></div></div>';
 }
-function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods()}}
-function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods()}
+function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods();if(ui.dtab==='log')loadActivityLog()}}
+function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods();if(ui.dtab==='log')loadActivityLog()}
 function afterSet(path){
   if(path==='design.tscale'){fitHero();return}
   if(path.indexOf('design.')===0&&['scale','space','shape','disp','body','dispLat'].indexOf(path.slice(7))>=0){applyDesign();setTimeout(fitHero,400);return}
@@ -2547,12 +2788,23 @@ function setBySpec(path,val){setPath(site,path,val)}
 
 /* ---------- content editor (owner) ---------- */
 var edPost=null;
+function toLocalInput(iso){
+  if(!iso)return'';
+  var d=new Date(iso);if(isNaN(d))return'';
+  var p=function(n){return('0'+n).slice(-2)};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes());
+}
+function fromLocalInput(v){
+  if(!v)return'';
+  var d=new Date(v);return isNaN(d)?'':d.toISOString();
+}
 function catOptions(sel,onlySubmit){
   return site.cats.filter(function(c){return!onlySubmit||c.submit}).map(function(c){return'<option value="'+esc(c.id)+'"'+(c.id===sel?' selected':'')+'>'+esc(c.name.ar||c.name.en)+'</option>'}).join('');
 }
 function kindOf(id){var c=catOf(id);return c?c.kind:'list'}
 function editorHTML(){
   var p=edPost,kind=kindOf(p.cat);
+  var expNote=p.expiresAt?'<p class="hint">ينتهي عرضه تلقائياً بتاريخ '+esc(fdate((p.expiresAt||'').slice(0,10)))+'.</p>':'';
   return'<div class="dlg-in"><h3>'+(p._new?'إضافة جديد':'تعديل')+'</h3>'+
     '<label class="fld">التصنيف<select id="p-cat">'+catOptions(p.cat)+'</select></label>'+
     '<label class="fld"><span id="l-title">العنوان (عربي)</span><input id="p-title" maxlength="200" value="'+esc(p.title.ar)+'"></label>'+
@@ -2567,6 +2819,7 @@ function editorHTML(){
     '<label class="fld"><span>Text (English, optional)</span><textarea id="p-body-en" dir="ltr" rows="6" maxlength="20000">'+esc(p.body.en)+'</textarea></label>'+
     '<label class="opt"><input type="checkbox" id="p-pin"'+(p.pinned?' checked':'')+'>📌 تثبيت في بداية الموقع</label>'+
     '<label class="fld">الحالة<select id="p-status"><option value="approved"'+(p.status==='approved'?' selected':'')+'>منشور</option><option value="draft"'+(p.status==='draft'?' selected':'')+'>مسودة (مخفي)</option><option value="pending"'+(p.status==='pending'?' selected':'')+'>بانتظار المراجعة</option></select></label>'+
+    '<label class="fld">جدولة النشر (اختياري)<input type="datetime-local" id="p-publish" value="'+esc(toLocalInput(p.publishAt))+'"></label><p class="hint">إذا حددت وقتاً مستقبلياً، تصير المشاركة مرئية للزوار تلقائياً في ذلك الوقت، حتى لو كانت حالتها «منشور».</p>'+expNote+
     '<div class="ed-actions"><button class="primary" data-act="post-save">حفظ</button>'+(p.status==='pending'?'<button class="primary" data-act="post-save-approve">حفظ وقبول ونشر</button>':'')+'<button data-close>إلغاء</button></div></div>';
 }
 function applyKind(dlg,catId){
@@ -2585,7 +2838,7 @@ function refreshEditorImg(){
 }
 function openEditor(id,catId){
   var p=id?posts.filter(function(x){return x.id===id})[0]:null;
-  edPost=p?JSON.parse(JSON.stringify(p)):{id:null,cat:(catId&&catOf(catId)?catId:(ui.tab!=='all'&&catOf(ui.tab)?ui.tab:site.cats[0].id)),title:{ar:'',en:''},body:{ar:'',en:''},date:todayISO(),time:'',place:'',image:'',author:'',status:'approved',pinned:false,extra:{},_new:true};
+  edPost=p?JSON.parse(JSON.stringify(p)):{id:null,cat:(catId&&catOf(catId)?catId:site.cats[0].id),title:{ar:'',en:''},body:{ar:'',en:''},date:todayISO(),time:'',place:'',image:'',author:'',status:'approved',pinned:false,extra:{},publishAt:'',expiresAt:'',_new:true};
   var d=$('editor');d.innerHTML=editorHTML();applyKind(d,edPost.cat);refreshEditorImg();openDlg(d);
 }
 async function savePost(approveToo){
@@ -2608,6 +2861,8 @@ async function savePost(approveToo){
   edPost.pinned=$('p-pin').checked;
   edPost.status=$('p-status').value;
   if(approveToo)edPost.status='approved';
+  edPost.publishAt=fromLocalInput($('p-publish').value);
+  if(edPost.status==='approved'&&kind==='news'&&!edPost.expiresAt)edPost.expiresAt=new Date(Date.now()+10*864e5).toISOString();
   var old=posts.filter(function(x){return x.id===edPost.id})[0],oldImage=old?old.image:'';
   toast('جاري الحفظ...');
   if(edPost._blob){
@@ -2631,24 +2886,28 @@ async function patchPost(id,patch,okMsg){
   posts=posts.map(function(x){return x.id===id?fromRow(r.data):x});
   renderAll();if(okMsg)toast(okMsg);return true;
 }
-function approvePost(id){return patchPost(id,{status:'approved'},'تم قبول المشاركة ونشرها.')}
+function approvePost(id){
+  var p=posts.filter(function(x){return x.id===id})[0],c=p&&catOf(p.cat),patch={status:'approved'};
+  if(c&&c.kind==='news'&&!(p&&p.expiresAt))patch.expires_at=new Date(Date.now()+10*864e5).toISOString();
+  return patchPost(id,patch,'تم قبول المشاركة ونشرها.').then(function(ok){if(ok)logActivity('post-approve',p?pTitle(p):id);return ok});
+}
 async function deletePost(id){
   var p=posts.filter(function(x){return x.id===id})[0];
   var r=await sb.from('posts').delete().eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف. جرّب مرة ثانية.');return}
   posts=posts.filter(function(x){return x.id!==id});
   if(p&&p.image)removeFiles([p.image]);
-  renderAll();toast('تم الحذف.');
+  renderAll();toast('تم الحذف.');logActivity('post-delete',p?pTitle(p):id);
 }
 async function approveReview(id){
   var r=await sb.from('reviews').update({status:'approved'}).eq('id',id).select().single();
   if(r.error||!r.data){toast('تعذّر القبول.');return}
-  reviews=reviews.map(function(x){return x.id===id?reviewFromRow(r.data):x});renderSec('reviews');toast('تم نشر الرأي.');
+  reviews=reviews.map(function(x){return x.id===id?reviewFromRow(r.data):x});renderSec('reviews');toast('تم نشر الرأي.');logActivity('review-approve',r.data.name||id);
 }
 async function deleteReview(id){
   var r=await sb.from('reviews').delete().eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف.');return}
-  reviews=reviews.filter(function(x){return x.id!==id});renderSec('reviews');toast('تم الحذف.');
+  reviews=reviews.filter(function(x){return x.id!==id});renderSec('reviews');toast('تم الحذف.');logActivity('review-delete',id);
 }
 function photoGroup(p){return p.kind==='audio'?'a':(isPending(p)?'p':'g')}
 async function movePhoto(i,dir){
@@ -2783,12 +3042,16 @@ async function doLogin(){
 }
 /* ---------- moderators: what they may not touch (the database enforces it too; this only hides and explains) ---------- */
 var MOD_BLOCK={};
-('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add backup design-reset msg-read msg-del mod-add mod-del').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
+('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
 function applyRole(){
   root.classList.toggle('modmode',!!ui.mod);
   var st=$('mod-css');if(!st){st=document.createElement('style');st.id='mod-css';document.head.appendChild(st)}
   st.textContent=ui.mod?Object.keys(MOD_BLOCK).map(function(k){return'html.modmode [data-act="'+k+'"]'}).join(',')+'{display:none!important}':'';
   var b=document.querySelector('.bar [data-act="design"]');if(b)b.textContent=ui.mod?'⚙ حسابي':'🎨 التحكم';
+}
+function logActivity(action,detail){
+  if(!sb)return;
+  try{sb.rpc('log_activity',{p_action:String(action||'').slice(0,60),p_detail:String(detail||'').slice(0,300)}).then(function(){},function(){})}catch(e){}
 }
 async function checkAdmin(){
   var r=await sb.rpc('is_admin'),role='';
@@ -3032,13 +3295,14 @@ async function recSave(){
 
 
 /* ---------- visitor submission ---------- */
-function submitHTML(){
-  var cats=site.cats.filter(function(c){return c.submit});
+function submitHTML(group){
+  var cats=site.cats.filter(function(c){return c.submit&&(!group||(c.group||'stories')===group)});
   var opts=cats.map(function(c){return'<option value="'+esc(c.id)+'">'+esc(tx(c.name))+'</option>'}).join('');
   return'<div class="dlg-in"><h3>'+t('f_title_share')+'</h3><p class="hint">'+t('f_note')+'</p>'+
     '<label class="fld">'+t('f_type')+'<select id="s-cat">'+opts+'</select></label>'+
     '<label class="fld"><span id="sl-title">'+t('f_title')+'</span><input id="s-title" maxlength="200"></label>'+
-    '<label class="fld">'+t('f_author')+'<input id="s-author" maxlength="100"></label>'+
+    '<label class="fld"><span id="sl-author">'+t('f_author')+'</span><input id="s-author" maxlength="100"></label>'+
+    '<p class="hint k-only k-news">'+t('news_expiry')+'</p>'+
     '<label class="fld k-only k-people">'+t('f_born')+'<input id="s-born" maxlength="20"></label>'+
     '<label class="fld k-only k-timeline">'+t('hist_year')+'<input id="s-year" maxlength="20" placeholder="'+esc(t('hist_year_p'))+'"></label>'+
     '<div class="row2 k-nodate"><label class="fld"><span id="sl-date">'+t('f_date')+'</span><input type="date" id="s-date" value="'+todayISO()+'"></label><label class="fld k-only k-event">'+t('f_time')+'<input type="time" id="s-time"></label></div>'+
@@ -3056,11 +3320,13 @@ function applySubmitKind(d){
   set('sl-body',(k==='people'||k==='team')?t('f_bio'):t('f_body'));
   set('sl-date',k==='people'?t('f_died'):t('f_date'));
   set('sl-place',k==='people'?t('f_place_p'):k==='team'?t('f_role'):t('f_place'));
+  set('sl-author',k==='news'?t('f_author')+' *':t('f_author'));
 }
-function openSubmit(catId){
-  if(!site.cats.some(function(c){return c.submit})){toast(t('offline'));return}
+function openSubmit(catId,group){
+  var pool=site.cats.filter(function(c){return c.submit&&(!group||(c.group||'stories')===group)});
+  if(!pool.length){toast(t('offline'));return}
   edPost={image:'',_blob:null};
-  var d=$('submit');d.innerHTML=submitHTML();d.dir=lang==='ar'?'rtl':'ltr';
+  var d=$('submit');d.innerHTML=submitHTML(group);d.dir=lang==='ar'?'rtl':'ltr';
   var sel=d.querySelector('#s-cat');if(catId&&sel&&[].some.call(sel.options,function(o){return o.value===catId}))sel.value=catId;
   applySubmitKind(d);openDlg(d);
 }
@@ -3071,7 +3337,8 @@ async function sendSubmission(){
   var cat=$('s-cat').value,kind=kindOf(cat);
   var title=$('s-title').value.trim(),body=$('s-body').value.trim();
   if(!title){serr((kind==='people'||kind==='team')?t('err_name'):t('err_title'));return}
-  if(kind==='list'&&body.length<20){serr(t('err_body'));return}
+  if(kind==='news'&&!$('s-author').value.trim()){serr(t('err_author'));return}
+  if((kind==='list'||kind==='news')&&body.length<20){serr(t('err_body'));return}
   var yr=kind==='timeline'?$('s-year').value.trim():'';
   if(kind==='timeline'&&!yr){serr(t('err_year'));return}
   if($('s-web').value){$('submit').close();toast(t('sent_ok'));return}
@@ -3281,12 +3548,12 @@ function cmtAfter(){
 async function cmtApprove(id){
   var r=await sb.from('comments').update({status:'approved'}).eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر قبول التعليق.');return}
-  comments.forEach(function(c){if(c.id===id)c.status='approved'});cmtAfter();toast('تم نشر التعليق.');
+  comments.forEach(function(c){if(c.id===id)c.status='approved'});cmtAfter();toast('تم نشر التعليق.');logActivity('comment-approve',id);
 }
 async function cmtDelete(id){
   var r=await sb.from('comments').delete().eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر حذف التعليق.');return}
-  comments=comments.filter(function(c){return c.id!==id});cmtAfter();toast('تم حذف التعليق.');
+  comments=comments.filter(function(c){return c.id!==id});cmtAfter();toast('تم حذف التعليق.');logActivity('comment-delete',id);
 }
 
 /* ---------- village services: visitors suggest a service, the owner or a moderator approves it ---------- */
@@ -3338,7 +3605,7 @@ async function sugAccept(id){
   if(!ok){site.directory.pop();toast('تعذّر حفظ الخدمة. جرّب مرة ثانية.');return}
   await sb.from('service_suggestions').delete().eq('id',id);
   suggestions=suggestions.filter(function(x){return x.id!==id});
-  renderSec('directory');updateBar();toast('تمت إضافة الخدمة للدليل. عدّلها مباشرة إذا احتجت.');
+  renderSec('directory');updateBar();toast('تمت إضافة الخدمة للدليل. عدّلها مباشرة إذا احتجت.');logActivity('service-approve',sg.name);
 }
 async function sugDelete(id){
   var r=await sb.from('service_suggestions').delete().eq('id',id).select('id');
@@ -3535,7 +3802,7 @@ async function adApprove(id){
   var r=await sb.from('ads').update({status:'approved',approved_at:now,expires_at:exp,reports:0}).eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر نشر الإعلان.');return}
   ads.forEach(function(a){if(a.id===id){a.status='approved';a.approved=now;a.expires=exp;a.reports=0}});
-  renderSec('ads');updateBar();toast('تم نشر الإعلان لمدة 30 يوماً.');
+  renderSec('ads');updateBar();toast('تم نشر الإعلان لمدة 30 يوماً.');logActivity('ad-approve',id);
 }
 async function adClear(id){
   var r=await sb.from('ads').update({reports:0}).eq('id',id).select('id');
@@ -3547,8 +3814,9 @@ async function adDelete(id){
   var r=await sb.from('ads').delete().eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف.');return}
   if(a)removeFiles(a.images);
-  ads=ads.filter(function(x){return x.id!==id});renderSec('ads');updateBar();toast('تم حذف الإعلان.');
+  ads=ads.filter(function(x){return x.id!==id});renderSec('ads');updateBar();toast('تم حذف الإعلان.');logActivity('ad-delete',a?a.title:id);
 }
+function openContact(){var d=$('contactdlg');d.innerHTML=contactDlgHTML();d.dir=lang==='ar'?'rtl':'ltr';openDlg(d)}
 
 
 /* ---------- events ---------- */
@@ -3576,7 +3844,7 @@ document.addEventListener('click',function(e){
   if(ui.mod&&MOD_BLOCK[act]){e.preventDefault();toast('هذه الأداة للمالك فقط.');return}
   if(!sb&&!OFFLINE_OK[act]){toast(t('offline'));return}
   switch(act){
-    case'tab':ui.tab=a.dataset.tab;renderSec('stories');break;
+    case'tab':{var grp=a.dataset.g||'stories';ui['tab_'+grp]=a.dataset.tab;ui.lastTab=a.dataset.tab;renderSec(grp);break}
     case'lang':setLang(lang==='ar'?'en':'ar');break;
     case'menu':ui.menu=true;root.classList.add('menuopen');break;
     case'menu-close':case'menu-go':ui.menu=false;root.classList.remove('menuopen');break;
@@ -3609,7 +3877,7 @@ document.addEventListener('click',function(e){
     case'ph-pick':pickFiles('phsub','image/*',true);break;
     case'ph-rm':ui.pblobs.splice(i,1);renderPhPrev();break;
     case'ph-send':sendPhotos();break;
-    case'ph-ok':{var pho=photos.filter(function(x){return x.id===id})[0];if(pho){var ns=nextSort();sb.from('photos').update({status:'approved',sort:ns}).eq('id',id).select('id').then(function(r){if(r.error||!r.data||!r.data.length){toast('تعذّر النشر.');return}pho.status='approved';pho.sort=ns;photos.sort(function(x,y){return(x.sort-y.sort)||0});renderAll();toast('تم نشر الصورة.')})}break}
+    case'ph-ok':{var pho=photos.filter(function(x){return x.id===id})[0];if(pho){var ns=nextSort();sb.from('photos').update({status:'approved',sort:ns}).eq('id',id).select('id').then(function(r){if(r.error||!r.data||!r.data.length){toast('تعذّر النشر.');return}pho.status='approved';pho.sort=ns;photos.sort(function(x,y){return(x.sort-y.sort)||0});renderAll();toast('تم نشر الصورة.');logActivity('photo-approve',id)})}break}
     case'aud-add':pickFiles('audio','audio/*,.m4a,.mp3,.aac,.wav',false);break;
     case'aud-rec':openRecorder();break;
     case'rec-start':recStart();break;
@@ -3622,6 +3890,7 @@ document.addEventListener('click',function(e){
     case'share-site':{var su=shareUrl('',''),sn=lang==='ar'?site.brand.ar:site.brand.en;if(navigator.share){try{navigator.share({title:sn,url:su})}catch(x){copyLink(su)}}else copyLink(su);break}
     case'ann-close':ls('malha-ann',annKey());{var an=$('ann');if(an)an.remove()}break;
     case'msg-open':openMessage();break;
+    case'contact-open':openContact();break;
     case'msg-send':sendMessage();break;
     case'msg-read':{var msg=messages.filter(function(x){return x.id===id})[0];if(msg)sb.from('messages').update({is_read:!msg.read}).eq('id',id).select('id').then(function(r){if(r.error||!r.data||!r.data.length){toast('تعذّر التحديث.');return}msg.read=!msg.read;renderInbox();updateInboxTab();updateBar()});break}
     case'msg-del':if(confirmTap('md'+id,'اضغط حذف مرة ثانية للتأكيد')){sb.from('messages').delete().eq('id',id).select('id').then(function(r){if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف.');return}messages=messages.filter(function(x){return x.id!==id});renderInbox();updateInboxTab();updateBar();toast('تم الحذف.')})}break;
@@ -3639,7 +3908,8 @@ document.addEventListener('click',function(e){
     case'design':openDesign();break;
     case'stats':openDesign('stats');break;
     case'dtab':ui.dtab=a.dataset.t;refreshDesign();break;
-    case'review':{var pe=$('pending')||$('pending-rev')||$('pending-ph')||$('pending-cmt')||$('pending-svc')||$('pending-ads')||$('flagged-ads');if(pe){pe.scrollIntoView();break}if(unreadMessages()){openDesign('inbox');break}toast('لا شيء للمراجعة الآن.');break}
+    case'ap-filter':{ui.apCat=a.dataset.c;[].forEach.call(document.querySelectorAll('[data-act="ap-filter"]'),function(bt){bt.setAttribute('aria-pressed',bt===a?'true':'false')});var al=$('ap-list');if(al)al.innerHTML=allPostsListHTML(ui.apQ||'',ui.apCat||'');break}
+    case'review':openDesign('review');break;
     case'set':{var pth=a.dataset.key;setBySpec(pth,parseVal(a.dataset.val));afterSet(pth);queueSettings();refreshDesign();break}
     case'preset':{var pr=PRESETS[i];site.theme={c1:pr.c[0],c2:pr.c[1],c3:pr.c[2]};applyDesign();queueSettings();refreshDesign();break}
     case'hero-pos':site.design.heroV=a.dataset.v;site.design.heroH=a.dataset.h;renderSec('hero');queueSettings();refreshDesign();break;
@@ -3709,13 +3979,41 @@ document.addEventListener('click',function(e){
     case'cat-down':if(moveIn(site.cats,i,1)){queueSettings();renderAll();refreshDesign()}break;
     case'cat-kind':site.cats[i].kind=a.dataset.k;queueSettings();renderAll();refreshDesign();break;
     case'cat-submit':site.cats[i].submit=!site.cats[i].submit;queueSettings();refreshDesign();break;
-    case'cat-add':site.cats.push({id:'c'+uid().slice(-6),name:{ar:'تصنيف جديد',en:'New category'},one:{ar:'عنصر',en:'Item'},kind:'list',submit:true});queueSettings();renderAll();refreshDesign();break;
+    case'cat-add':site.cats.push({id:'c'+uid().slice(-6),name:{ar:'تصنيف جديد',en:'New category'},one:{ar:'عنصر',en:'Item'},kind:'list',group:'stories',submit:true});queueSettings();renderAll();refreshDesign();break;
+    case'cat-group':site.cats[i].group=a.dataset.g;queueSettings();renderAll();refreshDesign();break;
+    case'sec-pause':{
+      var sx=site.sections.filter(function(x){return x.id===a.dataset.sid})[0];if(!sx)break;
+      if(ui.mod){
+        sb.rpc('mod_toggle_section_pause',{p_id:a.dataset.sid}).then(function(r){
+          if(r.error){toast('تعذّر الحفظ.');return}
+          sx.pausedSubmit=!!r.data;renderAll();refreshDesign();logActivity('section-pause',a.dataset.sid+':'+sx.pausedSubmit);
+        });
+      }else{sx.pausedSubmit=!sx.pausedSubmit;queueSettings();renderAll();refreshDesign();logActivity('section-pause',a.dataset.sid+':'+sx.pausedSubmit)}
+      break}
+    case'lockdown-toggle':site.lockdown=!site.lockdown;queueSettings();renderAll();refreshDesign();logActivity('lockdown',String(site.lockdown));break;
+    case'maint-toggle':{
+      if(ui.mod){
+        sb.rpc('mod_toggle_maintenance',{}).then(function(r){
+          if(r.error){toast('تعذّر الحفظ.');return}
+          site.maintenance.on=!!r.data;renderAll();refreshDesign();logActivity('maintenance',String(site.maintenance.on));
+        });
+      }else{site.maintenance.on=!site.maintenance.on;queueSettings();renderAll();refreshDesign();logActivity('maintenance',String(site.maintenance.on))}
+      break}
+    case'news-pause':{
+      var nx=site.cats.filter(function(x){return x.id==='news'})[0];if(!nx)break;
+      if(ui.mod){
+        sb.rpc('mod_toggle_news_submit',{}).then(function(r){
+          if(r.error){toast('تعذّر الحفظ.');return}
+          nx.submit=!!r.data;renderAll();refreshDesign();logActivity('news-pause',String(!nx.submit));
+        });
+      }else{nx.submit=!nx.submit;queueSettings();renderAll();refreshDesign();logActivity('news-pause',String(!nx.submit))}
+      break}
     case'cat-del':if(confirmTap('cd'+i,'اضغط حذف مرة ثانية. المواد داخل التصنيف لن تُحذف لكنها ستظهر تحت «الكل» فقط.')){site.cats.splice(i,1);if(!site.cats.length)site.cats=defaults().cats;queueSettings();renderAll();refreshDesign()}break;
     case'design-reset':if(confirmTap('dr','اضغط مرة ثانية لاستعادة التصميم الافتراضي (المحتوى لن يُحذف).')){var dd=defaults();site.theme=dd.theme;site.design=dd.design;site.cover.dark=40;queueSettings();renderAll();refreshDesign();toast('تمت استعادة التصميم.')}break;
-    case'submit-open':openSubmit(a.dataset.cat);break;
+    case'submit-open':openSubmit(a.dataset.cat,a.dataset.g);break;
     case'submit-img':pickFiles('submit','image/*',false);break;
     case'submit-send':sendSubmission();break;
-    case'post-add':$('reader').close();openEditor(null,a.dataset.cat);break;
+    case'post-add':{$('reader').close();var gcat=a.dataset.g?ui['tab_'+a.dataset.g]:(a.dataset.cat||ui.lastTab);openEditor(null,gcat);break}
     case'post-edit':$('reader').close();openEditor(id);break;
     case'post-approve':$('reader').close();approvePost(id);break;
     case'post-del':if(confirmTap('p'+id,'اضغط حذف مرة ثانية للتأكيد')){$('reader').close();deletePost(id)}break;
@@ -3738,7 +4036,7 @@ document.addEventListener('click',function(e){
         var ph2=photos[i];
         sb.from('photos').delete().eq('id',ph2.id).select('id').then(function(r){
           if(r.error||!r.data||!r.data.length){toast('تعذّر حذف العنصر.');return}
-          photos=photos.filter(function(x){return x.id!==ph2.id});removeFiles([ph2.url,ph2.poster].filter(Boolean));if(site.intro&&site.intro.id===ph2.id){site.intro.id='';queueSettings()}renderAll();
+          photos=photos.filter(function(x){return x.id!==ph2.id});removeFiles([ph2.url,ph2.poster].filter(Boolean));logActivity('photo-delete',ph2.id);if(site.intro&&site.intro.id===ph2.id){site.intro.id='';queueSettings()}renderAll();
         });
       }
       break;
@@ -3762,7 +4060,8 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('input',function(e){
   var tg=e.target;
-  if(tg.id==='q'){filterStories(tg.value);return}
+  if(tg.dataset&&tg.dataset.g&&/^q(_|$)/.test(tg.id)){filterStories(tg.value,tg.dataset.g);return}
+  if(tg.id==='ap-q'){ui.apQ=tg.value;var al2=$('ap-list');if(al2)al2.innerHTML=allPostsListHTML(ui.apQ,ui.apCat||'');return}
   if(tg.id==='adq'){ui.adq=tg.value;var ag=$('ads-grid');if(ag)ag.innerHTML=adGridInner(adFilterNow(),ui.adq);return}
   if(tg.id==='dq'){ui.dq=tg.value;var dl=$('dir-list');if(dl)dl.innerHTML=dirListInner(dirFilterNow(),ui.dq);return}
   if(tg.dataset&&tg.dataset.color){site.theme[tg.dataset.color]=tg.value;applyDesign();queueSettings();return}
@@ -3840,11 +4139,11 @@ function openInstallHelp(){
   d.dir=lang==='ar'?'rtl':'ltr';openDlg(d);
 }
 function applyUserScale(){var v=ls('malha-fs');root.style.setProperty('--uscale',v==='1'?1.15:v==='2'?1.3:1)}
-function filterStories(q){
-  q=String(q||'').trim().toLowerCase();
-  var rows=[].slice.call(document.querySelectorAll('[data-sec="stories"] .post-list .post[data-s],[data-sec="stories"] .people .person[data-s]')),shown=0;
+function filterStories(q,group){
+  group=group||'stories';q=String(q||'').trim().toLowerCase();
+  var rows=[].slice.call(document.querySelectorAll('[data-sec="'+group+'"] .post-list .post[data-s],[data-sec="'+group+'"] .people .person[data-s]')),shown=0;
   rows.forEach(function(r){var hide=!!q&&r.dataset.s.indexOf(q)<0;r.hidden=hide;if(!hide)shown++});
-  var nr=$('nores');if(nr)nr.hidden=!(q&&rows.length&&!shown);
+  var nr=$('nores_'+group);if(nr)nr.hidden=!(q&&rows.length&&!shown);
 }
 window.addEventListener('hashchange',function(){openFromHash()});
 
