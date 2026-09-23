@@ -1224,6 +1224,8 @@ function normalize(s){
   s.maintenance=s.maintenance&&typeof s.maintenance==='object'?s.maintenance:{};s.maintenance.on=!!s.maintenance.on;s.maintenance.text=T2(s.maintenance.text);if(!s.maintenance.text.ar&&!s.maintenance.text.en)s.maintenance.text=defaults().maintenance.text;
   s.showVisitCounter=s.showVisitCounter!==false;
   s.showWeather=s.showWeather!==false;
+  s.bnavOn=s.bnavOn!==false;
+  s.bnav=Array.isArray(s.bnav)?s.bnav.filter(function(k,i,a){return typeof k==='string'&&a.indexOf(k)===i}).slice(0,4):null;
   return s;
 }
 var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[],comments=[],suggestions=[],ads=[];
@@ -2700,6 +2702,18 @@ tiles:function(){
       '<div class="rowline">'+(img?'<img alt="" src="'+img+'" style="width:64px;height:44px;object-fit:cover;border-radius:8px">':'')+'<button class="mini" data-act="tile-img" data-i="'+i+'">'+(img?'تغيير الصورة':'＋ صورة')+'</button>'+(img?'<button class="mini del" data-act="tile-img-del" data-i="'+i+'">إزالة الصورة</button>':'')+'<button class="mini" data-act="tile-edit" data-i="'+i+'">الوجهة والأيقونة</button><button class="mini del" data-act="tile-del" data-i="'+i+'">حذف</button></div></div>';
   }).join('')+'<button class="add-btn light" data-act="tile-add">＋ إضافة بلاطة</button>';
 },
+bnav:function(){
+  var cur=bnavList(),h=bnavHave(),full=cur.length>=4;
+  function ic(k){return k==='menu'?MENU_PATH:TILEICONS[BNAV[k][0]]}
+  return toggleRow('إظهار الشريط السفلي على الجوال والآيباد','bnavOn')+
+    '<p class="hint">«الرئيسية» ثابتة في أول الشريط دائماً. اختر بعدها حتى <b>'+nf(4)+'</b> أزرار ورتّبها كما تحب.</p><h4>الأزرار الظاهرة ('+nf(cur.length)+' من '+nf(4)+')</h4>'+
+    (cur.length?cur.map(function(k,i){var b=BNAV[k];if(!b)return'';
+      return'<div class="card-row"><div class="rowline"><span class="ti" aria-hidden="true" style="display:inline-block;width:22px;height:22px">'+'<svg viewBox="0 0 24 24">'+ic(k)+'</svg></span><span class="grow">'+esc(b[1])+(h[k]?'':' <small style="opacity:.6">(مخفي الآن: القسم فارغ أو غير ظاهر)</small>')+'</span><button class="mini" data-act="bn-up" data-i="'+i+'" aria-label="تقديم">↑</button><button class="mini" data-act="bn-down" data-i="'+i+'" aria-label="تأخير">↓</button><button class="mini del" data-act="bn-del" data-i="'+i+'">إزالة</button></div></div>'}).join('')
+      :'<p class="hint">لا توجد أزرار. أضف من القائمة تحت.</p>')+
+    '<h4>أضف زراً</h4>'+(full?'<p class="hint">وصلت للحد الأقصى ('+nf(4)+'). أزل زراً لتضيف غيره.</p>':'')+
+    '<div class="seg">'+BNAV_ALL.filter(function(k){return cur.indexOf(k)<0}).map(function(k){return'<button class="seg-b" data-act="bn-add" data-k="'+k+'"'+(full?' disabled style="opacity:.4"':'')+'>＋ '+esc(BNAV[k][1])+'</button>'}).join('')+'</div>'+
+    '<div class="ed-actions" style="margin-top:14px"><button data-act="bn-reset">↺ رجوع للاختيار التلقائي</button></div>';
+},
 links:function(){
   var L=site.contact.links;
   return'<p class="hint">تظهر هذه الروابط عند الضغط على زر ✉ «تواصل معنا» أعلى الموقع. الرابط يبدأ بـ https:// للمواقع، أو mailto: للبريد، أو tel: للهاتف.</p>'+L.map(function(l,i){
@@ -2895,9 +2909,9 @@ function picker(k,label,v){return'<label class="pick"><input type="color" data-c
 var PGROUPS=[
   {id:'home',ic:'🏠',n:'الرئيسية',t:['home','stats']},
   {id:'content',ic:'📥',n:'المحتوى',t:['review','inbox','allposts']},
-  {id:'site',ic:'🎨',n:'الموقع',t:['look','type','hero','secs','tiles','links','cats','map']},
+  {id:'site',ic:'🎨',n:'الموقع',t:['look','type','hero','secs','tiles','bnav','links','cats','map']},
   {id:'settings',ic:'⚙️',n:'الإعدادات',t:['gen','history','mods','log']}];
-var TABN={home:'🏠 الملخص',stats:'📊 الزوار',review:'🗂 المراجعة',inbox:'📩 الرسائل',allposts:'📋 كل المحتوى',look:'🎨 الألوان',type:'🔤 الخطوط',hero:'🖼 الواجهة والهوية',secs:'📑 الأقسام',tiles:'🧩 البلاطات',links:'🔗 روابط التواصل',cats:'🏷️ التصنيفات',map:'🗺️ الخريطة',gen:'⚙️ عام',history:'⏪ الاسترجاع',mods:'👥 المشرفون',log:'📜 السجل'};
+var TABN={home:'🏠 الملخص',stats:'📊 الزوار',review:'🗂 المراجعة',inbox:'📩 الرسائل',allposts:'📋 كل المحتوى',look:'🎨 الألوان',type:'🔤 الخطوط',hero:'🖼 الواجهة والهوية',secs:'📑 الأقسام',tiles:'🧩 البلاطات',bnav:'📱 الشريط السفلي',links:'🔗 روابط التواصل',cats:'🏷️ التصنيفات',map:'🗺️ الخريطة',gen:'⚙️ عام',history:'⏪ الاسترجاع',mods:'👥 المشرفون',log:'📜 السجل'};
 function pgroupOf(tb){for(var i=0;i<PGROUPS.length;i++)if(PGROUPS[i].t.indexOf(tb)>=0)return PGROUPS[i];return PGROUPS[0]}
 function pendTotal(){return pendingPosts().length+pendingReviews().length+pendingPhotos().length+pendingComments().length+pendingSuggestions().length+pendingAds().length}
 function designHTML(){
@@ -2967,15 +2981,24 @@ function sitemapDownload(){
 }
 /* ---------- mobile bottom navigation ---------- */
 var BNAV={stories:['book','الحكايات','Stories'],photos:['photos','الصور','Photos'],directory:['phone','الخدمات','Services'],ads:['tag','الإعلانات','Ads'],map:['pin','الخريطة','Map'],history:['doc','التاريخ','History'],deaths:['star','الوفيات','Deaths'],audio:['mic','أصوات','Voices'],reviews:['chat','الآراء','Reviews'],volunteers:['people','الفريق','Team']};
-function bnavHTML(){
-  if(ui.edit)return'';
-  var have={};navItems().forEach(function(x){have[x.id]=1});
-  var pick=['stories','photos','directory','ads','map','history','deaths','audio','reviews','volunteers'].filter(function(id){return have[id]}).slice(0,3);
-  function it(href,ic,label,act){return(act?'<button type="button" data-act="'+act+'">':'<a href="'+href+'">')+'<svg viewBox="0 0 24 24" aria-hidden="true">'+ic+'</svg><span>'+esc(label)+'</span>'+(act?'</button>':'</a>')}
-  return'<nav class="bnav" aria-label="'+(lang==='ar'?'تنقل سريع':'Quick navigation')+'">'+it('#top',TILEICONS.home,lang==='ar'?'الرئيسية':'Home')+
-    pick.map(function(id){var b=BNAV[id];return it('#'+id,TILEICONS[b[0]],lang==='ar'?b[1]:b[2])}).join('')+
-    it('','<path d="M3 7h18M3 12h18M3 17h18"/>',t('menu'),'menu')+'</nav>';
+var MENU_PATH='<path d="M3 7h18M3 12h18M3 17h18"/>';
+BNAV.contact=['link','شاركنا','Share'];BNAV.featured=['heart','مختارات','Featured'];BNAV.menu=['','القائمة','Menu'];
+var BNAV_ALL=['stories','photos','ads','directory','map','history','deaths','volunteers','audio','reviews','featured','contact','menu'];
+function bnavHave(){var h={menu:1};navItems().forEach(function(x){h[x.id]=1});return h}
+function bnavAuto(){
+  var h=bnavHave(),pick=['stories','photos','directory','map','history','deaths','audio','reviews','volunteers'].filter(function(id){return h[id]}).slice(0,3);
+  return pick.concat([h.ads?'ads':'menu']);
 }
+function bnavList(){return Array.isArray(site.bnav)?site.bnav:bnavAuto()}
+function bnavHTML(){
+  if(ui.edit||site.bnavOn===false)return'';
+  var h=bnavHave(),list=bnavList().filter(function(k){return BNAV[k]&&h[k]}).slice(0,4);
+  function it(k){var b=BNAV[k],lb=lang==='ar'?b[1]:b[2];
+    if(k==='menu')return'<button type="button" data-act="menu"><svg viewBox="0 0 24 24" aria-hidden="true">'+MENU_PATH+'</svg><span>'+esc(t('menu'))+'</span></button>';
+    return'<a href="#'+k+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+TILEICONS[b[0]]+'</svg><span>'+esc(lb)+'</span></a>'}
+  return'<nav class="bnav" style="grid-template-columns:repeat('+(list.length+1)+',1fr)" aria-label="'+(lang==='ar'?'تنقل سريع':'Quick navigation')+'"><a href="#top"><svg viewBox="0 0 24 24" aria-hidden="true">'+TILEICONS.home+'</svg><span>'+(lang==='ar'?'الرئيسية':'Home')+'</span></a>'+list.map(it).join('')+'</nav>';
+}
+function bnavEdit(fn){if(!Array.isArray(site.bnav))site.bnav=bnavAuto().slice();fn(site.bnav);queueSettings();renderAll();refreshDesign()}
 function areaChart(days){
   var n=days.length;if(!n)return'<p class="hint">لا توجد بيانات بعد.</p>';
   var W=320,H=130,L=8,T=10,B=10,max=1;days.forEach(function(x){if(+x.n>max)max=+x.n});
@@ -3341,7 +3364,7 @@ async function doLogin(){
 }
 /* ---------- moderators: what they may not touch (the database enforces it too; this only hides and explains) ---------- */
 var MOD_BLOCK={};
-('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group hist-restore sitemap thumbs-gen backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
+('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group hist-restore sitemap thumbs-gen bn-add bn-del bn-up bn-down bn-reset backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
 function applyRole(){
   root.classList.toggle('modmode',!!ui.mod);
   var st=$('mod-css');if(!st){st=document.createElement('style');st.id='mod-css';document.head.appendChild(st)}
@@ -4367,6 +4390,11 @@ document.addEventListener('click',function(e){
     case'preview-on':previewOn();break;
     case'preview-off':previewOff();break;
     case'sitemap':sitemapDownload();break;
+    case'bn-add':bnavEdit(function(L){if(L.length<4&&L.indexOf(a.dataset.k)<0)L.push(a.dataset.k)});break;
+    case'bn-del':bnavEdit(function(L){L.splice(i,1)});break;
+    case'bn-up':bnavEdit(function(L){moveIn(L,i,-1)});break;
+    case'bn-down':bnavEdit(function(L){moveIn(L,i,1)});break;
+    case'bn-reset':site.bnav=null;queueSettings();renderAll();refreshDesign();toast('رجع الشريط للاختيار التلقائي.');break;
     case'thumbs-gen':genThumbs();break;
   }
   if(/^(tile-(up|down|on|del|img-del|add|save)|link-(add|del))$/.test(act))refreshDesign();
