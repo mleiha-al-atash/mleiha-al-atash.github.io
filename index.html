@@ -735,6 +735,16 @@ html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.l
 #ap-catf{flex-wrap:wrap;margin:10px 0}
 
 </style>
+<style id="media-fit">
+/* whole photo visible on every screen: the picture is never cut, a soft blurred copy fills the empty sides */
+.fc-media{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#161614;isolation:isolate}
+.fc:first-child .fc-media{aspect-ratio:16/11}
+.fc-media .fc-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.72) saturate(1.1);transform:scale(1.2);z-index:-1}
+.fc-media .fc-img{display:block;width:100%;height:100%;aspect-ratio:auto!important;object-fit:contain;background:none}
+@media (min-width:800px){.fc:first-child .fc-media{aspect-ratio:auto;height:min(62vh,560px)}}
+.rd img{object-fit:contain;max-height:72dvh;background:color-mix(in srgb,var(--fg3) 6%,transparent)}
+.person-img{object-position:center 22%}
+</style>
 <style id="panel-v2">
 /* ===== owner control panel v2: full-screen, grouped, bottom navigation ===== */
 #design{width:min(760px,100%);height:min(88dvh,860px);max-height:none;padding:0;overflow:hidden}
@@ -1467,7 +1477,7 @@ function featuredHTML(s){
   if(!list.length&&!ui.edit)return'';
   var cards=list.map(function(p){
     var img=safeUrl(p.image),c=catOf(p.cat);
-    return'<button class="fc" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="fc-img" alt="" loading="lazy" src="'+img+'">':'<span class="fc-ph">'+STAR0+'</span>')+
+    return'<button class="fc" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<span class="fc-media"><img class="fc-bg" alt="" aria-hidden="true" loading="lazy" src="'+img+'"><img class="fc-img" alt="" loading="lazy" src="'+img+'"></span>':'<span class="fc-ph">'+STAR0+'</span>')+
       '<span class="fc-body"><span class="tag">'+esc(c?tx(c.one):p.cat)+'</span><span class="fc-title">'+esc(pTitle(p))+'</span><span class="fc-ex">'+esc(excerpt(p,150))+'</span></span></button>';
   }).join('');
   return secOpen(s)+secTitle(s)+(list.length?'<div class="feat-grid">'+cards+'</div>':'<div class="ow-hint">لا توجد مواد مثبّتة بعد. من قسم الحكايات اضغط «تثبيت» على أي حكاية أو مقال ليظهر هنا في بداية الموقع.</div>')+'</section>';
@@ -4323,8 +4333,9 @@ document.addEventListener('error',function(e){
   if(!im||im.tagName!=='IMG'||!im.closest)return;
   var ph=im.closest('.ph-btn');
   if(ph){var sp=document.createElement('span');sp.className='ph-vph';im.replaceWith(sp);return}
+  if(im.classList.contains('fc-bg')){im.remove();return}
   if(im.classList.contains('fc-img')||im.classList.contains('person-img')){
-    var s2=document.createElement('span');s2.className=im.classList.contains('fc-img')?'fc-ph':'person-ph';s2.innerHTML=STAR0;im.replaceWith(s2);return;
+    var s2=document.createElement('span');s2.className=im.classList.contains('fc-img')?'fc-ph':'person-ph';s2.innerHTML=STAR0;(im.closest('.fc-media')||im).replaceWith(s2);return;
   }
   if(im.classList.contains('post-thumb'))im.remove();
 },true);
