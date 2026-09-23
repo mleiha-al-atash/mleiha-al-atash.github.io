@@ -735,6 +735,58 @@ html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.l
 #ap-catf{flex-wrap:wrap;margin:10px 0}
 
 </style>
+<style id="panel-v2">
+/* ===== owner control panel v2: full-screen, grouped, bottom navigation ===== */
+#design{width:min(760px,100%);height:min(88dvh,860px);max-height:none;padding:0;overflow:hidden}
+#design[open]{display:flex;flex-direction:column}
+.pnl{display:flex;flex-direction:column;height:100%;min-height:0;width:100%}
+.pnl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 12px;background:#f5f3ee;border-bottom:1px solid rgba(22,22,20,.08)}
+.pnl-top h3{margin:0;font-size:1.3rem;font-weight:800;line-height:1.2}
+.pnl-x:focus:not(:focus-visible){outline:none}
+.pnl-x{flex:none;width:42px;height:42px;border:0;border-radius:50%;background:rgba(22,22,20,.07);color:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
+.pnl-sub{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 4px;scrollbar-width:none;flex:none}
+.pnl-sub::-webkit-scrollbar{display:none}
+.pnl-sub .dtab{flex:none;white-space:nowrap}
+#design .pnl-body{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:8px 18px 28px}
+#design .pnl-body::before{display:none!important}
+.pnl-nav{flex:none;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px 8px calc(8px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid rgba(22,22,20,.1)}
+.pnl-nav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;border:0;border-radius:14px;background:none;color:rgba(22,22,20,.5);font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
+.pnl-nav .ni{font-size:1.4rem;line-height:1;filter:grayscale(1);opacity:.7;transition:filter .15s,opacity .15s}
+.pnl-nav button[aria-pressed="true"]{color:#161614;background:rgba(22,22,20,.07)}
+.pnl-nav button[aria-pressed="true"] .ni{filter:none;opacity:1}
+.pnl-nav .nb{position:absolute;top:3px;inset-inline-end:16%;min-width:18px;padding:0 5px;border-radius:99px;background:#b3261e;color:#fff;font-size:.68rem;line-height:1.55}
+@media (max-width:700px){
+  #design{width:100%;max-width:100%;height:100dvh;margin:0;border-radius:0}
+  .pnl-top{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+}
+/* home */
+.hm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 20px}
+.hm-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 14px 12px;border:1.5px solid rgba(22,22,20,.1);border-radius:16px;background:#fff;color:inherit;font:inherit;text-align:start;cursor:pointer;transition:transform .1s}
+.hm-card:active{transform:scale(.97)}
+.hm-card b{font-size:1.8rem;line-height:1.1;font-weight:800}
+.hm-card span{font-size:.85rem;opacity:.7}
+.hm-card.alert{border-color:#d9a62e;background:#fff8e6}
+.hm-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hm-acts button{min-height:54px;padding:6px 10px;border:1.5px solid rgba(22,22,20,.12);border-radius:14px;background:#fff;color:inherit;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;transition:transform .1s}
+.hm-acts button:active{transform:scale(.97)}
+/* rows as cards */
+.card-row{border:1.5px solid rgba(22,22,20,.1);border-radius:14px;padding:10px 12px;margin:0 0 10px;background:#fff}
+.card-row .rowline{background:none;margin:0;padding:0}
+.card-row .rowline+.rowline{padding-top:8px}
+.bulk{padding:12px 14px;margin:0 0 16px;border-radius:14px;background:rgba(22,22,20,.04)}
+.bulk h4{margin:0 0 8px!important}
+/* switches instead of checkboxes */
+#design .opt{justify-content:space-between;gap:14px;padding:10px 0;margin:0;border-bottom:1px solid rgba(22,22,20,.06)}
+#design .opt input[type=checkbox]{order:2;appearance:none;-webkit-appearance:none;flex:none;width:48px;height:28px;margin:0;border-radius:99px;background:rgba(22,22,20,.22);position:relative;cursor:pointer;transition:background .2s}
+#design .opt input[type=checkbox]::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+#design .opt input[type=checkbox]:checked{background:#1f7a45}
+#design .opt input[type=checkbox]:checked::after{transform:translateX(-20px)}
+/* chart */
+.chart{margin:4px 0 2px}
+.chart svg{display:block;width:100%;height:auto}
+/* visitor preview pill */
+.pv-pill{position:fixed;z-index:70;bottom:16px;inset-inline-end:16px;min-height:50px;padding:0 22px;border:0;border-radius:999px;background:#d9a62e;color:#161614;font:inherit;font-weight:800;font-size:1rem;box-shadow:0 4px 18px rgba(0,0,0,.3);cursor:pointer}
+</style>
 <style id="theme-vars"></style>
 <noscript><style>.loader{display:none}.line>span{transform:none}html.loading,html.loading body{overflow:auto}</style></noscript>
 </head>
@@ -787,7 +839,7 @@ function ytId(s){
 var lang='ar';
 var I18N={
 ar:{
-  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',f_role:'الدور أو المسؤولية',news_badge:'عاجل',news_expiry:'يختفي هذا الخبر تلقائياً بعد 10 أيام من نشره.',err_author:'الاسم إلزامي لهذا النوع من المشاركات.',visit_counter_lbl:'زيارة لموقع القرية',weather_lbl:'طقس القرية',contact_btn:'تواصل معنا',maint_title:'الموقع قيد التحديث',lockdown_notice:'المشاركات موقوفة مؤقتاً من إدارة الموقع.',share_btn_deaths:'＋ شارك اسماً',share_btn_volunteers:'＋ شارك خبراً أو اقترح عضواً',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
+  menu:'القائمة',close:'إغلاق',scroll:'استكشف المزيد',about_more:'اقرأ المزيد',about_less:'إخفاء التفاصيل',cmt_btn:'التعليقات',cmt_none:'لا تعليقات بعد. كن أول من يعلّق.',cmt_name:'اسمك',cmt_text:'تعليقك',cmt_send:'إرسال التعليق',cmt_sending:'جاري الإرسال...',cmt_pending:'وصل تعليقك. يظهر بعد أن يراجعه صاحب الموقع.',cmt_posted:'تم نشر تعليقك.',cmt_cool:'انتظر قليلاً قبل إرسال تعليق آخر.',cmt_err_name:'اكتب اسمك.',cmt_err_text:'اكتب تعليقاً من حرفين على الأقل.',cmt_fail:'تعذّر إرسال التعليق. جرّب مرة ثانية.',cmt_rule:'التعليقات المسيئة تُحذف.',cmt_photo:'صورة',cmt_video:'فيديو',cmt_audio:'تسجيل صوتي',f_role:'الدور أو المسؤولية',news_badge:'عاجل',news_expiry:'يختفي هذا الخبر تلقائياً بعد 10 أيام من نشره.',err_author:'الاسم إلزامي لهذا النوع من المشاركات.',visit_counter_lbl:'زيارة لموقع القرية',weather_lbl:'طقس القرية',visit_lbl:'عدد الزيارات',contact_btn:'تواصل معنا',maint_title:'الموقع قيد التحديث',lockdown_notice:'المشاركات موقوفة مؤقتاً من إدارة الموقع.',share_btn_deaths:'＋ شارك اسماً',share_btn_volunteers:'＋ شارك خبراً أو اقترح عضواً',dir_search_ph:'ابحث عن خدمة أو اسم أو مهنة أو رقم...',dir_noresult:'ما لقينا نتيجة. جرّب كلمة ثانية.',dir_suggest:'＋ اقترح خدمة أو رقماً مفيداً',sug_title:'اقترح خدمة',sug_note:'يصل اقتراحك لصاحب الموقع ويُنشر بعد مراجعته. اكتب أرقام الأشخاص بموافقتهم فقط.',sug_cat:'التصنيف',sug_name:'الاسم (شخص أو مكان)',sug_role:'المهنة أو التخصص (اختياري)',sug_phone:'الهاتف (اختياري)، ويفضّل بصيغة +963',sug_addr:'العنوان أو وصف الموقع (اختياري)',sug_more:'ملاحظة، مثل أوقات العمل (اختياري)',sug_by:'اسمك (اختياري)',sug_send:'إرسال الاقتراح',sug_thanks:'وصل اقتراحك. يظهر بعد أن يراجعه صاحب الموقع.',sug_err_name:'اكتب اسم الخدمة أو الشخص.',sug_err_contact:'اكتب رقم هاتف أو عنواناً على الأقل.',sug_fail:'تعذّر إرسال الاقتراح. جرّب مرة ثانية.',sug_cool:'انتظر قليلاً قبل إرسال اقتراح آخر.',ad_add:'＋ أضف إعلانك مجاناً',ad_manage:'إدارة إعلاني',ad_none:'لا إعلانات حالياً. كن أول من يعلن.',ad_search_ph:'ابحث في الإعلانات...',ad_negotiable:'بالاتفاق',ad_report:'بلّغ عن الإعلان',ad_reported:'وصل بلاغك. شكراً لك.',ad_form_title:'إعلان جديد',ad_f_cat:'التصنيف',ad_f_title:'عنوان الإعلان',ad_f_body:'الوصف',ad_f_price:'السعر (اختياري)',ad_f_price_p:'مثال: 5000 دولار، أو بالاتفاق',ad_f_place:'الموقع (اختياري)',ad_f_seller:'اسمك',ad_f_phone:'رقم الجوال (يظهر للجميع)',ad_f_photos:'الصور (حتى 5)',ad_pick:'＋ اختيار الصور',ad_agree:'قرأت الشروط وأوافق عليها',ad_send:'إرسال الإعلان',ad_err_title:'اكتب عنواناً من 3 أحرف على الأقل.',ad_err_phone:'اكتب رقم جوال صحيح.',ad_err_seller:'اكتب اسمك.',ad_err_agree:'وافق على الشروط أولاً.',ad_cool:'انتظر قليلاً قبل إرسال إعلان آخر.',ad_fail:'تعذّر إرسال الإعلان. جرّب مرة ثانية.',ad_fail_img:'تعذّر رفع الصور. جرّب صوراً أقل أو أصغر.',ad_sent_title:'وصل إعلانك',ad_sent_note:'يظهر بعد المراجعة ويبقى 30 يوماً.',ad_code_l:'رمز إدارة إعلانك',ad_code_note:'احفظه أو صوّره. تحتاجه لتسجّل «تم البيع» أو لتحذف إعلانك، ولا نقدر نسترجعه.',ad_copy:'نسخ الرمز',ad_manage_title:'إدارة إعلاني',ad_manage_note:'اكتب رمز إعلانك، أو اختر من إعلاناتك على هذا الجهاز.',ad_code_in:'رمز الإعلان',ad_lookup:'بحث',ad_notfound:'ما لقينا إعلاناً بهذا الرمز.',ad_st_pending:'بانتظار المراجعة',ad_st_approved:'منشور',ad_st_sold:'تم البيع',ad_st_removed:'محذوف',ad_expires:'ينتهي',ad_mark_sold:'تم البيع',ad_remove:'حذف الإعلان',ad_done_sold:'تم تسجيل الإعلان كمُباع.',ad_done_removed:'تم حذف الإعلان.',ad_by:'المعلن',ad_terms_h:'شروط الاستخدام',ad_code_copied:'تم نسخ الرمز.',owner_login:'دخول الإدارة',
   qa_title:'أسئلة عن القرية',
   all:'الكل',share_btn:'＋ شارك بحكاية أو مقال أو حدث',share_note:'تظهر مشاركتك في الموقع بعد أن يراجعها صاحب الموقع.',
   empty_soon:'قريباً: قصص ومقالات وأحداث من القرية.',empty_cat:'لا يوجد شيء في هذا القسم بعد.',
@@ -820,7 +872,7 @@ ar:{
   t_event:'حدث',doc_title:'مليحة العطش | قرية في درعا، سوريا',doc_desc:'موقع قرية مليحة العطش في محافظة درعا، جنوب سوريا: حكايات وصور وتاريخ وخدمات وإعلانات من أهلها.'
 },
 en:{
-  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',f_role:'Role or responsibility',news_badge:'Breaking',news_expiry:'This news item disappears automatically 10 days after it is published.',err_author:'A name is required for this kind of post.',visit_counter_lbl:'visits to the village site',weather_lbl:'Village weather',contact_btn:'Contact us',maint_title:'The site is being updated',lockdown_notice:'Visitor submissions are temporarily paused by the site owner.',share_btn_deaths:'＋ Add a name',share_btn_volunteers:'＋ Share news or suggest a member',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
+  menu:'Menu',close:'Close',scroll:'Explore more',about_more:'Read more',about_less:'Show less',cmt_btn:'Comments',cmt_none:'No comments yet. Be the first.',cmt_name:'Your name',cmt_text:'Your comment',cmt_send:'Send comment',cmt_sending:'Sending...',cmt_pending:'Your comment was received. It will appear after review.',cmt_posted:'Your comment is published.',cmt_cool:'Please wait a little before sending another comment.',cmt_err_name:'Please write your name.',cmt_err_text:'Write a comment of at least two characters.',cmt_fail:'Could not send the comment. Try again.',cmt_rule:'Abusive comments are removed.',cmt_photo:'Photo',cmt_video:'Video',cmt_audio:'Audio',f_role:'Role or responsibility',news_badge:'Breaking',news_expiry:'This news item disappears automatically 10 days after it is published.',err_author:'A name is required for this kind of post.',visit_counter_lbl:'visits to the village site',weather_lbl:'Village weather',visit_lbl:'Visits',contact_btn:'Contact us',maint_title:'The site is being updated',lockdown_notice:'Visitor submissions are temporarily paused by the site owner.',share_btn_deaths:'＋ Add a name',share_btn_volunteers:'＋ Share news or suggest a member',dir_search_ph:'Search a service, name, trade or number...',dir_noresult:'No results. Try another word.',dir_suggest:'＋ Suggest a service or useful number',sug_title:'Suggest a service',sug_note:'Your suggestion goes to the site owner and is published after review. Only add people\'s numbers with their permission.',sug_cat:'Category',sug_name:'Name (person or place)',sug_role:'Trade or specialty (optional)',sug_phone:'Phone (optional), ideally as +963...',sug_addr:'Address or location (optional)',sug_more:'Note, e.g. opening hours (optional)',sug_by:'Your name (optional)',sug_send:'Send suggestion',sug_thanks:'Your suggestion was received. It appears after review.',sug_err_name:'Write the name of the service or person.',sug_err_contact:'Write a phone number or an address at least.',sug_fail:'Could not send the suggestion. Try again.',sug_cool:'Please wait a little before sending another suggestion.',ad_add:'＋ Post your ad for free',ad_manage:'Manage my ad',ad_none:'No ads right now. Be the first.',ad_search_ph:'Search the ads...',ad_negotiable:'Negotiable',ad_report:'Report this ad',ad_reported:'Your report was received. Thank you.',ad_form_title:'New ad',ad_f_cat:'Category',ad_f_title:'Ad title',ad_f_body:'Description',ad_f_price:'Price (optional)',ad_f_price_p:'e.g. 5000 USD, or negotiable',ad_f_place:'Location (optional)',ad_f_seller:'Your name',ad_f_phone:'Mobile number (visible to everyone)',ad_f_photos:'Photos (up to 5)',ad_pick:'＋ Choose photos',ad_agree:'I read the terms and agree',ad_send:'Send the ad',ad_err_title:'Write a title of at least 3 characters.',ad_err_phone:'Write a valid mobile number.',ad_err_seller:'Write your name.',ad_err_agree:'Please accept the terms first.',ad_cool:'Please wait a little before sending another ad.',ad_fail:'Could not send the ad. Try again.',ad_fail_img:'Could not upload the photos. Try fewer or smaller ones.',ad_sent_title:'Your ad was received',ad_sent_note:'It appears after review and stays for 30 days.',ad_code_l:'Your ad management code',ad_code_note:'Save it or take a screenshot. You need it to mark the item sold or delete the ad, and we cannot recover it.',ad_copy:'Copy the code',ad_manage_title:'Manage my ad',ad_manage_note:'Write your ad code, or pick one of your ads on this device.',ad_code_in:'Ad code',ad_lookup:'Find',ad_notfound:'No ad found with this code.',ad_st_pending:'Waiting for review',ad_st_approved:'Published',ad_st_sold:'Sold',ad_st_removed:'Deleted',ad_expires:'Ends',ad_mark_sold:'Mark as sold',ad_remove:'Delete the ad',ad_done_sold:'The ad was marked as sold.',ad_done_removed:'The ad was deleted.',ad_by:'Seller',ad_terms_h:'Terms of use',ad_code_copied:'Code copied.',owner_login:'Staff login',
   qa_title:'Questions about the village',
   all:'All',share_btn:'＋ Share a story, article or event',share_note:'Your contribution appears on the site after the owner reviews it.',
   empty_soon:'Coming soon: stories, articles and events from the village.',empty_cat:'Nothing in this section yet.',
@@ -1139,10 +1191,11 @@ function normalize(s){
   s.lockdown=!!s.lockdown;
   s.maintenance=s.maintenance&&typeof s.maintenance==='object'?s.maintenance:{};s.maintenance.on=!!s.maintenance.on;s.maintenance.text=T2(s.maintenance.text);if(!s.maintenance.text.ar&&!s.maintenance.text.en)s.maintenance.text=defaults().maintenance.text;
   s.showVisitCounter=s.showVisitCounter!==false;
+  s.showWeather=s.showWeather!==false;
   return s;
 }
 var site=normalize(defaults()),posts=[],photos=[],reviews=[],messages=[],comments=[],suggestions=[],ads=[];
-var ui={lastTab:'',apQ:'',apCat:'',cmtOK:false,svcOK:false,dq:'',adsOK:false,adcat:'all',adq:'',ablobs:[],edit:false,admin:false,tab:'',pending:null,fileFor:null,vi:0,dtab:'look',menu:false};
+var ui={lastTab:'',apQ:'',apCat:'',cmtOK:false,svcOK:false,dq:'',adsOK:false,adcat:'all',adq:'',ablobs:[],edit:false,admin:false,tab:'',pending:null,fileFor:null,vi:0,dtab:'home',menu:false};
 
 /* ---------- theme + design ---------- */
 function okHex(h){return/^#[0-9a-fA-F]{6}$/.test(h||'')}
@@ -1367,9 +1420,10 @@ function heroHTML(s){
   var cls='hero'+(covs.length?' has-cover':'')+(d.heroSize==='tall'?' h-tall':d.heroSize==='half'?' h-half':'')+(d.titleStyle==='outline'?' t-outline':'')+(d.heroH==='center'?' h-cn':'');
   var style='--dark:'+(clamp(+site.cover.dark,0,80)/100)+';--hv:'+(map[d.heroV]||'flex-end')+';--hh:'+(map[d.heroH]||'flex-start')+';--ha:'+(d.heroH==='center'?'center':d.heroH==='end'?'end':'start');
   var hasLoc=isFinite(+site.map.lat)&&isFinite(+site.map.lng)&&(+site.map.lat||+site.map.lng);
-  var corner=(hasLoc||site.showVisitCounter)?'<div class="hero-corner">'+
-    (hasLoc?'<div class="hc-weather" id="hc-weather" hidden aria-live="polite"><span class="hc-lbl">'+esc(t('weather_lbl'))+'</span><span class="hc-ic" id="hc-wicon" aria-hidden="true">🌤️</span><b class="hc-temp" id="hc-temp">--</b>°</div>':'')+
-    (site.showVisitCounter?'<div class="visit-badge" id="visit-badge" hidden aria-live="polite"><span class="vb-eye" aria-hidden="true">👁</span><b class="vb-num" id="vb-num">0</b></div>':'')+
+  var showWx=hasLoc&&site.showWeather!==false;
+  var corner=(showWx||site.showVisitCounter)?'<div class="hero-corner">'+
+    (showWx?'<div class="hc-weather" id="hc-weather" hidden aria-live="polite"><span class="hc-lbl">'+esc(t('weather_lbl'))+'</span><span class="hc-ic" id="hc-wicon" aria-hidden="true">🌤️</span><b class="hc-temp" id="hc-temp">--</b>°</div>':'')+
+    (site.showVisitCounter?'<div class="visit-badge" id="visit-badge" hidden aria-live="polite"><span class="hc-lbl">'+esc(t('visit_lbl'))+'</span><span class="vb-eye" aria-hidden="true">👁</span><b class="vb-num" id="vb-num">0</b></div>':'')+
     '</div>':'';
   return'<section class="'+cls+'" data-sec="hero" id="hero" style="'+style+'">'+
     (covs.length?'<div class="cover" aria-hidden="true">'+covs.map(function(u){return'<img alt="" src="'+u+'">'}).join('')+'</div>':'')+
@@ -1805,7 +1859,7 @@ function afterRender(k){
     });
   }
   if(!k)fitNav();
-  if(!k||k==='hero'){startCover();fitHero()}
+  if(!k||k==='hero'){startCover();fitHero();refreshCorner()}
   if(!k||k==='map')setupMap();
   if(!k&&ui.menu===false)root.classList.remove('menuopen');
   updateBar();
@@ -2122,6 +2176,7 @@ async function saveSettings(){
   }
   var r=await sb.from('site_settings').update({data:body,updated_at:new Date().toISOString()}).eq('id',1).select('id');
   var ok=!r.error&&!!r.data&&r.data.length>0;
+  if(ok){var js=JSON.stringify(body);if(ui.savedJSON&&ui.savedJSON!==js)histRecord(ui.savedJSON);ui.savedJSON=js}
   if(!ok&&wasDirty)ui.dirDirty=true;
   return ok;
 }
@@ -2303,7 +2358,7 @@ async function onFiles(files){
     if(kind==='photos')renderSec('photos');
     else if(kind==='cover'){renderSec('hero');refreshDesign()}
     else if(kind==='emblem'){renderAll();refreshDesign()}
-    else if(kind==='tile'){renderSec('tiles')}
+    else if(kind==='tile'){renderSec('tiles');refreshDesign()}
     else if(kind==='blk'){var bs=site.sections.filter(function(x){return x.id==='blk_'+(site.blocks[ui.fileIdx]||{}).id})[0];if(bs)renderSec(bs.id)}
   }
   toast(failed?'تعذّر رفع '+failed+' من الصور. تأكد من الاتصال وحجم الصورة.':added?'تمت الإضافة.':'ما تمت إضافة شيء.');
@@ -2334,7 +2389,7 @@ function withTimeout(p,ms,fallback){
 }
 async function loadData(){
   var s=await sb.from('site_settings').select('data').eq('id',1).maybeSingle();
-  if(!s.error&&s.data&&s.data.data&&typeof s.data.data==='object')site=normalize(merge(defaults(),s.data.data));
+  if(!s.error&&s.data&&s.data.data&&typeof s.data.data==='object'){site=normalize(merge(defaults(),s.data.data));ui.savedJSON=JSON.stringify(site)}
   var p=await sb.from('posts').select('*').order('created_at',{ascending:false});
   if(!p.error&&p.data)posts=p.data.map(fromRow);
   var h=await sb.from('photos').select('*').order('sort',{ascending:true}).order('created_at',{ascending:true});
@@ -2395,14 +2450,23 @@ async function loadWeather(){
     var num=$('hc-temp'),ic=$('hc-wicon');
     if(num)num.textContent=nf(Math.round(data.temp));
     if(ic)ic.textContent=WMO_ICON[data.code]||'🌤️';
-    el.hidden=false;
+    ui.wx=data;el.hidden=false;
   }catch(e){}
+}
+function refreshCorner(){
+  if(site.showWeather!==false){
+    var w=$('hc-weather');
+    if(w&&ui.wx){var tn=$('hc-temp'),ic=$('hc-wicon');if(tn)tn.textContent=nf(Math.round(ui.wx.temp));if(ic)ic.textContent=WMO_ICON[ui.wx.code]||'🌤️';w.hidden=false}
+    else if(w&&!ui.wx&&sb)loadWeather().catch(function(){});
+  }
+  var b=$('visit-badge');
+  if(b&&ui.vc!=null){var vn=$('vb-num');if(vn)vn.textContent=nf(ui.vc);b.hidden=false}
 }
 async function loadVisitCount(){
   if(!site.showVisitCounter)return;
   var r=await withTimeout(sb.rpc('visit_count'),8000,null);
   var badge=$('visit-badge');if(!badge||!r||r.error||r.data==null)return;
-  var target=+r.data||0,el=$('vb-num');if(!el)return;
+  var target=+r.data||0,el=$('vb-num');ui.vc=target;if(!el)return;
   badge.hidden=false;
   var start=0,steps=Math.min(40,Math.max(1,target)),dur=900,t0=null;
   function tick(ts){
@@ -2564,7 +2628,7 @@ function statsHTML(d){
   return'<div class="stat-grid">'+
     [['اليوم',d.today],['أمس',d.yesterday],['آخر 7 أيام',d.last7],['آخر 30 يوم',d.last30],['كل الوقت',d.people]].map(function(c){return'<div class="stat"><b>'+n0(c[1])+'</b><span>'+c[0]+'</span></div>'}).join('')+
     '<div class="stat"><b>'+n0(d.visits)+'</b><span>مجموع الزيارات</span></div></div>'+
-    '<h4>الزوار كل يوم (آخر 30 يوم)</h4><div class="bars" dir="ltr">'+bars+'</div><div class="bars-lbl" dir="ltr"><span>'+esc(first)+'</span><span>الأعلى: '+n0(max)+'</span><span>'+esc(last)+'</span></div>'+
+    '<h4>الزوار كل يوم (آخر 30 يوم)</h4>'+areaChart(days)+'<div class="bars-lbl" dir="ltr"><span>'+esc(first)+'</span><span>الأعلى: '+n0(max)+'</span><span>'+esc(last)+'</span></div>'+
     statBreak('الجهاز (آخر 30 يوم)',d.device,STAT_NAMES.device)+statBreak('لغة الزائر',d.lang,STAT_NAMES.lang)+statBreak('من أين وصلوا',d.src,STAT_NAMES.src)+
     (d.first_day?'<p class="hint" style="margin-top:14px">العدّاد بدأ بتاريخ '+esc(d.first_day)+'.</p>':'')+
     '<p class="hint">كل متصفح يُحسب مرة واحدة باليوم، فالأرقام تقريبية: من يزور من جهازين يُحسب مرتين، ومن يمسح بيانات المتصفح يُحسب من جديد. لا يُسجَّل أي اسم أو رقم أو موقع، لذلك لا يمكن معرفة أسماء الزوار. الأسماء الوحيدة هي ما يكتبونه بأنفسهم في التقييمات والمشاركات.</p>'+
@@ -2581,6 +2645,40 @@ async function loadStats(){
   box.innerHTML=statsHTML(r.data);
 }
 var DBODY={
+home:function(){
+  var pend=pendTotal(),um=unreadMessages();
+  return'<p class="hint" style="margin-top:6px">ملخص الموقع الآن. اضغط أي بطاقة لتفتح تفاصيلها.</p><div class="hm-grid">'+
+    '<button class="hm-card'+(pend?' alert':'')+'" data-act="dtab" data-t="review"><b>'+nf(pend)+'</b><span>بانتظار المراجعة</span></button>'+
+    '<button class="hm-card'+(um?' alert':'')+'" data-act="dtab" data-t="inbox"><b>'+nf(um)+'</b><span>رسائل غير مقروءة</span></button>'+
+    '<button class="hm-card" data-act="dtab" data-t="stats"><b id="hm-today">…</b><span>زوار اليوم</span></button>'+
+    '<button class="hm-card" data-act="dtab" data-t="stats"><b id="hm-week">…</b><span>زوار آخر 7 أيام</span></button></div>'+
+    '<h4>أعمال سريعة</h4><div class="hm-acts"><button data-act="post-add">＋ إضافة مشاركة</button><button data-act="preview-on">👁 معاينة كزائر</button><button data-act="dtab" data-t="gen">📢 شريط الإعلان</button><button data-act="backup">📥 نسخة احتياطية</button><button data-act="dtab" data-t="tiles">🧩 البلاطات</button><button data-act="dtab" data-t="history">⏪ استرجاع إعدادات</button></div>'+
+    '<p class="hint" style="margin-top:16px">المنشور في الموقع الآن: '+nf(approved().length)+' مادة.</p>';
+},
+tiles:function(){
+  var it=site.tiles.items;
+  return'<p class="hint">البلاطات هي المربعات المصوّرة في «استكشف مليحة العطش». رتّبها وأخفِ ما لا تريده وغيّر صورها ووجهتها.</p>'+it.map(function(x,i){
+    var img=safeUrl(x.image),on=x.on!==false;
+    return'<div class="card-row"><div class="rowline"><span class="ti" aria-hidden="true" style="display:inline-block;width:22px;height:22px">'+tileIcon(x.icon)+'</span><span class="grow">'+esc(tx(x.title))+'</span><button class="mini" data-act="tile-up" data-i="'+i+'" aria-label="تقديم">↑</button><button class="mini" data-act="tile-down" data-i="'+i+'" aria-label="تأخير">↓</button><button class="mini" data-act="tile-on" data-i="'+i+'" aria-pressed="'+on+'">'+(on?'ظاهرة':'مخفية')+'</button></div>'+
+      '<div class="rowline"><input type="text" placeholder="العنوان بالعربي" data-model="tiles.items.'+i+'.title" data-l="ar" value="'+esc(x.title.ar)+'"><input type="text" dir="ltr" placeholder="English title" data-model="tiles.items.'+i+'.title" data-l="en" value="'+esc(x.title.en)+'"></div>'+
+      '<div class="rowline">'+(img?'<img alt="" src="'+img+'" style="width:64px;height:44px;object-fit:cover;border-radius:8px">':'')+'<button class="mini" data-act="tile-img" data-i="'+i+'">'+(img?'تغيير الصورة':'＋ صورة')+'</button>'+(img?'<button class="mini del" data-act="tile-img-del" data-i="'+i+'">إزالة الصورة</button>':'')+'<button class="mini" data-act="tile-edit" data-i="'+i+'">الوجهة والأيقونة</button><button class="mini del" data-act="tile-del" data-i="'+i+'">حذف</button></div></div>';
+  }).join('')+'<button class="add-btn light" data-act="tile-add">＋ إضافة بلاطة</button>';
+},
+links:function(){
+  var L=site.contact.links;
+  return'<p class="hint">تظهر هذه الروابط عند الضغط على زر ✉ «تواصل معنا» أعلى الموقع. الرابط يبدأ بـ https:// للمواقع، أو mailto: للبريد، أو tel: للهاتف.</p>'+L.map(function(l,i){
+    return'<div class="card-row"><div class="rowline"><input type="text" placeholder="الاسم بالعربي (مثل: واتساب)" data-model="contact.links.'+i+'.k" data-l="ar" value="'+esc(l.k.ar)+'"><input type="text" dir="ltr" placeholder="Name (English)" data-model="contact.links.'+i+'.k" data-l="en" value="'+esc(l.k.en)+'"></div>'+
+      '<div class="rowline"><input type="text" dir="ltr" placeholder="النص الظاهر، مثل الرقم أو البريد" data-model="contact.links.'+i+'.v" value="'+esc(l.v)+'"></div>'+
+      '<div class="rowline"><input type="text" dir="ltr" placeholder="https://..." data-model="contact.links.'+i+'.href" value="'+esc(l.href)+'"><button class="mini del" data-act="link-del" data-i="'+i+'">حذف</button></div></div>';
+  }).join('')+'<button class="add-btn light" data-act="link-add">＋ إضافة رابط</button>';
+},
+history:function(){
+  var L=histList();
+  return'<p class="hint">كلما عدّلت إعدادات الموقع (الألوان، والأقسام، والبلاطات، والنصوص الثابتة) نحفظ نسخة من الشكل السابق على <b>هذا الجهاز</b>، حتى 12 نسخة. إذا أخطأت، ارجع لأي نسخة بضغطتين. هذا لا يمسّ الحكايات والصور والرسائل.</p>'+
+    (L.length?L.map(function(h,i){var d='';try{d=new Date(h.t).toLocaleString('ar-SY',{dateStyle:'medium',timeStyle:'short'})}catch(e){d=String(h.t)}
+      return'<div class="card-row"><div class="rowline"><span class="grow">'+esc(d)+'</span><button class="mini" data-act="hist-restore" data-i="'+i+'">استرجاع</button></div></div>'}).join('')
+    :'<p class="hint">لا توجد نسخ بعد. تظهر هنا بعد أول تعديل على الإعدادات.</p>');
+},
 inbox:function(){return'<div id="inboxbox"><p class="hint">جاري التحميل...</p></div>'},
 stats:function(){return'<div id="statsbox"><p class="hint">جاري التحميل...</p></div>'},
 look:function(){
@@ -2655,7 +2753,7 @@ gen:function(){
     '<h4>شريط إعلان أعلى الموقع</h4><p class="hint">للأفراح والتعازي والفعاليات. الزائر يقدر يغلقه.</p>'+toggleRow('إظهار الشريط','announce.on')+textRow('نص الإعلان (عربي)','announce.text','ar')+textRow('Announcement text (English)','announce.text','en',' dir="ltr"')+textRow('رابط عند الضغط (اختياري)','announce.link','',' dir="ltr" placeholder="https://..."')+
     '<h4>آراء الزوار</h4>'+toggleRow('نشر آراء الزوار مباشرة بدون مراجعة (غير مفضّل)','reviews.auto')+
     '<h4>تعليقات الزوار</h4><p class="hint">التعليقات على الحكايات والمقالات والصور والفيديو والتسجيلات، وليس على وفيات القرية.</p>'+toggleRow('نشر التعليقات مباشرة بدون مراجعة (غير مفضّل)','comments.auto')+
-    '<h4>عداد الزيارات</h4>'+toggleRow('إظهار عداد زيارات الموقع للزوار بأعلى الصفحة','showVisitCounter')+
+    '<h4>الطقس وعداد الزيارات</h4>'+toggleRow('إظهار حالة الطقس أعلى الواجهة','showWeather')+toggleRow('إظهار عداد الزيارات أعلى الواجهة','showVisitCounter')+
     '<h4>الموقع قيد الصيانة</h4><p class="hint">يظهر للزوار رسالة بسيطة بدل الموقع، وأنت والمشرفون تدخلون وتعملون عادي.</p>'+toggleRow('تفعيل وضع الصيانة','maintenance.on')+textRow('نص الصيانة (عربي)','maintenance.text','ar')+textRow('Maintenance text (English)','maintenance.text','en',' dir="ltr"')+
     '<h4>إيقاف طارئ شامل</h4><p class="hint">يوقف كل مشاركات الزوار بالموقع دفعة وحدة (حكايات، وفيات، فريق، صور، آراء، تعليقات، خدمات، إعلانات). للمالك فقط.</p><div class="ed-actions"><button class="'+(site.lockdown?'primary':'')+'" data-act="lockdown-toggle">'+(site.lockdown?'⏸ الإيقاف الطارئ مفعّل — اضغط للإلغاء':'تفعيل الإيقاف الطارئ')+'</button></div>'+
     '<h4>نسخة احتياطية</h4><p class="hint">تنزّل ملفاً فيه الحكايات والإعدادات والتعليقات والرسائل وروابط المعرض. الصور والفيديوهات نفسها تبقى في Supabase. خذ نسخة كل شهر واحفظها في مكان آمن.'+(ls('malha-lastbackup')?' آخر نسخة من هذا الجهاز: '+esc(ls('malha-lastbackup'))+'.':' لم تأخذ نسخة من هذا الجهاز بعد.')+'</p><div class="ed-actions"><button data-act="backup">📥 تنزيل نسخة احتياطية</button></div>'+
@@ -2673,10 +2771,11 @@ acct:function(){
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="logout">تسجيل الخروج</button></div>';
 },
 review:function(){
+  var bulk=bulkBarHTML();
   var parts=[pendPostsHTML('stories','rv-pending-stories'),pendPostsHTML('deaths','rv-pending-deaths'),pendPostsHTML('volunteers','rv-pending-volunteers'),pendPhotosHTML(),pendReviewsHTML(),pendCmtHTML(),pendSuggestHTML(),adStaffHTML()].filter(Boolean);
   var um=unreadMessages(),msgLine=um?'<div class="pending-box"><h3 class="sub-title">رسائل خاصة غير مقروءة ('+nf(um)+')</h3><div class="ed-actions"><button data-act="dtab" data-t="inbox">فتح صندوق الرسائل</button></div></div>':'';
   var any=parts.length||um;
-  return'<p class="hint">كل شي بانتظار مراجعتك بمكان واحد.</p>'+msgLine+(any?parts.join(''):'<p class="hint">ما في شي بانتظار المراجعة الآن. 🎉</p>');
+  return'<p class="hint">كل شي بانتظار مراجعتك بمكان واحد.</p>'+bulk+msgLine+(any?parts.join(''):'<p class="hint">ما في شي بانتظار المراجعة الآن. 🎉</p>');
 },
 log:function(){return'<div id="logbox"><p class="hint">جاري التحميل...</p></div>'},
 allposts:function(){
@@ -2755,12 +2854,131 @@ function pwHTML(){
     '<div class="ed-actions"><button class="primary" data-act="pw-change" id="pw-go">تغيير كلمة السر</button></div>';
 }
 function picker(k,label,v){return'<label class="pick"><input type="color" data-color="'+k+'" value="'+(okHex(v)?v:'#000000')+'"><span>'+label+'</span></label>'}
+var PGROUPS=[
+  {id:'home',ic:'🏠',n:'الرئيسية',t:['home','stats']},
+  {id:'content',ic:'📥',n:'المحتوى',t:['review','inbox','allposts']},
+  {id:'site',ic:'🎨',n:'الموقع',t:['look','type','hero','secs','tiles','links','cats','map']},
+  {id:'settings',ic:'⚙️',n:'الإعدادات',t:['gen','history','mods','log']}];
+var TABN={home:'🏠 الملخص',stats:'📊 الزوار',review:'🗂 المراجعة',inbox:'📩 الرسائل',allposts:'📋 كل المحتوى',look:'🎨 الألوان',type:'🔤 الخطوط',hero:'🖼 الواجهة والهوية',secs:'📑 الأقسام',tiles:'🧩 البلاطات',links:'🔗 روابط التواصل',cats:'🏷️ التصنيفات',map:'🗺️ الخريطة',gen:'⚙️ عام',history:'⏪ الاسترجاع',mods:'👥 المشرفون',log:'📜 السجل'};
+function pgroupOf(tb){for(var i=0;i<PGROUPS.length;i++)if(PGROUPS[i].t.indexOf(tb)>=0)return PGROUPS[i];return PGROUPS[0]}
+function pendTotal(){return pendingPosts().length+pendingReviews().length+pendingPhotos().length+pendingComments().length+pendingSuggestions().length+pendingAds().length}
 function designHTML(){
-  if(ui.mod)ui.dtab='acct';
-  return'<div class="dlg-in"><h3>'+(ui.mod?'حسابي':'لوحة التحكم')+'</h3><div class="dtabs">'+(ui.mod?DTABS_MOD:DTABS).map(function(x){return'<button class="dtab" data-act="dtab" data-t="'+x[0]+'" aria-pressed="'+(ui.dtab===x[0])+'">'+x[1]+(x[0]==='inbox'&&unreadMessages()?' ('+unreadMessages()+')':'')+'</button>'}).join('')+'</div><div id="dbody">'+DBODY[ui.dtab]()+'</div><div class="ed-actions"><button class="primary" data-close>تم</button></div></div>';
+  if(ui.mod){ui.dtab='acct';return'<div class="pnl"><div class="pnl-top"><h3>⚙️ حسابي</h3><button class="pnl-x" data-close aria-label="إغلاق">×</button></div><div id="dbody" class="pnl-body dlg-in">'+DBODY.acct()+'</div></div>'}
+  if(!DBODY[ui.dtab]||ui.dtab==='acct')ui.dtab='home';
+  var g=pgroupOf(ui.dtab),badge=pendTotal()+unreadMessages(),um=unreadMessages();
+  var sub=g.t.length>1?'<div class="pnl-sub">'+g.t.map(function(k){return'<button class="dtab" data-act="dtab" data-t="'+k+'" aria-pressed="'+(ui.dtab===k)+'">'+TABN[k]+(k==='inbox'&&um?' ('+um+')':'')+(k==='review'&&pendTotal()?' ('+pendTotal()+')':'')+'</button>'}).join('')+'</div>':'';
+  return'<div class="pnl"><div class="pnl-top"><h3>'+g.ic+' '+g.n+'</h3><button class="pnl-x" data-close aria-label="إغلاق">×</button></div>'+sub+
+    '<div id="dbody" class="pnl-body dlg-in">'+DBODY[ui.dtab]()+'</div>'+
+    '<nav class="pnl-nav" aria-label="أقسام لوحة التحكم">'+PGROUPS.map(function(x){return'<button data-act="dtab" data-t="'+x.t[0]+'" aria-pressed="'+(x===g)+'"><span class="ni" aria-hidden="true">'+x.ic+'</span>'+x.n+(x.id==='content'&&badge?'<span class="nb">'+nf(badge)+'</span>':'')+'</button>'}).join('')+'</nav></div>';
 }
-function refreshDesign(){var d=$('design');if(d.open){var y=d.scrollTop;d.innerHTML=designHTML();d.scrollTop=y;if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods();if(ui.dtab==='log')loadActivityLog()}}
-function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();openDlg(d);if(ui.dtab==='stats')loadStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods();if(ui.dtab==='log')loadActivityLog()}
+function panelLoaders(){if(ui.dtab==='stats')loadStats();if(ui.dtab==='home')loadHomeStats();if(ui.dtab==='inbox')loadInbox();if(ui.dtab==='mods')loadMods();if(ui.dtab==='log')loadActivityLog()}
+function refreshDesign(){var d=$('design');if(!d.open)return;var ob=d.querySelector('.pnl-body'),y=(ob&&ui.lastDtab===ui.dtab)?ob.scrollTop:0;d.innerHTML=designHTML();var nb=d.querySelector('.pnl-body');if(nb)nb.scrollTop=y;ui.lastDtab=ui.dtab;panelLoaders()}
+function openDesign(tab){if(tab)ui.dtab=tab;var d=$('design');d.innerHTML=designHTML();ui.lastDtab=ui.dtab;openDlg(d);panelLoaders()}
+async function loadHomeStats(){
+  if(!$('hm-today')||!sb)return;
+  var r=await withTimeout(sb.rpc('visit_stats'),9000,null),a=$('hm-today'),b=$('hm-week');
+  if(!a)return;
+  if(r&&!r.error&&r.data){a.textContent=nf(+r.data.today||0);if(b)b.textContent=nf(+r.data.last7||0)}
+  else{a.textContent='—';if(b)b.textContent='—'}
+}
+function areaChart(days){
+  var n=days.length;if(!n)return'<p class="hint">لا توجد بيانات بعد.</p>';
+  var W=320,H=130,L=8,T=10,B=10,max=1;days.forEach(function(x){if(+x.n>max)max=+x.n});
+  var step=n>1?(W-2*L)/(n-1):0,pts=days.map(function(x,i){return[L+i*step,T+(H-T-B)*(1-(+x.n||0)/max)]});
+  var line=pts.map(function(p,i){return(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)}).join('');
+  var area=line+'L'+pts[n-1][0].toFixed(1)+' '+(H-B)+'L'+pts[0][0].toFixed(1)+' '+(H-B)+'Z';
+  var grid=[0,.5,1].map(function(f){var y=(T+(H-T-B)*f).toFixed(1);return'<line x1="'+L+'" x2="'+(W-L)+'" y1="'+y+'" y2="'+y+'" stroke="rgba(22,22,20,.1)" stroke-dasharray="3 4"/>'}).join('');
+  var last=pts[n-1];
+  return'<div class="chart"><svg viewBox="0 0 '+W+' '+H+'" dir="ltr" role="img" aria-label="الزوار كل يوم"><defs><linearGradient id="vcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f7a45" stop-opacity=".35"/><stop offset="1" stop-color="#1f7a45" stop-opacity="0"/></linearGradient></defs>'+grid+
+    '<path d="'+area+'" fill="url(#vcg)"/><path d="'+line+'" fill="none" stroke="#1f7a45" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="4" fill="#1f7a45" stroke="#fff" stroke-width="2"/></svg></div>';
+}
+/* ---------- settings history (kept on this device) ---------- */
+var HIST_KEY='malha-hist';
+function histList(){try{var l=JSON.parse(ls(HIST_KEY)||'[]');return Array.isArray(l)?l:[]}catch(e){return[]}}
+function histSave(L){while(L.length>12)L.pop();ls(HIST_KEY,JSON.stringify(L));if(ls(HIST_KEY)===null&&L.length>3){L.splice(3);ls(HIST_KEY,JSON.stringify(L))}}
+function histRecord(prev,force){if(!prev)return;var L=histList();if(!force&&L.length&&Date.now()-L[0].t<5*60*1000)return;L.unshift({t:Date.now(),d:prev});histSave(L)}
+function histRestore(i){
+  var h=histList()[i];if(!h)return;
+  try{
+    var d=JSON.parse(h.d),cur=JSON.stringify(site),dir=site.directory;
+    site=normalize(merge(defaults(),d));site.directory=dir;
+    histRecord(cur,true);queueSettings();renderAll();refreshDesign();
+    toast('تم الاسترجاع. والشكل الذي كان قبله محفوظ أعلى القائمة لو أردت الرجوع.');
+  }catch(e){toast('تعذّر الاسترجاع.')}
+}
+/* ---------- bulk review ---------- */
+function bulkBarHTML(){
+  var K=[['posts','المشاركات',pendingPosts().length],['reviews','آراء الزوار',pendingReviews().length],['comments','التعليقات',pendingComments().length],['photos','الصور',pendingPhotos().length],['ads','الإعلانات',pendingAds().length]].filter(function(x){return x[2]});
+  if(!K.length)return'';
+  return'<div class="bulk"><h4>إجراء جماعي</h4>'+K.map(function(x){return'<div class="rowline" style="background:none;padding:6px 0;margin:0"><span class="grow">'+x[1]+' ('+nf(x[2])+')</span><button class="mini" data-act="bulk" data-k="'+x[0]+'" data-op="ok">✅ قبول الكل</button><button class="mini del" data-act="bulk" data-k="'+x[0]+'" data-op="del">🗑 حذف الكل</button></div>'}).join('')+
+    '<p class="hint" style="margin:6px 0 0">راجع المحتوى تحت قبل القبول الجماعي. الحذف نهائي.</p></div>';
+}
+async function bulkRun(k,op){
+  var ok=0,fail=0,ids,L;
+  function done(){renderAll();refreshDesign();updateBar();toast(fail?('تم '+nf(ok)+'، وتعذّر '+nf(fail)+'. جرّب مرة ثانية.'):('تم تنفيذ '+nf(ok)+' عنصر.'));logActivity('bulk',k+':'+op+':'+ok)}
+  if(k==='posts'){
+    L=pendingPosts();if(!L.length)return;
+    if(op==='del'){
+      var r=await sb.from('posts').delete().in('id',L.map(function(p){return p.id})).select('id');
+      if(r.error||!r.data){fail=L.length}else{var gone={};r.data.forEach(function(x){gone[x.id]=1});ok=r.data.length;fail=L.length-ok;removeFiles(L.filter(function(p){return gone[p.id]&&p.image}).map(function(p){return p.image}));posts=posts.filter(function(p){return!gone[p.id]})}
+    }else{
+      for(var i=0;i<L.length;i++){
+        var p=L[i],c=catOf(p.cat),patch={status:'approved'};
+        if(c&&c.kind==='news'&&!p.expiresAt)patch.expires_at=new Date(Date.now()+10*864e5).toISOString();
+        var r2=await sb.from('posts').update(patch).eq('id',p.id).select().single();
+        if(r2.error||!r2.data){fail++;continue}
+        ok++;var np=fromRow(r2.data);posts=posts.map(function(x){return x.id===np.id?np:x});
+      }
+    }
+    return done();
+  }
+  if(k==='reviews'||k==='comments'){
+    L=k==='reviews'?pendingReviews():pendingComments();if(!L.length)return;ids=L.map(function(x){return x.id});
+    var q=op==='del'?sb.from(k).delete().in('id',ids).select('id'):sb.from(k).update({status:'approved'}).in('id',ids).select('id');
+    var r3=await q;
+    if(r3.error||!r3.data){fail=L.length}else{
+      var hit={};r3.data.forEach(function(x){hit[String(x.id)]=1});ok=r3.data.length;fail=L.length-ok;
+      var arr=k==='reviews'?reviews:comments;
+      if(op==='del')arr=arr.filter(function(x){return!hit[String(x.id)]});else arr.forEach(function(x){if(hit[String(x.id)])x.status='approved'});
+      if(k==='reviews')reviews=arr;else comments=arr;
+    }
+    return done();
+  }
+  if(k==='photos'){
+    L=pendingPhotos();if(!L.length)return;
+    if(op==='del'){
+      var r4=await sb.from('photos').delete().in('id',L.map(function(p){return p.id})).select('id');
+      if(r4.error||!r4.data){fail=L.length}else{var g2={};r4.data.forEach(function(x){g2[x.id]=1});ok=r4.data.length;fail=L.length-ok;removeFiles(L.filter(function(p){return g2[p.id]}).map(function(p){return p.url}));photos=photos.filter(function(p){return!g2[p.id]})}
+    }else{
+      for(var j=0;j<L.length;j++){
+        var ns=nextSort(),r5=await sb.from('photos').update({status:'approved',sort:ns}).eq('id',L[j].id).select('id');
+        if(r5.error||!r5.data||!r5.data.length){fail++;continue}
+        ok++;L[j].status='approved';L[j].sort=ns;
+      }
+      photos.sort(function(x,y){return(x.sort-y.sort)||0});
+    }
+    return done();
+  }
+  if(k==='ads'){
+    L=pendingAds();if(!L.length)return;ids=L.map(function(a){return a.id});
+    if(op==='del'){
+      var r6=await sb.from('ads').delete().in('id',ids).select('id');
+      if(r6.error||!r6.data){fail=L.length}else{var g3={};r6.data.forEach(function(x){g3[String(x.id)]=1});ok=r6.data.length;fail=L.length-ok;L.forEach(function(a){if(g3[a.id])removeFiles(a.images)});ads=ads.filter(function(a){return!g3[a.id]})}
+    }else{
+      var exp=new Date(Date.now()+30*864e5).toISOString(),now=new Date().toISOString();
+      var r7=await sb.from('ads').update({status:'approved',approved_at:now,expires_at:exp,reports:0}).in('id',ids).select('id');
+      if(r7.error||!r7.data){fail=L.length}else{var g4={};r7.data.forEach(function(x){g4[String(x.id)]=1});ok=r7.data.length;fail=L.length-ok;ads.forEach(function(a){if(g4[a.id]){a.status='approved';a.approved=now;a.expires=exp;a.reports=0}})}
+    }
+    return done();
+  }
+}
+/* ---------- preview as a visitor ---------- */
+function previewOn(){
+  $('design').close();ui.preview=true;exitEdit();$('fab').hidden=true;
+  var b=$('pv');if(!b){b=document.createElement('button');b.id='pv';b.className='pv-pill';b.dataset.act='preview-off';b.textContent='↩ رجوع للتحرير';document.body.appendChild(b)}
+  window.scrollTo(0,0);toast('هذا ما يراه الزائر الآن.');
+}
+function previewOff(){var b=$('pv');if(b)b.remove();ui.preview=false;enterEdit()}
 function afterSet(path){
   if(path==='design.tscale'){fitHero();return}
   if(path.indexOf('design.')===0&&['scale','space','shape','disp','body','dispLat'].indexOf(path.slice(7))>=0){applyDesign();setTimeout(fitHero,400);return}
@@ -3025,7 +3243,7 @@ async function doLogin(){
 }
 /* ---------- moderators: what they may not touch (the database enforces it too; this only hides and explains) ---------- */
 var MOD_BLOCK={};
-('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
+('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group hist-restore backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
 function applyRole(){
   root.classList.toggle('modmode',!!ui.mod);
   var st=$('mod-css');if(!st){st=document.createElement('style');st.id='mod-css';document.head.appendChild(st)}
@@ -3815,7 +4033,7 @@ savePost=(function(orig){return async function(a){
   var bs=[].slice.call(document.querySelectorAll('#editor [data-act^="post-save"]'));bs.forEach(function(x){x.disabled=true});
   try{return await orig(a)}finally{busy.savePost=false;bs.forEach(function(x){x.disabled=false})}
 }})(savePost);
-addYouTube=guard('yt',addYouTube);addVideo=guard('video',addVideo);addAudio=guard('audio',addAudio);savePoi=guard('poi',savePoi);recSave=guard('rec',recSave);addMod=guard('mod',addMod);
+addYouTube=guard('yt',addYouTube);addVideo=guard('video',addVideo);addAudio=guard('audio',addAudio);savePoi=guard('poi',savePoi);recSave=guard('rec',recSave);addMod=guard('mod',addMod);bulkRun=guard('bulk',bulkRun);
 document.addEventListener('click',function(e){
   var tg=e.target;
   var close=tg.closest&&tg.closest('[data-close]');
@@ -4039,7 +4257,12 @@ document.addEventListener('click',function(e){
     case'rev-send':sendReview();break;
     case'rev-ok':approveReview(id);break;
     case'rev-del':if(confirmTap('rd'+id,'اضغط حذف مرة ثانية للتأكيد')){deleteReview(id)}break;
+    case'bulk':if(a.dataset.op==='del'&&!confirmTap('bk'+a.dataset.k,'اضغط مرة ثانية لحذف الكل نهائياً'))break;bulkRun(a.dataset.k,a.dataset.op);break;
+    case'hist-restore':if(confirmTap('hr'+i,'اضغط مرة ثانية للاسترجاع'))histRestore(i);break;
+    case'preview-on':previewOn();break;
+    case'preview-off':previewOff();break;
   }
+  if(/^(tile-(up|down|on|del|img-del|add|save)|link-(add|del))$/.test(act))refreshDesign();
 });
 document.addEventListener('input',function(e){
   var tg=e.target;
