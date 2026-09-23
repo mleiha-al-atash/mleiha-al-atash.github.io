@@ -745,6 +745,28 @@ html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.l
 .rd img{object-fit:contain;max-height:72dvh;background:color-mix(in srgb,var(--fg3) 6%,transparent)}
 .person-img{object-position:center 22%}
 </style>
+<style id="mobile-v3">
+a.post-btn,a.fc,a.person-btn{text-decoration:none;color:inherit}
+/* featured: a swipeable strip on phones instead of one tall card after another */
+@media (max-width:799px){
+  .feat-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--pad) * -1);padding:4px var(--pad) 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .feat-grid::-webkit-scrollbar{display:none}
+  .feat-grid .fc{flex:0 0 84%;scroll-snap-align:center}
+  .feat-grid .fc .fc-media,.feat-grid .fc:first-child .fc-media{aspect-ratio:4/3;height:auto}
+  .feat-grid .fc .fc-title,.feat-grid .fc:first-child .fc-title{font-size:clamp(1.4rem,6vw,1.9rem)}
+}
+/* bottom navigation on phones and tablets */
+.bnav{display:none}
+@media (max-width:999px){
+  .bnav{position:fixed;z-index:18;inset-inline:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg1) 94%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--fg1);border-top:1px solid color-mix(in srgb,var(--fg1) 16%,transparent);box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+  .bnav a,.bnav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;padding:2px;border:0;background:none;color:inherit;font:inherit;font-size:.72rem;font-weight:600;line-height:1.2;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .bnav a:active,.bnav button:active{opacity:.6}
+  .bnav svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  html:not(.editing) body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  html:not(.editing) .fab,.pv-pill{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  html:not(.editing) .toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+</style>
 <style id="panel-v2">
 /* ===== owner control panel v2: full-screen, grouped, bottom navigation ===== */
 #design{width:min(760px,100%);height:min(88dvh,860px);max-height:none;padding:0;overflow:hidden}
@@ -1396,7 +1418,7 @@ function annHTML(){
 }
 
 /* ---------- share ---------- */
-function shareUrl(kind,id){return location.origin+location.pathname+(kind?'#'+kind+'='+encodeURIComponent(id):'')}
+function shareUrl(kind,id){if(kind==='p')return BASEURL+'?p='+encodeURIComponent(id);return location.origin+location.pathname+(kind?'#'+kind+'='+encodeURIComponent(id):'')}
 function shareBar(kind,id,title){
   var url=shareUrl(kind,id),msg=(title?title+'\n':'')+url;
   return'<div class="share"><span class="share-l">'+esc(t('share'))+'</span>'+
@@ -1476,9 +1498,9 @@ function featuredHTML(s){
   var list=featuredList();
   if(!list.length&&!ui.edit)return'';
   var cards=list.map(function(p){
-    var img=safeUrl(p.image),c=catOf(p.cat);
-    return'<button class="fc" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<span class="fc-media"><img class="fc-bg" alt="" aria-hidden="true" loading="lazy" src="'+img+'"><img class="fc-img" alt="" loading="lazy" src="'+img+'"></span>':'<span class="fc-ph">'+STAR0+'</span>')+
-      '<span class="fc-body"><span class="tag">'+esc(c?tx(c.one):p.cat)+'</span><span class="fc-title">'+esc(pTitle(p))+'</span><span class="fc-ex">'+esc(excerpt(p,150))+'</span></span></button>';
+    var img=pThumb(p),c=catOf(p.cat);
+    return'<a class="fc" href="?p='+encodeURIComponent(p.id)+'" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<span class="fc-media"><img class="fc-bg" alt="" aria-hidden="true" loading="lazy" src="'+img+'"><img class="fc-img" alt="" loading="lazy" src="'+img+'"></span>':'<span class="fc-ph">'+STAR0+'</span>')+
+      '<span class="fc-body"><span class="tag">'+esc(c?tx(c.one):p.cat)+'</span><span class="fc-title">'+esc(pTitle(p))+'</span><span class="fc-ex">'+esc(excerpt(p,150))+'</span></span></a>';
   }).join('');
   return secOpen(s)+secTitle(s)+(list.length?'<div class="feat-grid">'+cards+'</div>':'<div class="ow-hint">لا توجد مواد مثبّتة بعد. من قسم الحكايات اضغط «تثبيت» على أي حكاية أو مقال ليظهر هنا في بداية الموقع.</div>')+'</section>';
 }
@@ -1565,19 +1587,19 @@ function ownerTools(p){
   return'<div class="row-tools"><button class="tool" data-act="post-pin" data-id="'+id+'">'+(p.pinned?'إلغاء التثبيت':'📌 تثبيت')+'</button><button class="tool" data-act="post-hide" data-id="'+id+'">'+(p.status==='draft'?'نشر':'إخفاء')+'</button><button class="tool" data-act="post-edit" data-id="'+id+'">تعديل</button><button class="tool danger" data-act="post-del" data-id="'+id+'">حذف</button></div>';
 }
 function postRow(p,tools){
-  var img=safeUrl(p.image),isNews=(function(){var c=catOf(p.cat);return c&&c.kind==='news'})();
-  return'<article class="post'+(isNews?' post-news':'')+'" data-s="'+esc((pTitle(p)+' '+pBody(p)).toLowerCase().slice(0,700))+'"><button class="post-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="post-thumb" alt="" loading="lazy" src="'+img+'">':'')+
-    '<span class="post-text"><span class="post-title">'+(isNews?'<b class="news-badge">'+esc(t('news_badge'))+'</b> ':'')+esc(pTitle(p))+'</span><span class="post-meta">'+postMeta(p)+'</span></span></button>'+tools+'</article>';
+  var img=pThumb(p),isNews=(function(){var c=catOf(p.cat);return c&&c.kind==='news'})();
+  return'<article class="post'+(isNews?' post-news':'')+'" data-s="'+esc((pTitle(p)+' '+pBody(p)).toLowerCase().slice(0,700))+'"><a class="post-btn" href="?p='+encodeURIComponent(p.id)+'" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="post-thumb" alt="" loading="lazy" src="'+img+'">':'')+
+    '<span class="post-text"><span class="post-title">'+(isNews?'<b class="news-badge">'+esc(t('news_badge'))+'</b> ':'')+esc(pTitle(p))+'</span><span class="post-meta">'+postMeta(p)+'</span></span></a>'+tools+'</article>';
 }
 function teamCard(p){
-  var img=safeUrl(p.image);
-  return'<article class="person team-card" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><button class="person-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
-    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(p.place?'<span class="team-role">'+esc(p.place)+'</span>':'')+'</button>'+ownerTools(p)+'</article>';
+  var img=pThumb(p);
+  return'<article class="person team-card" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><a class="person-btn" href="?p='+encodeURIComponent(p.id)+'" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
+    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(p.place?'<span class="team-role">'+esc(p.place)+'</span>':'')+'</a>'+ownerTools(p)+'</article>';
 }
 function personCard(p){
-  var img=safeUrl(p.image),ll=lifeLine(p);
-  return'<article class="person" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><button class="person-btn" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
-    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(ll?'<span class="person-dates">'+esc(ll)+'</span>':'')+'</button>'+ownerTools(p)+'</article>';
+  var img=pThumb(p),ll=lifeLine(p);
+  return'<article class="person" data-s="'+esc((pTitle(p)+' '+pBody(p)+' '+(p.place||'')).toLowerCase().slice(0,700))+'"><a class="person-btn" href="?p='+encodeURIComponent(p.id)+'" data-act="post-open" data-id="'+esc(p.id)+'">'+(img?'<img class="person-img" alt="" loading="lazy" src="'+img+'">':'<span class="person-ph">'+STAR0+'</span>')+
+    '<span class="person-name">'+esc(pTitle(p))+'</span>'+(ll?'<span class="person-dates">'+esc(ll)+'</span>':'')+'</a>'+ownerTools(p)+'</article>';
 }
 /* posts in a category "group": stories (قصص/مقالات/أحداث/أخبار), deaths (وفيات القرية) or volunteers (فريق التطوع).
    each group is its own page section with its own tab bar, drawn by the same generic code. */
@@ -1625,10 +1647,12 @@ function deathsHTML(s){return postGroupHTML(s,'deaths','pending-deaths','إضا�
 function volunteersHTML(s){return postGroupHTML(s,'volunteers','pending-volunteers','إضافة خبر أو عضو')}
 
 /* ---------- photos and videos ---------- */
+function pThumb(p){return safeUrl(p&&p.extra&&p.extra.thumb)||safeUrl(p&&p.image)}
+function makeThumb(blob){return readImage(blob,800,.74)}
 function mediaThumb(m){
   if(m.kind==='youtube'&&/^[A-Za-z0-9_-]{11}$/.test(m.yt||''))return'https://i.ytimg.com/vi/'+m.yt+'/hqdefault.jpg';
   if(m.kind==='video')return safeUrl(m.poster);
-  return safeUrl(m.url);
+  return safeUrl(m.poster)||safeUrl(m.url);
 }
 function isPending(p){return p.status==='pending'}
 function viewable(p){return p.kind!=='audio'&&!isPending(p)}
@@ -1673,7 +1697,7 @@ function historyHTML(s){
   var list=shown().filter(isTL).sort(function(a,b){return yearKey(a)-yearKey(b)||((a.created||'')<(b.created||'')?-1:1)});
   if(!list.length&&!ui.edit)return'';
   var items=list.map(function(p){
-    var img=safeUrl(p.image),ex=excerpt(p,240),id=esc(p.id);
+    var img=pThumb(p),ex=excerpt(p,240),id=esc(p.id);
     return'<li class="tl-item"><div class="tl-year">'+esc(dig(yearLabel(p)))+'</div><div class="tl-card">'+(img?'<img class="tl-img" alt="" loading="lazy" src="'+img+'">':'')+'<h3 class="tl-title">'+esc(pTitle(p))+'</h3>'+(ex?'<p class="tl-text">'+esc(ex)+'</p>':'')+'<div class="row-tools" style="padding:0"><button class="tool" data-act="post-open" data-id="'+id+'">'+t('hist_more')+'</button></div>'+ownerTools(p)+'</div></li>';
   }).join('');
   var tl=(site.cats.filter(function(c){return c.kind==='timeline'})[0]||{}).id||'history';
@@ -1845,7 +1869,7 @@ function renderAll(){
   root.classList.toggle('lockdown',lock);
   var a=annHTML();root.classList.toggle('has-ann',!!a);
   applyDesign();
-  app.innerHTML=navHTML()+a+(lock&&!maint?'<div class="lock-bar" role="status">⏸ '+esc(t('lockdown_notice'))+'</div>':'')+(maint?maintHTML():'<main id="top">'+site.sections.filter(function(s){return s.on}).map(secHTML).join('')+'</main>')+footHTML();
+  app.innerHTML=navHTML()+a+(lock&&!maint?'<div class="lock-bar" role="status">⏸ '+esc(t('lockdown_notice'))+'</div>':'')+(maint?maintHTML():'<main id="top">'+site.sections.filter(function(s){return s.on}).map(secHTML).join('')+'</main>')+footHTML()+(maint?'':bnavHTML());
   afterRender();
 }
 function maintHTML(){
@@ -2355,8 +2379,9 @@ async function onFiles(files){
     var up=await upload(blob,kind==='cover'?'covers':kind==='emblem'?'site':(kind==='blk'||kind==='tile')?'blocks':'photos',kind==='emblem'?'png':'jpg',kind==='emblem'?'image/png':'image/jpeg');
     if(!up){failed++;continue}
     if(kind==='photos'){
-      var r=await sb.from('photos').insert({url:up.url,kind:'image',caption:'',caption_en:'',sort:nextSort()}).select().single();
-      if(r.error||!r.data){failed++;removeFiles([up.url]);continue}
+      var thu=null;try{var tbb=await makeThumb(blob),tup=await upload(tbb,'photos');if(tup)thu=tup.url}catch(e){}
+      var r=await sb.from('photos').insert({url:up.url,kind:'image',poster_url:thu,caption:'',caption_en:'',sort:nextSort()}).select().single();
+      if(r.error||!r.data){failed++;removeFiles([up.url].concat(thu?[thu]:[]));continue}
       photos.push(photoFromRow(r.data));
     }else if(kind==='cover'){site.cover.imgs.push(up.url);queueSettings()}
     else if(kind==='emblem'){if(site.emblem)removeFiles([site.emblem]);site.emblem=up.url;queueSettings()}
@@ -2569,7 +2594,8 @@ function buildChrome(){
     d.addEventListener('close',function(){
       if(d.id==='recdlg')recCleanup();
       if(d.id==='editor'||d.id==='submit'||d.id==='login'||d.id==='poidlg'||d.id==='tiledlg'||d.id==='cmtdlg'||d.id==='contactdlg'||d.id==='ytdlg'||d.id==='recdlg'||d.id==='viewer')d.innerHTML='';
-      if(d.id==='reader'||d.id==='viewer'||d.id==='adlg'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+      if(d.id==='reader'){clearPostSEO()}
+      if(d.id==='viewer'||d.id==='adlg'){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
       if(d.id==='reader'||d.id==='adlg')d.innerHTML='';
       if(!document.querySelector('dialog[open]'))root.classList.remove('modal');
     });
@@ -2766,6 +2792,8 @@ gen:function(){
     '<h4>الطقس وعداد الزيارات</h4>'+toggleRow('إظهار حالة الطقس أعلى الواجهة','showWeather')+toggleRow('إظهار عداد الزيارات أعلى الواجهة','showVisitCounter')+
     '<h4>الموقع قيد الصيانة</h4><p class="hint">يظهر للزوار رسالة بسيطة بدل الموقع، وأنت والمشرفون تدخلون وتعملون عادي.</p>'+toggleRow('تفعيل وضع الصيانة','maintenance.on')+textRow('نص الصيانة (عربي)','maintenance.text','ar')+textRow('Maintenance text (English)','maintenance.text','en',' dir="ltr"')+
     '<h4>إيقاف طارئ شامل</h4><p class="hint">يوقف كل مشاركات الزوار بالموقع دفعة وحدة (حكايات، وفيات، فريق، صور، آراء، تعليقات، خدمات، إعلانات). للمالك فقط.</p><div class="ed-actions"><button class="'+(site.lockdown?'primary':'')+'" data-act="lockdown-toggle">'+(site.lockdown?'⏸ الإيقاف الطارئ مفعّل — اضغط للإلغاء':'تفعيل الإيقاف الطارئ')+'</button></div>'+
+    '<h4>الظهور في جوجل</h4><p class="hint">كل حكاية صار لها رابط خاص يقرؤه جوجل. نزّل «خريطة الموقع» وارفعها على GitHub مكان sitemap.xml القديم، كل شهر أو بعد إضافة حكايات كثيرة.</p><div class="ed-actions"><button data-act="sitemap">🗺 تنزيل خريطة الموقع</button></div>'+
+    '<h4>تسريع الصور</h4><p class="hint">الصور الجديدة تُحفظ الآن بنسخة صغيرة للعرض السريع. هذا الزر يصنع نسخاً صغيرة للصور القديمة، مرة واحدة فقط. أبقِ الصفحة مفتوحة حتى ينتهي.</p><div class="ed-actions"><button data-act="thumbs-gen">⚡ تسريع الصور القديمة</button></div>'+
     '<h4>نسخة احتياطية</h4><p class="hint">تنزّل ملفاً فيه الحكايات والإعدادات والتعليقات والرسائل وروابط المعرض. الصور والفيديوهات نفسها تبقى في Supabase. خذ نسخة كل شهر واحفظها في مكان آمن.'+(ls('malha-lastbackup')?' آخر نسخة من هذا الجهاز: '+esc(ls('malha-lastbackup'))+'.':' لم تأخذ نسخة من هذا الجهاز بعد.')+'</p><div class="ed-actions"><button data-act="backup">📥 تنزيل نسخة احتياطية</button></div>'+
     pwHTML()+
     '<h4>الحساب</h4><div class="ed-actions"><button data-act="design-reset">استعادة التصميم الافتراضي</button><button data-act="logout">تسجيل الخروج</button></div>';
@@ -2890,6 +2918,63 @@ async function loadHomeStats(){
   if(!a)return;
   if(r&&!r.error&&r.data){a.textContent=nf(+r.data.today||0);if(b)b.textContent=nf(+r.data.last7||0)}
   else{a.textContent='—';if(b)b.textContent='—'}
+}
+async function genThumbs(){
+  var P=photos.filter(function(p){return p.kind==='image'&&!p.poster&&safeUrl(p.url)}),Q=posts.filter(function(p){return safeUrl(p.image)&&!(p.extra&&p.extra.thumb)});
+  var n=P.length+Q.length,ok=0,fail=0,k=0;
+  if(!n){toast('كل الصور جاهزة، لا شيء يحتاج تسريعاً.');return}
+  async function mk(u,folder){var r=await fetch(u,{mode:'cors'});if(!r.ok)throw 0;var b=await r.blob(),tb=await makeThumb(b),up=await upload(tb,folder);if(!up)throw 0;return up.url}
+  for(var i=0;i<P.length;i++){
+    k++;toast('جاري تسريع الصور ('+nf(k)+' من '+nf(n)+')... لا تغلق الصفحة');
+    try{var u=await mk(P[i].url,'photos'),r=await sb.from('photos').update({poster_url:u}).eq('id',P[i].id).select('id');
+      if(r.error||!r.data||!r.data.length){removeFiles([u]);fail++;continue}P[i].poster=u;ok++}catch(e){fail++}
+  }
+  for(var j=0;j<Q.length;j++){
+    k++;toast('جاري تسريع الصور ('+nf(k)+' من '+nf(n)+')... لا تغلق الصفحة');
+    try{var u2=await mk(Q[j].image,'posts'),ex=Object.assign({},Q[j].extra||{},{thumb:u2}),r2=await sb.from('posts').update({extra:ex}).eq('id',Q[j].id).select('id');
+      if(r2.error||!r2.data||!r2.data.length){removeFiles([u2]);fail++;continue}Q[j].extra=ex;ok++}catch(e){fail++}
+  }
+  renderAll();refreshDesign();
+  toast(fail?('تم تسريع '+nf(ok)+' صورة، وتعذّر '+nf(fail)+'. جرّب الزر مرة ثانية لاحقاً.'):('تم تسريع '+nf(ok)+' صورة ✅'));
+}
+/* ---------- search engines: a readable address and details for each story ---------- */
+var BASEURL=((document.querySelector('link[rel="canonical"]')||{}).href)||(location.origin+location.pathname);
+function setMeta(sel,attr,val){var m=document.querySelector(sel);if(m)m.setAttribute(attr,val)}
+function setPostSEO(p){
+  var url=BASEURL+'?p='+encodeURIComponent(p.id),brand=lang==='ar'?site.brand.ar:site.brand.en,desc=excerpt(p,155)||t('doc_desc');
+  try{var q=new URLSearchParams(location.search);q.set('p',p.id);history.replaceState(null,'',location.pathname+'?'+q.toString())}catch(e){}
+  document.title=pTitle(p)+' | '+brand;
+  setMeta('meta[name="description"]','content',desc);setMeta('link[rel="canonical"]','href',url);
+  var img=safeUrl(p.image),c=catOf(p.cat),ld={'@context':'https://schema.org','@type':(c&&c.kind==='people')?'Person':'Article',url:url,inLanguage:lang};
+  if(ld['@type']==='Person'){ld.name=pTitle(p);ld.description=desc;if(img)ld.image=img}
+  else{ld.headline=pTitle(p).slice(0,110);ld.description=desc;if(img)ld.image=[img];if(p.created)ld.datePublished=p.created;if(p.author)ld.author={'@type':'Person',name:p.author};ld.publisher={'@type':'Organization',name:brand};ld.mainEntityOfPage=url}
+  var el=$('ld-post');if(!el){el=document.createElement('script');el.type='application/ld+json';el.id='ld-post';document.head.appendChild(el)}
+  el.textContent=JSON.stringify(ld);
+}
+function clearPostSEO(){
+  try{var q=new URLSearchParams(location.search);q.delete('p');var qs=q.toString();history.replaceState(null,'',location.pathname+(qs?'?'+qs:''))}catch(e){}
+  setMeta('link[rel="canonical"]','href',BASEURL);document.title=t('doc_title');
+  var el=$('ld-post');if(el)el.remove();updateSEO();
+}
+function sitemapDownload(){
+  var d=todayISO(),list=approved().filter(function(p){var c=catOf(p.cat);return!(c&&c.kind==='news')&&!p.expiresAt});
+  var x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>'+esc(BASEURL)+'</loc><lastmod>'+d+'</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>\n'+
+    list.map(function(p){var lm=(p.created||'').slice(0,10);return'  <url><loc>'+esc(BASEURL+'?p='+encodeURIComponent(p.id))+'</loc>'+(/^\d{4}-\d\d-\d\d$/.test(lm)?'<lastmod>'+lm+'</lastmod>':'')+'<priority>0.7</priority></url>\n'}).join('')+'</urlset>\n';
+  var blob=new Blob([x],{type:'application/xml'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='sitemap.xml';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
+  toast('تم تنزيل sitemap.xml وفيه '+nf(list.length+1)+' رابطاً. ارفعه على GitHub مكان القديم.');
+}
+/* ---------- mobile bottom navigation ---------- */
+var BNAV={stories:['book','الحكايات','Stories'],photos:['photos','الصور','Photos'],directory:['phone','الخدمات','Services'],ads:['tag','الإعلانات','Ads'],map:['pin','الخريطة','Map'],history:['doc','التاريخ','History'],deaths:['star','الوفيات','Deaths'],audio:['mic','أصوات','Voices'],reviews:['chat','الآراء','Reviews'],volunteers:['people','الفريق','Team']};
+function bnavHTML(){
+  if(ui.edit)return'';
+  var have={};navItems().forEach(function(x){have[x.id]=1});
+  var pick=['stories','photos','directory','ads','map','history','deaths','audio','reviews','volunteers'].filter(function(id){return have[id]}).slice(0,3);
+  function it(href,ic,label,act){return(act?'<button type="button" data-act="'+act+'">':'<a href="'+href+'">')+'<svg viewBox="0 0 24 24" aria-hidden="true">'+ic+'</svg><span>'+esc(label)+'</span>'+(act?'</button>':'</a>')}
+  return'<nav class="bnav" aria-label="'+(lang==='ar'?'تنقل سريع':'Quick navigation')+'">'+it('#top',TILEICONS.home,lang==='ar'?'الرئيسية':'Home')+
+    pick.map(function(id){var b=BNAV[id];return it('#'+id,TILEICONS[b[0]],lang==='ar'?b[1]:b[2])}).join('')+
+    it('','<path d="M3 7h18M3 12h18M3 17h18"/>',t('menu'),'menu')+'</nav>';
 }
 function areaChart(days){
   var n=days.length;if(!n)return'<p class="hint">لا توجد بيانات بعد.</p>';
@@ -3074,13 +3159,15 @@ async function savePost(approveToo){
   if(approveToo)edPost.status='approved';
   edPost.publishAt=fromLocalInput($('p-publish').value);
   if(edPost.status==='approved'&&kind==='news'&&!edPost.expiresAt)edPost.expiresAt=new Date(Date.now()+10*864e5).toISOString();
-  var old=posts.filter(function(x){return x.id===edPost.id})[0],oldImage=old?old.image:'';
+  var old=posts.filter(function(x){return x.id===edPost.id})[0],oldImage=old?old.image:'',oldThumb=old&&old.extra?old.extra.thumb||'':'';
   toast('جاري الحفظ...');
   if(edPost._blob){
     var up=await upload(edPost._blob,'posts');
     if(!up){toast('تعذّر رفع الصورة. جرّب مرة ثانية.');return}
     edPost.image=up.url;
+    try{var etb=await makeThumb(edPost._blob),etu=await upload(etb,'posts');if(etu)edPost.extra.thumb=etu.url;else delete edPost.extra.thumb}catch(e){delete edPost.extra.thumb}
   }
+  if(!edPost.image)delete edPost.extra.thumb;
   var row=toRow(edPost),res;
   if(edPost._new)res=await sb.from('posts').insert(row).select().single();
   else res=await sb.from('posts').update(row).eq('id',edPost.id).select().single();
@@ -3088,6 +3175,7 @@ async function savePost(approveToo){
   var saved=fromRow(res.data);
   if(edPost._new)posts.push(saved);else posts=posts.map(function(x){return x.id===saved.id?saved:x});
   if(oldImage&&oldImage!==saved.image)removeFiles([oldImage]);
+  if(oldThumb&&oldThumb!==((saved.extra||{}).thumb||''))removeFiles([oldThumb]);
   edPost=null;$('editor').close();renderAll();
   toast(saved.status==='approved'?'تم النشر.':'تم الحفظ.');
 }
@@ -3107,7 +3195,7 @@ async function deletePost(id){
   var r=await sb.from('posts').delete().eq('id',id).select('id');
   if(r.error||!r.data||!r.data.length){toast('تعذّر الحذف. جرّب مرة ثانية.');return}
   posts=posts.filter(function(x){return x.id!==id});
-  if(p&&p.image)removeFiles([p.image]);
+  if(p&&p.image)removeFiles([p.image].concat(p.extra&&p.extra.thumb?[p.extra.thumb]:[]));
   renderAll();toast('تم الحذف.');logActivity('post-delete',p?pTitle(p):id);
 }
 async function approveReview(id){
@@ -3200,7 +3288,7 @@ function openReader(id){
   var d=$('reader');
   d.innerHTML='<button class="x" data-close aria-label="'+t('close')+'">×</button><article class="rd'+(people?' people':'')+(team?' team':'')+'">'+(img?'<img alt="" src="'+img+'">':'')+'<div class="post-meta">'+postMeta(p)+'</div><h2>'+esc(pTitle(p))+'</h2>'+
     (people&&lifeLine(p)?'<div class="lifeline">'+esc(lifeLine(p))+'</div>':'')+(c&&c.kind==='timeline'&&yearLabel(p)?'<div class="lifeline">'+esc(dig(yearLabel(p)))+'</div>':'')+'<div class="rd-body">'+body+'</div>'+shareBar('p',p.id,pTitle(p))+cmtBtn('post',p.id)+tools+'</article>';
-  try{history.replaceState(null,'','#p='+encodeURIComponent(p.id))}catch(e){}
+  setPostSEO(p);
   d.scrollTop=0;openDlg(d);
 }
 function stepPhoto(from,dir){var n=photos.length,k=from;for(var c=0;c<n;c++){k=(k+dir+n)%n;if(viewable(photos[k]))return k}return from}
@@ -3253,7 +3341,7 @@ async function doLogin(){
 }
 /* ---------- moderators: what they may not touch (the database enforces it too; this only hides and explains) ---------- */
 var MOD_BLOCK={};
-('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group hist-restore backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
+('tile-up tile-down tile-img tile-img-del tile-edit tile-on tile-del tile-add tile-icon-pick tile-save qa-del qa-add fact-del fact-add photo-intro chip-del chip-add poi-del poi-add poi-icon poi-save link-del link-add blk-img blk-img-del blk-del blk-add stats set preset cover-del cover-add hero-pos emblem-del emblem-add sec-bg sec-up sec-down sec-on sec-align sec-ts cat-up cat-down cat-del cat-kind cat-submit cat-add cat-group hist-restore sitemap thumbs-gen backup design-reset msg-read msg-del mod-add mod-del lockdown-toggle allpost-del allpost-open').split(' ').forEach(function(k){MOD_BLOCK[k]=1});
 function applyRole(){
   root.classList.toggle('modmode',!!ui.mod);
   var st=$('mod-css');if(!st){st=document.createElement('style');st.id='mod-css';document.head.appendChild(st)}
@@ -3426,6 +3514,8 @@ async function backupDownload(){
 
 /* ---------- links to a story or a photo: #p=<id> and #m=<id> ---------- */
 function openFromHash(){
+  var qp=/[?&]p=([A-Za-z0-9_-]{6,64})(?:&|$)/.exec(location.search||'');
+  if(qp){var qpost=posts.filter(function(x){return x.id===qp[1]&&(x.status==='approved'||ui.admin)})[0];if(qpost&&!$('reader').open){openReader(qpost.id);return}}
   var m=/^#(p|m|a)=([A-Za-z0-9_-]{6,64})$/.exec(location.hash||'');if(!m)return;
   if(m[1]==='a'){openAd(m[2]);return}
   if(m[1]==='p'){
@@ -3556,12 +3646,14 @@ async function sendSubmission(){
   serr('');
   var btn=$('s-send');btn.disabled=true;btn.textContent=t('sending');
   var imageUrl=null;
+  var subThumb='';
   if(edPost&&edPost._blob){
     var up=await upload(edPost._blob,'submissions');
     if(!up){serr(t('img_up_fail'));btn.disabled=false;btn.textContent=t('send');return}
     imageUrl=up.url;
+    try{var stb=await makeThumb(edPost._blob),stu=await upload(stb,'submissions');if(stu)subThumb=stu.url}catch(e){}
   }
-  var extra={};if(kind==='people'){var bv=$('s-born').value.trim();if(bv)extra.born=bv}
+  var extra={};if(subThumb)extra.thumb=subThumb;if(kind==='people'){var bv=$('s-born').value.trim();if(bv)extra.born=bv}
   if(kind==='timeline')extra.year=yr;
   var row={type:cat,title:title,body:body,post_date:kind==='timeline'?(/^\d{4}$/.test(yr)?yr+'-01-01':null):($('s-date').value||todayISO()),post_time:kind==='event'?($('s-time').value||null):null,
     place:(kind==='event'||kind==='people'||kind==='team')?$('s-place').value.trim():'',image_url:imageUrl,author_name:$('s-author').value.trim(),status:'pending',extra:extra};
@@ -3664,7 +3756,10 @@ async function sendPhotos(){
   var desc=$('ph-desc').value.trim().slice(0,300),year=$('ph-year').value.trim().slice(0,20),name=$('ph-name').value.trim().slice(0,100),okc=0;
   for(var i=0;i<ui.pblobs.length;i++){
     var up=await upload(ui.pblobs[i],'submissions');if(!up)continue;
-    var r=await sb.from('photos').insert({url:up.url,kind:'image',caption:desc,caption_en:'',status:'pending',author_name:name,year:year});
+    var pth=null;try{var ptb=await makeThumb(ui.pblobs[i]),ptu=await upload(ptb,'submissions');if(ptu)pth=ptu.url}catch(e){}
+    var prow={url:up.url,kind:'image',caption:desc,caption_en:'',status:'pending',author_name:name,year:year};
+    var r=await sb.from('photos').insert(pth?Object.assign({poster_url:pth},prow):prow);
+    if(r.error&&pth){removeFiles([pth]);r=await sb.from('photos').insert(prow)}
     if(!r.error)okc++;
   }
   btn.disabled=false;btn.textContent=t('send');
@@ -4043,7 +4138,7 @@ savePost=(function(orig){return async function(a){
   var bs=[].slice.call(document.querySelectorAll('#editor [data-act^="post-save"]'));bs.forEach(function(x){x.disabled=true});
   try{return await orig(a)}finally{busy.savePost=false;bs.forEach(function(x){x.disabled=false})}
 }})(savePost);
-addYouTube=guard('yt',addYouTube);addVideo=guard('video',addVideo);addAudio=guard('audio',addAudio);savePoi=guard('poi',savePoi);recSave=guard('rec',recSave);addMod=guard('mod',addMod);bulkRun=guard('bulk',bulkRun);
+addYouTube=guard('yt',addYouTube);addVideo=guard('video',addVideo);addAudio=guard('audio',addAudio);savePoi=guard('poi',savePoi);recSave=guard('rec',recSave);addMod=guard('mod',addMod);bulkRun=guard('bulk',bulkRun);genThumbs=guard('thumbs',genThumbs);
 document.addEventListener('click',function(e){
   var tg=e.target;
   var close=tg.closest&&tg.closest('[data-close]');
@@ -4069,7 +4164,7 @@ document.addEventListener('click',function(e){
       });
       break;
     }
-    case'post-open':openReader(id);break;
+    case'post-open':if(a.tagName==='A')e.preventDefault();openReader(id);break;
     case'photo-open':showPhoto(i);openDlg($('viewer'));break;
     case'v-prev':showPhoto(stepPhoto(ui.vi,-1));break;
     case'v-next':showPhoto(stepPhoto(ui.vi,1));break;
@@ -4271,6 +4366,8 @@ document.addEventListener('click',function(e){
     case'hist-restore':if(confirmTap('hr'+i,'اضغط مرة ثانية للاسترجاع'))histRestore(i);break;
     case'preview-on':previewOn();break;
     case'preview-off':previewOff();break;
+    case'sitemap':sitemapDownload();break;
+    case'thumbs-gen':genThumbs();break;
   }
   if(/^(tile-(up|down|on|del|img-del|add|save)|link-(add|del))$/.test(act))refreshDesign();
 });
@@ -4372,7 +4469,7 @@ renderAll();
 var dataReady=initBackend();
 
 function reveal(){root.classList.remove('loading');root.classList.add('ready')}
-if(reduce||ls('malha-noloader')==='1'){
+if(reduce||ls('malha-noloader')==='1'||ls('malha-seen')==='1'){
   reveal();
 }else{
   var loader=document.createElement('div');
@@ -4381,7 +4478,7 @@ if(reduce||ls('malha-noloader')==='1'){
   document.body.appendChild(loader);
   var lifted=false;
   var lift=function(){
-    if(lifted)return;lifted=true;
+    if(lifted)return;lifted=true;ls('malha-seen','1');
     loader.classList.add('done');reveal();setTimeout(function(){loader.remove()},1300);
   };
   liftLoader=lift;
