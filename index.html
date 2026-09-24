@@ -747,6 +747,7 @@ html.lockdown .add-btn:not([data-act="msg-open"]),html.lockdown .rev-form,html.l
 </style>
 <style id="mobile-v3">
 a.post-btn,a.fc,a.person-btn{text-decoration:none;color:inherit}
+.ph-num{font-weight:700;font-size:1.05rem;align-self:center;margin-inline-end:4px;user-select:all}
 /* featured: a swipeable strip on phones instead of one tall card after another */
 @media (max-width:799px){
   .feat-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--pad) * -1);padding:4px var(--pad) 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -894,7 +895,7 @@ ar:{
   aud_by:'بصوت',aud_untitled:'تسجيل صوتي',
   ph_share:'＋ شارك صورة للمعرض',ph_title:'شارك صورة',ph_note:'تظهر صورتك بعد أن يراجعها صاحب الموقع.',ph_pick:'اختيار الصور (حتى 5)',ph_desc:'وصف الصورة',ph_year:'السنة تقريباً (اختياري)',ph_name:'اسمك (اختياري)',ph_ok:'وصلتنا صورك. تظهر بعد المراجعة، شكراً لك.',ph_err_pick:'اختر صورة واحدة على الأقل.',ph_fail:'تعذّر إرسال الصور. تأكد من الاتصال ثم جرّب.',ph_by:'من',ph_cool:'انتظر دقيقة قبل إرسال صور أخرى.',
   err_year:'اكتب السنة أو الفترة.',hist_year:'السنة',hist_more:'اقرأ المزيد',hist_add:'＋ اقترح محطة من تاريخ القرية',hist_year_p:'مثال: 1956',hist_empty:'قريباً: محطات من تاريخ القرية.',
-  dir_all:'الكل',dir_call:'اتصال',dir_wa:'واتساب',dir_empty:'قريباً: خدمات القرية وأرقامها المفيدة.',
+  dir_all:'الكل',dir_call:'اتصال',dir_wa:'واتساب',show_num:'إظهار رقم التواصل',dir_empty:'قريباً: خدمات القرية وأرقامها المفيدة.',
   inst_btn:'📲 أضِف الموقع لشاشتك',inst_title:'أضِف الموقع لشاشتك',inst_ios:'في سفاري: اضغط زر المشاركة ⬆️ ثم اختر «إضافة إلى الشاشة الرئيسية».',inst_and:'في كروم: اضغط ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».',inst_desk:'في كروم أو إيدج: اضغط أيقونة التثبيت في شريط العنوان، أو القائمة ثم «تثبيت».',
   msg_btn:'✉ راسلنا بشكل خاص',msg_title:'راسلنا',msg_note:'رسالتك تصل لصاحب الموقع فقط ولا تُنشر.',msg_contact:'وسيلة للتواصل معك (اختياري)',msg_contact_p:'رقم واتساب أو بريد',msg_body:'رسالتك',
   msg_err_name:'اكتب اسمك.',msg_err_body:'اكتب رسالة أطول قليلاً (5 أحرف على الأقل).',msg_ok:'وصلتنا رسالتك، شكراً لك.',msg_fail:'تعذّر إرسال الرسالة. تأكد من الاتصال ثم جرّب.',msg_cool:'انتظر دقيقة قبل إرسال رسالة ثانية.',
@@ -927,7 +928,7 @@ en:{
   aud_by:'Voice of',aud_untitled:'Audio recording',
   ph_share:'＋ Share a photo',ph_title:'Share a photo',ph_note:'Your photo appears after the owner reviews it.',ph_pick:'Choose photos (up to 5)',ph_desc:'Photo description',ph_year:'Year, roughly (optional)',ph_name:'Your name (optional)',ph_ok:'We received your photos. They appear after review. Thank you.',ph_err_pick:'Please choose at least one photo.',ph_fail:'Could not send the photos. Check your connection and try again.',ph_by:'From',ph_cool:'Please wait a minute before sending more photos.',
   err_year:'Please enter the year.',hist_year:'Year',hist_more:'Read more',hist_add:'＋ Suggest a milestone in the village history',hist_year_p:'e.g. 1956',hist_empty:'Coming soon: milestones from the village history.',
-  dir_all:'All',dir_call:'Call',dir_wa:'WhatsApp',dir_empty:'Coming soon: the village services and useful numbers.',
+  dir_all:'All',dir_call:'Call',dir_wa:'WhatsApp',show_num:'Show contact number',dir_empty:'Coming soon: the village services and useful numbers.',
   inst_btn:'📲 Add the site to your home screen',inst_title:'Add the site to your home screen',inst_ios:'In Safari: tap the Share button ⬆️, then choose “Add to Home Screen”.',inst_and:'In Chrome: tap ⋮, then “Install app” or “Add to Home screen”.',inst_desk:'In Chrome or Edge: click the install icon in the address bar, or the menu, then “Install”.',
   msg_btn:'✉ Message us privately',msg_title:'Message us',msg_note:'Your message goes to the site owner only and is never published.',msg_contact:'How can we reach you? (optional)',msg_contact_p:'WhatsApp number or e-mail',msg_body:'Your message',
   msg_err_name:'Please enter your name.',msg_err_body:'Please write a little more (at least 5 characters).',msg_ok:'We received your message. Thank you.',msg_fail:'Could not send. Check your connection and try again.',msg_cool:'Please wait a minute before sending another message.',
@@ -1734,7 +1735,7 @@ function dirCardsHTML(f,q){
       ((tx(x.addr)||ui.edit)?'<p class="dc-addr"'+ea('directory.'+i+'.addr','العنوان أو وصف الموقع',1,1)+'>'+esc(tx(x.addr))+'</p>':'')+
       ((tx(x.note)||ui.edit)?'<p class="dc-note"'+ea('directory.'+i+'.note','ملاحظة (أوقات العمل...)',1,1)+'>'+esc(tx(x.note))+'</p>':'')+
       (ui.edit?'<p class="dc-phone" dir="ltr"'+ea('directory.'+i+'.phone','+963 ... (بصيغة دولية ليعمل واتساب)',1)+'>'+esc(x.phone)+'</p><div class="row-tools">'+sel+'<button class="tool" data-act="dir-up" data-i="'+i+'">↑</button><button class="tool" data-act="dir-down" data-i="'+i+'">↓</button><button class="tool danger" data-act="dir-del" data-i="'+i+'">حذف</button></div>'
-        :((tel||wa)?'<div class="row-tools">'+(tel?'<a class="tool" href="'+esc(tel)+'">'+t('dir_call')+'</a>':'')+(wa?'<a class="tool" target="_blank" rel="noopener" href="'+esc(wa)+'">'+t('dir_wa')+'</a>':'')+'</div>':''))+'</div></article>';
+        :((tel||wa)?'<div class="row-tools"><button class="tool" data-act="ph-show" data-src="dir" data-i="'+i+'">📞 '+esc(t('show_num'))+'</button></div>':''))+'</div></article>';
   }).join('');
 }
 function dirListInner(f,q){var h=dirCardsHTML(f,q);return h||(ui.edit?'':'<p class="empty">'+t('dir_noresult')+'</p>')}
@@ -4008,7 +4009,7 @@ function openAd(id){
     '<div class="post-meta">'+c.ic+' '+esc(c[lang])+' · '+esc(adDate(a.approved||a.created))+'</div><h2>'+esc(a.title)+'</h2><div class="ad-price big">'+esc(a.price||t('ad_negotiable'))+'</div>'+
     (a.place?'<p class="ad-place">📍 '+esc(a.place)+'</p>':'')+(a.body?'<div class="rd-body"><p>'+esc(a.body).replace(/\n/g,'<br>')+'</p></div>':'')+
     '<p class="ad-seller">'+esc(t('ad_by'))+': <b>'+esc(a.seller)+'</b>'+(a.expires&&adLive(a)?' · '+esc(t('ad_expires'))+' '+esc(adDate(a.expires)):'')+'</p>'+
-    '<div class="row-tools">'+(tel?'<a class="tool primary-t" href="'+esc(tel)+'">'+t('dir_call')+' <span dir="ltr">'+esc(a.phone)+'</span></a>':'<span dir="ltr">'+esc(a.phone)+'</span>')+(wa?'<a class="tool" target="_blank" rel="noopener" href="'+esc(wa)+'">'+t('dir_wa')+'</a>':'')+'</div>'+
+    '<div class="row-tools"><button class="tool" data-act="ph-show" data-src="ad" data-id="'+esc(a.id)+'">📞 '+esc(t('show_num'))+'</button></div>'+
     shareBar('a',a.id,a.title)+'<div class="row-tools"><button class="tool" data-act="ad-report" data-id="'+esc(a.id)+'">⚑ '+esc(t('ad_report'))+'</button></div></article>';
   try{history.replaceState(null,'','#a='+encodeURIComponent(a.id))}catch(e){}
   d.scrollTop=0;openDlg(d);
@@ -4149,7 +4150,7 @@ function openContact(){var d=$('contactdlg');d.innerHTML=contactDlgHTML();d.dir=
 
 
 /* ---------- events ---------- */
-var OFFLINE_OK={'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1,'cmt-open':1,'sug-open':1,'ad-open':1,'ad-img':1,'ad-filter':1};
+var OFFLINE_OK={'ph-show':1,'dir-filter':1,install:1,fontsize:1,'share-site':1,'copy-link':1,'native-share':1,'ann-close':1,'pass-show':1,'pw-show-panel':1,'rc-show':1,tab:1,'qa-toggle':1,'photo-open':1,'v-prev':1,'v-next':1,'post-open':1,'map-layer':1,lang:1,menu:1,'menu-close':1,'menu-go':1,'poi-go':1,'rev-star':1,'tile-go':1,'about-more':1,'cmt-open':1,'sug-open':1,'ad-open':1,'ad-img':1,'ad-filter':1};
 function setLang(l){lang=l;ls('malha-lang',l);ui.menu=false;root.classList.remove('menuopen');renderAll()}
 function moveIn(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return false;var x=arr[i];arr[i]=arr[j];arr[j]=x;return true}
 
@@ -4390,6 +4391,14 @@ document.addEventListener('click',function(e){
     case'preview-on':previewOn();break;
     case'preview-off':previewOff();break;
     case'sitemap':sitemapDownload();break;
+    case'ph-show':{
+      var num='';
+      if(a.dataset.src==='ad'){var adx=ads.filter(function(x){return x.id===id})[0];num=adx?adx.phone:''}
+      else{var dxx=site.directory[i];num=dxx?dxx.phone:''}
+      if(!num)break;
+      var tl=telHref(num),wl=waHref(num),box=a.parentNode;
+      box.innerHTML='<span class="ph-num" dir="ltr">'+esc(num)+'</span>'+(tl?'<a class="tool" href="'+esc(tl)+'">'+esc(t('dir_call'))+'</a>':'')+(wl?'<a class="tool" target="_blank" rel="noopener" href="'+esc(wl)+'">'+esc(t('dir_wa'))+'</a>':'');
+      break}
     case'bn-add':bnavEdit(function(L){if(L.length<4&&L.indexOf(a.dataset.k)<0)L.push(a.dataset.k)});break;
     case'bn-del':bnavEdit(function(L){L.splice(i,1)});break;
     case'bn-up':bnavEdit(function(L){moveIn(L,i,-1)});break;
